@@ -22,15 +22,15 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
 
   return (
     <div
-      className={`relative flex flex-col justify-between rounded-[20px] md:rounded-2xl bg-[#121318] p-2 md:p-3 transition-all duration-200 select-none group hover:-translate-y-1 ${
+      className={`relative flex flex-col justify-between rounded-[20px] bg-[#121318] p-2 transition-all duration-200 select-none group hover:-translate-y-0.5 ${
         isRLC
           ? 'border border-[#75161c] shadow-[0_4px_24px_rgba(229,9,20,0.18)] hover:border-red-500/50'
-          : 'border border-[#20222a] hover:border-[#3b4052] shadow-sm hover:shadow-md'
+          : 'border border-[#20222a] hover:border-[#353846]'
       }`}
     >
       {/* 1. Image Thumbnail Canvas */}
       <div
-        className={`relative w-full aspect-[16/11] rounded-[14px] md:rounded-xl flex items-center justify-center p-2 overflow-hidden ${
+        className={`relative w-full aspect-[16/11] rounded-[14px] flex items-center justify-center p-2 overflow-hidden ${
           isRLC
             ? 'bg-gradient-to-b from-[#1e1b1c] to-[#0c0d10]'
             : 'bg-[#ffffff]'
@@ -48,38 +48,31 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
         ) : (
           <span className="text-[10px] text-gray-500 font-mono">No Image</span>
         )}
-
-        {/* Status for sale badge */}
-        {item.is_for_sale && (
-          <span className="absolute top-2 left-2 bg-emerald-600/90 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow">
-            FOR SALE
-          </span>
-        )}
       </div>
 
-      {/* 2. Car Information Body */}
+      {/* 2. Car Information Body (100% Persis Screenshot Asli) */}
       <div className="pt-2.5 pb-1 px-1 flex flex-col gap-1.5">
         {/* Model Name */}
-        <h3 className="text-white font-extrabold text-[12px] md:text-sm tracking-tight uppercase truncate">
+        <h3 className="text-white font-extrabold text-[12.5px] tracking-tight uppercase truncate">
           {item.name}
         </h3>
 
-        {/* Badge Bar: Bulat Biru | Tahun | Tier Badge | Warna */}
-        <div className="flex flex-wrap items-center gap-1 text-[10px] font-semibold">
+        {/* Badge Bar: Bulat Biru [1] | Tahun [2026] | Tier Badge [RLC] | Warna */}
+        <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-semibold">
           {/* Bulat Biru Segment Index */}
-          <span className="w-3.5 h-3.5 rounded-full bg-[#0066d6] text-white flex items-center justify-center text-[8px] font-black shrink-0">
+          <span className="w-4 h-4 rounded-full bg-[#0066d6] text-white flex items-center justify-center text-[8.5px] font-black shrink-0">
             {item.segment_number || 1}
           </span>
 
           {/* Tahun Rilis */}
-          <span className="bg-[#21242e] text-gray-300 px-1.5 py-0.5 rounded text-[9.5px]">
+          <span className="bg-[#21242e] text-gray-300 px-2 py-0.5 rounded text-[10px]">
             {item.release_year}
           </span>
 
           {/* Tier Badge */}
           {item.tier_badge && (
             <span
-              className={`px-1.5 py-0.5 rounded text-[9.5px] font-bold ${
+              className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                 isRLC
                   ? 'bg-[#e50914] text-white'
                   : 'bg-[#21242e] text-gray-300'
@@ -91,40 +84,30 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
 
           {/* Warna Bodi */}
           {item.color && (
-            <span className="bg-[#1b1c23] text-gray-400 px-1.5 py-0.5 rounded text-[9.5px] truncate max-w-[85px]">
+            <span className="bg-[#1b1c23] text-gray-400 px-2 py-0.5 rounded text-[10px] truncate max-w-[85px]">
               {item.color}
             </span>
           )}
         </div>
 
-        {/* Harga Pasar */}
-        {item.sell_price > 0 && (
-          <div className="flex items-center justify-between text-[11px] md:text-xs pt-1 text-gray-400">
-            <span className="text-[10px] uppercase font-bold text-gray-500">Harga:</span>
-            <span className="font-extrabold text-white">
-              Rp {item.sell_price.toLocaleString('id-ID')}
-            </span>
-          </div>
-        )}
-
-        {/* Modal Beli (Khusus Admin) */}
+        {/* Modal Beli (Hanya jika admin login) */}
         {isAdmin && item.buy_price !== undefined && (
-          <div className="flex items-center justify-between text-[10px] bg-red-950/40 px-1.5 py-0.5 rounded text-red-300 border border-red-900/30">
-            <span className="text-[9px] uppercase font-bold text-red-400">Modal:</span>
+          <div className="flex items-center justify-between text-[10px] bg-red-950/40 px-2 py-0.5 rounded text-red-300 border border-red-900/30 mt-0.5">
+            <span className="font-bold text-red-400 text-[9px] uppercase">Modal:</span>
             <span className="font-mono font-bold">Rp {item.buy_price.toLocaleString('id-ID')}</span>
           </div>
         )}
       </div>
 
-      {/* 3. Bottom Action Controls Bar */}
-      <div className="mt-1 pt-1.5 border-t border-[#1f2129] flex items-center justify-between px-0.5 text-gray-400">
+      {/* 3. Bottom Action Controls Bar: [ - / + ] [ ★ ] [ ≡ ] (Persis screenshot) */}
+      <div className="mt-1 pt-1.5 border-t border-[#1f2129] flex items-center justify-between px-1 text-gray-400">
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation();
             onUpdateQty?.(item.id, -1);
           }}
-          className="w-6 h-6 flex items-center justify-center rounded hover:text-white transition-colors"
+          className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/5 hover:text-white transition-colors"
           title="Kurang"
         >
           <Minus className="w-3.5 h-3.5" />
@@ -136,8 +119,8 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
             e.stopPropagation();
             onToggleFavorite?.(item.id);
           }}
-          className={`w-6 h-6 flex items-center justify-center rounded hover:text-white transition-colors ${
-            item.is_favorite ? 'text-amber-400' : 'text-gray-500'
+          className={`w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/5 transition-colors ${
+            item.is_favorite ? 'text-amber-400' : 'text-gray-500 hover:text-gray-300'
           }`}
           title="Favorit"
         >
@@ -154,7 +137,7 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
               window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
             }
           }}
-          className="w-6 h-6 flex items-center justify-center rounded hover:text-white transition-colors"
+          className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/5 hover:text-white transition-colors"
           title="Opsi / Order WA"
         >
           <AlignLeft className="w-3.5 h-3.5" />

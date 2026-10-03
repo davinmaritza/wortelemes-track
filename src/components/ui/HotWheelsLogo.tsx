@@ -1,11 +1,17 @@
 import React from 'react';
+import Image from 'next/image';
 
-export const HotWheelsFlameLogo = ({ className = 'w-28 h-auto' }: { className?: string }) => {
+export const HotWheelsFlameLogo = ({ className = 'w-24 h-7' }: { className?: string }) => {
   return (
-    <div className={`relative flex items-center justify-center font-black italic tracking-tighter select-none ${className}`}>
-      <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-amber-500 to-red-500 text-xl font-extrabold drop-shadow-[0_2px_10px_rgba(229,9,20,0.5)]">
-        HOT WHEELS
-      </span>
+    <div className={`relative select-none shrink-0 ${className}`}>
+      <Image
+        src="/cars/hotwheels_flame_logo.png"
+        alt="Hot Wheels"
+        fill
+        className="object-contain"
+        priority
+        unoptimized
+      />
     </div>
   );
 };
