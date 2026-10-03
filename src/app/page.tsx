@@ -18,13 +18,11 @@ import {
   Flame,
   LayoutGrid,
   Camera,
+  ChevronDown,
 } from 'lucide-react';
 
 export default function Home() {
-  // Navigation tabs (Bottom Bar)
   const [currentNav, setCurrentNav] = useState<AppNavTab>('garage');
-
-  // Garage Sub-Tabs: Vehicles | Series | Lists
   const [garageSubTab, setGarageSubTab] = useState<'Vehicles' | 'Series' | 'Lists'>('Vehicles');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSort, setSelectedSort] = useState<'newest' | 'price-asc' | 'price-desc'>('newest');
@@ -44,7 +42,6 @@ export default function Home() {
   const [pinError, setPinError] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  // Verify Admin PIN
   const handleVerifyPin = (e: React.FormEvent) => {
     e.preventDefault();
     if (pinInput === '1234' || pinInput === '0000') {
@@ -57,7 +54,6 @@ export default function Home() {
     }
   };
 
-  // Filter & Search Logic
   const filteredItems = collections.filter((item) => {
     const matchesSearch =
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -69,14 +65,12 @@ export default function Home() {
     return matchesSearch;
   });
 
-  // Sorting Logic
   const sortedItems = [...filteredItems].sort((a, b) => {
     if (selectedSort === 'price-asc') return a.sell_price - b.sell_price;
     if (selectedSort === 'price-desc') return b.sell_price - a.sell_price;
     return 0;
   });
 
-  // Admin Quick Actions
   const handleUpdateQty = (id: string, delta: number) => {
     setCollections((prev) =>
       prev.map((c) => (c.id === id ? { ...c, qty: Math.max(0, c.qty + delta) } : c))
@@ -93,7 +87,6 @@ export default function Home() {
     setCollections((prev) => [newItem, ...prev]);
   };
 
-  // If viewing single car detail (Screenshot 3)
   if (selectedCar) {
     return (
       <CarDetailView
@@ -107,30 +100,30 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0c0d10] text-white flex justify-center pb-24">
-      {/* Container Frame (Mobile First) */}
-      <div className="w-full max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-4xl px-4 sm:px-6 pt-4 flex flex-col">
-        {/* Status bar placeholder with local time */}
-        <div className="flex items-center justify-between text-xs text-gray-400 font-semibold px-1 pb-2">
+    <main className="min-h-screen bg-[#000000] text-white flex justify-center pb-24">
+      {/* Mobile-sized shell (persis smartphone app container) */}
+      <div className="w-full max-w-[430px] px-4 pt-3 flex flex-col">
+        {/* Status bar */}
+        <div className="flex items-center justify-between text-[11px] text-gray-400 font-semibold px-2 pb-2">
           <span>9:30</span>
           <div className="flex items-center gap-1.5 text-gray-300">
-            <span className="text-[10px]">5G</span>
+            <span className="text-[9px]">5G</span>
             <span>100%</span>
           </div>
         </div>
 
-        {/* Top Branding & Admin Access */}
-        <div className="flex items-center justify-between pb-3">
-          <div className="flex items-center gap-2">
-            <Flame className="w-6 h-6 text-red-600 fill-red-600" />
-            <span className="font-black italic tracking-tighter text-xl bg-gradient-to-r from-red-600 via-amber-500 to-red-500 bg-clip-text text-transparent">
+        {/* Top Logo & Admin Toggle */}
+        <div className="flex items-center justify-between pb-2">
+          <div className="flex items-center gap-1.5">
+            <Flame className="w-5 h-5 text-red-600 fill-red-600" />
+            <span className="font-black italic tracking-tighter text-lg bg-gradient-to-r from-red-600 via-amber-500 to-red-500 bg-clip-text text-transparent">
               HOT WHEELS
             </span>
           </div>
 
           <button
             onClick={() => (isAdmin ? setIsAdmin(false) : setShowPinModal(true))}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold transition-all ${
               isAdmin
                 ? 'bg-red-600/20 text-red-400 border border-red-500/40'
                 : 'bg-[#16181f] text-gray-400 border border-[#242735] hover:text-white'
@@ -138,21 +131,20 @@ export default function Home() {
           >
             {isAdmin ? (
               <>
-                <Unlock className="w-3.5 h-3.5 text-red-400" />
-                <span>Admin Aktif</span>
+                <Unlock className="w-3 h-3 text-red-400" />
+                <span>Admin Mode</span>
               </>
             ) : (
               <>
-                <Lock className="w-3.5 h-3.5" />
+                <Lock className="w-3 h-3" />
                 <span>Login Admin PIN</span>
               </>
             )}
           </button>
         </div>
 
-        {/* SCREEN VIEWS BASED ON BOTTOM TAB BAR */}
+        {/* SCREEN VIEWS */}
         {currentNav === 'discover' ? (
-          /* DISCOVER VIEW (Screenshot 1) */
           <DiscoverView
             cars={collections}
             isAdmin={isAdmin}
@@ -161,55 +153,50 @@ export default function Home() {
             onToggleFavorite={handleToggleFavorite}
           />
         ) : currentNav === 'news' ? (
-          /* NEWS VIEW */
-          <div className="py-12 text-center text-gray-400 flex flex-col items-center gap-2">
-            <h2 className="text-white font-extrabold text-lg">Hot Wheels Collector News</h2>
-            <p className="text-xs max-w-xs">
-              Rilisan batch terbaru 2026, agenda Red Line Club drops, dan event konvensi kolektor.
+          <div className="py-20 text-center text-gray-400 flex flex-col items-center gap-2">
+            <h2 className="text-white font-extrabold text-base">Hot Wheels Collector News</h2>
+            <p className="text-xs max-w-xs text-gray-500">
+              Agenda drop RLC, update rilisan batch 2026, dan liputan diecast terkini.
             </p>
           </div>
         ) : currentNav === 'profile' ? (
-          /* PROFILE VIEW */
-          <div className="py-12 text-center text-gray-400 flex flex-col items-center gap-3">
-            <div className="w-16 h-16 rounded-full bg-[#16181f] border border-[#242735] flex items-center justify-center text-white font-bold text-xl">
+          <div className="py-16 text-center text-gray-400 flex flex-col items-center gap-3">
+            <div className="w-16 h-16 rounded-full bg-[#16181f] border border-[#242735] flex items-center justify-center text-white font-black text-xl">
               W
             </div>
             <h2 className="text-white font-extrabold text-lg">Garasi Wortelemes</h2>
-            <p className="text-xs">Kolektor Diecast & Penjual Terpercaya</p>
+            <p className="text-xs text-gray-500">Kolektor Diecast & Penjual Terpercaya</p>
             {isAdmin && <PortfolioSummary items={collections} />}
           </div>
         ) : (
-          /* MY GARAGE VIEW (Screenshots 2 & 4) */
+          /* MY GARAGE (Screenshot 2 & 4) */
           <>
             <div className="flex items-center justify-between mt-1 mb-2">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-black tracking-tight uppercase text-white">
+                <h1 className="text-2xl font-black tracking-tight uppercase text-white font-sans">
                   MY GARAGE
                 </h1>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  {collections.reduce((sum, i) => sum + (i.qty || 1), 0)} / 250 Vehicles
-                </p>
               </div>
 
               {isAdmin && (
                 <button
                   onClick={() => setShowAddModal(true)}
-                  className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow active:scale-95 transition-all"
+                  className="flex items-center gap-1 bg-[#0066d6] hover:bg-blue-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow active:scale-95 transition-all"
                 >
-                  <Plus className="w-4 h-4" />
-                  <span>Tambah Mobil</span>
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Tambah</span>
                 </button>
               )}
             </div>
 
-            {/* Admin Financial Dashboard (Strictly Hidden from Public) */}
+            {/* Financial Summary (Only shown for admin) */}
             {isAdmin && <PortfolioSummary items={collections} />}
 
-            {/* Garage Segmented Pills (Vehicles | Series | Lists) */}
-            <div className="bg-[#16181f] p-1 rounded-2xl flex items-center border border-[#242735] mb-4">
+            {/* Tab Navigation (Pill container: Vehicles | Series | Lists) */}
+            <div className="bg-[#14151a] p-1 rounded-full flex items-center border border-[#22242e] mb-3">
               <button
                 onClick={() => setGarageSubTab('Vehicles')}
-                className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+                className={`flex-1 py-1.5 text-xs font-bold rounded-full transition-all ${
                   garageSubTab === 'Vehicles'
                     ? 'bg-[#0066d6] text-white shadow'
                     : 'text-gray-400 hover:text-white'
@@ -219,7 +206,7 @@ export default function Home() {
               </button>
               <button
                 onClick={() => setGarageSubTab('Series')}
-                className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+                className={`flex-1 py-1.5 text-xs font-bold rounded-full transition-all ${
                   garageSubTab === 'Series'
                     ? 'bg-[#0066d6] text-white shadow'
                     : 'text-gray-400 hover:text-white'
@@ -229,7 +216,7 @@ export default function Home() {
               </button>
               <button
                 onClick={() => setGarageSubTab('Lists')}
-                className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+                className={`flex-1 py-1.5 text-xs font-bold rounded-full transition-all ${
                   garageSubTab === 'Lists'
                     ? 'bg-[#0066d6] text-white shadow'
                     : 'text-gray-400 hover:text-white'
@@ -239,49 +226,50 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Filters Bar & Search Input */}
-            <div className="flex flex-col gap-2.5 mb-5">
-              {/* Dropdowns (Date Added, Segment, Assortment) */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 text-[11px]">
-                <select
-                  value={selectedSort}
-                  onChange={(e) => setSelectedSort(e.target.value as any)}
-                  className="bg-[#16181f] border border-[#242735] text-gray-300 px-3 py-1.5 rounded-xl font-semibold shrink-0 focus:outline-none"
-                >
-                  <option value="newest">Date Added: New-Old</option>
-                  <option value="price-asc">Price: Low-High</option>
-                  <option value="price-desc">Price: High-Low</option>
-                </select>
-
-                <button
-                  onClick={() => setFilterForSaleOnly(!filterForSaleOnly)}
-                  className={`px-3 py-1.5 rounded-xl font-semibold shrink-0 transition-all ${
-                    filterForSaleOnly
-                      ? 'bg-emerald-600 text-white font-bold'
-                      : 'bg-[#16181f] text-gray-400 border border-[#242735] hover:text-white'
-                  }`}
-                >
-                  For Sale
-                </button>
+            {/* Filter Bar (Date Added, Segment, Assortment) */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 text-[11px]">
+              <div className="flex items-center gap-1 bg-[#16181f] border border-[#232632] px-3 py-1.5 rounded-full text-gray-300 font-medium shrink-0">
+                <span>Date Added: New-Old</span>
+                <ChevronDown className="w-3 h-3 text-gray-500" />
               </div>
-
-              {/* Search Bar */}
-              <div className="relative">
-                <Search className="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by vehicles, SKU, and more"
-                  className="w-full bg-[#16181f] border border-[#242735] rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6]"
-                />
+              <div className="flex items-center gap-1 bg-[#16181f] border border-[#232632] px-3 py-1.5 rounded-full text-gray-300 font-medium shrink-0">
+                <span>Segment</span>
+                <ChevronDown className="w-3 h-3 text-gray-500" />
+              </div>
+              <div className="flex items-center gap-1 bg-[#16181f] border border-[#232632] px-3 py-1.5 rounded-full text-gray-300 font-medium shrink-0">
+                <span>Assortment</span>
+                <ChevronDown className="w-3 h-3 text-gray-500" />
               </div>
             </div>
 
-            {/* SUB-TAB CONTENT */}
+            {/* Search Bar */}
+            <div className="relative my-1">
+              <Search className="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by vehicles, SKU, and more"
+                className="w-full bg-[#16181f] border border-[#232632] rounded-[14px] pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6]"
+              />
+            </div>
+
+            {/* Counter Bar: 181 / 250 Vehicles [Upgrade] [Select] */}
+            <div className="flex items-center justify-between py-2.5 text-xs text-gray-400 font-semibold">
+              <div className="flex items-center gap-2">
+                <span>{collections.reduce((sum, i) => sum + (i.qty || 1), 0)} / 250 Vehicles</span>
+                <span className="bg-[#0066d6] text-white text-[9.5px] font-black px-2 py-0.5 rounded-full">
+                  Upgrade
+                </span>
+              </div>
+              <button className="text-[#0066d6] hover:text-blue-400 font-bold text-xs">
+                Select
+              </button>
+            </div>
+
+            {/* SUB-TAB DISPLAY */}
             {garageSubTab === 'Series' ? (
-              /* Series Set Completion View (Screenshot 2) */
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 {seriesList.map((series) => {
                   const seriesItems = collections.filter((i) => i.series_id === series.id);
                   return (
@@ -290,6 +278,7 @@ export default function Home() {
                       series={series}
                       items={seriesItems}
                       isAdmin={isAdmin}
+                      onSelectCar={(car) => setSelectedCar(car)}
                       onUpdateQty={handleUpdateQty}
                       onToggleFavorite={handleToggleFavorite}
                     />
@@ -297,15 +286,14 @@ export default function Home() {
                 })}
               </div>
             ) : (
-              /* Vehicles & Lists Grid 2-Kolom (Screenshots 2 & 4) */
               <div>
                 {sortedItems.length === 0 ? (
                   <div className="py-16 text-center text-gray-500 flex flex-col items-center gap-2">
-                    <LayoutGrid className="w-10 h-10 stroke-[1.5] text-gray-600" />
-                    <p className="text-xs">Tidak ada mobil yang sesuai dengan pencarian.</p>
+                    <LayoutGrid className="w-8 h-8 stroke-[1.5] text-gray-600" />
+                    <p className="text-xs">Tidak ada mobil ditemukan.</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 gap-2.5">
                     {sortedItems.map((item) => (
                       <div
                         key={item.id}
@@ -327,20 +315,20 @@ export default function Home() {
           </>
         )}
 
-        {/* Floating Quick Camera Button (Screenshot 1 & 2) */}
+        {/* Floating Camera Button (Screenshot 1 & 2) */}
         <button
           onClick={() => (isAdmin ? setShowAddModal(true) : setShowPinModal(true))}
-          className="fixed bottom-20 right-6 z-30 w-12 h-12 rounded-full bg-[#0066d6] text-white flex items-center justify-center shadow-[0_4px_20px_rgba(0,102,214,0.5)] active:scale-90 transition-transform"
-          title="Scan atau Tambah Mobil"
+          className="fixed bottom-20 right-6 z-30 w-12 h-12 rounded-full bg-[#0066d6] text-white flex items-center justify-center shadow-[0_4px_25px_rgba(0,102,214,0.6)] active:scale-90 transition-transform"
+          title="Scan Foto Diecast"
         >
           <Camera className="w-6 h-6" />
         </button>
       </div>
 
-      {/* Persistent Bottom Tab Bar (Screenshots 1, 2, 4) */}
+      {/* Persistent Bottom Tab Bar */}
       <BottomTabBar activeTab={currentNav} onChangeTab={(tab) => setCurrentNav(tab)} />
 
-      {/* Admin Passcode PIN Modal */}
+      {/* PIN Login Modal */}
       {showPinModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="bg-[#16181f] border border-[#242735] w-full max-w-xs rounded-2xl p-5 flex flex-col items-center shadow-xl">
