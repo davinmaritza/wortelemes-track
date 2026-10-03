@@ -12,7 +12,8 @@ interface BottomTabBarProps {
 
 export const BottomTabBar: React.FC<BottomTabBarProps> = ({ activeTab, onChangeTab }) => {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#0c0d10]/95 backdrop-blur-xl border-t border-[#1f222e] flex items-center justify-around py-2.5 px-4 max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-4xl mx-auto">
+    // md:hidden ensures it ONLY shows on Mobile screens, not Desktop!
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0c0d10]/95 backdrop-blur-xl border-t border-[#1f222e] flex items-center justify-around py-2.5 px-4 w-full">
       {/* 1. My Garage */}
       <button
         onClick={() => onChangeTab('garage')}
