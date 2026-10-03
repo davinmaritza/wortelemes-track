@@ -9,6 +9,7 @@ import { PortfolioSummary } from '@/components/admin/PortfolioSummary';
 import { DiecastFormModal } from '@/components/admin/DiecastFormModal';
 import { QuickPriceEditModal } from '@/components/admin/QuickPriceEditModal';
 import { HotWheelsFlameLogo } from '@/components/ui/HotWheelsLogo';
+import { WortelemesLogo } from '@/components/ui/WortelemesLogo';
 import {
   getStoredCollections,
   saveStoredCollections,
@@ -200,7 +201,10 @@ export default function AdminPage() {
     return (
       <main className="min-h-screen bg-[#0c0d10] text-white flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-sm bg-[#16181f] border border-[#242735] rounded-3xl p-6 sm:p-8 flex flex-col items-center shadow-2xl">
-          <HotWheelsFlameLogo className="w-28 h-8 mb-5" />
+          <div className="flex items-center gap-3 mb-5">
+            <WortelemesLogo className="w-10 h-10" size={40} />
+            <HotWheelsFlameLogo className="w-26 h-7" />
+          </div>
 
           <div className="w-12 h-12 rounded-2xl bg-red-600/20 text-red-500 border border-red-500/30 flex items-center justify-center mb-3">
             <Lock className="w-6 h-6" />
@@ -265,6 +269,7 @@ export default function AdminPage() {
       {/* Top Admin Header */}
       <header className="w-full max-w-7xl px-4 sm:px-8 py-3.5 border-b border-[#1f222e] bg-[#121318]/95 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
         <div className="flex items-center gap-3">
+          <WortelemesLogo className="w-8 h-8" size={32} />
           <HotWheelsFlameLogo className="w-24 h-7" />
           <span className="text-[10px] font-black uppercase bg-red-950/80 text-red-400 border border-red-800/40 px-2.5 py-1 rounded-full flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />

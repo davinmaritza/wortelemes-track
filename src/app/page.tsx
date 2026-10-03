@@ -13,6 +13,7 @@ import { BottomTabBar, AppNavTab } from '@/components/navigation/BottomTabBar';
 import { PortfolioSummary } from '@/components/admin/PortfolioSummary';
 import { AddDiecastModal } from '@/components/admin/AddDiecastModal';
 import { HotWheelsFlameLogo } from '@/components/ui/HotWheelsLogo';
+import { WortelemesLogo } from '@/components/ui/WortelemesLogo';
 import {
   Search,
   Lock,
@@ -137,9 +138,10 @@ export default function Home() {
       {/* DESKTOP TOP NAVIGATION BAR */}
       <header className="hidden md:flex w-full max-w-7xl px-8 py-3.5 items-center justify-between border-b border-[#1f222e] bg-[#0c0d10]/90 backdrop-blur-md sticky top-0 z-30">
         <div className="flex items-center gap-8">
-          {/* Authentic Flame Logo */}
+          {/* Authentic Flame Logo & Wortelemes Brand */}
           <div className="flex items-center gap-3">
-            <HotWheelsFlameLogo className="w-28 h-8" />
+            <WortelemesLogo className="w-8 h-8" size={32} />
+            <HotWheelsFlameLogo className="w-26 h-7" />
             <span className="font-extrabold text-sm tracking-widest text-gray-400 uppercase border-l border-[#242735] pl-3">
               SHOWCASE
             </span>
@@ -255,13 +257,13 @@ export default function Home() {
         <div className="md:hidden flex items-center justify-between pb-3 pt-1">
           <Link
             href="/admin"
-            className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+            className="flex items-center gap-1.5"
             title="Garasi Admin"
           >
-            <Lock className="w-4 h-4" />
+            <WortelemesLogo className="w-8 h-8" size={32} />
           </Link>
 
-          {/* Centered Hot Wheels Logo on Mobile (Sesuai Screenshot 2) */}
+          {/* Centered Hot Wheels Logo on Mobile */}
           <HotWheelsFlameLogo className="w-26 h-7" />
 
           <button
