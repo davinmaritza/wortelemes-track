@@ -45,12 +45,13 @@
   - One-click auto-fill data dari Hot Wheels Wiki.
   - Image uploader (upload foto fisik ke Supabase Storage atau gunakan gambar Wiki).
   - Input field modal beli, estimasi harga jual, jumlah stok (qty), kondisi, & toggle For Sale.
-- [x] Fitur Quick Adjust: tombol edit cepat (+/- qty, star favorite, delete item).
+- [x] Fitur Quick Adjust: tombol edit cepat (+/- qty, star favorite, delete item, inline modal edit harga beli & harga jual).
+- [x] Checkbox Select All & Bulk Action: hapus massal (bulk delete) & set massal status For Sale / NFS.
 
 ---
 
 ## Phase 5: Testing, Hardening & Polishing
 - [x] Verifikasi zero-leakage: Pastikan non-admin sama sekali tidak menerima field modal/buy_price.
-- [x] Testing responsivitas mobile (PWA viewport di iOS & Android browser).
+- [x] Testing responsivitas mobile (PWA viewport di iOS & Android browser) & desktop grid view.
 - [x] Testing edge-case API Wiki jika mobil tidak ditemukan atau offline.
-- [ ] Final polishing visual (micro-animations, skeleton loader, empty states).
+- [x] Final polishing visual (micro-animations, select all checkbox, live profit margin calculator, zero placeholder slop).
