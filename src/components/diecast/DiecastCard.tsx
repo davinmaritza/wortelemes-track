@@ -38,12 +38,8 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
   const isRLC = item.tier_badge?.toLowerCase().includes('rlc');
 
   return (
-    <motion.div
-      layout={!shouldReduceMotion}
-      initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      className={`relative flex flex-col justify-between bg-[#14151b] rounded-2xl border transition-colors overflow-hidden ${
+    <div
+      className={`relative flex flex-col justify-between bg-[#14151b] rounded-2xl border transition-all duration-200 overflow-hidden active:scale-[0.99] ${
         isRLC
           ? 'border-red-600/40 shadow-[0_4px_20px_rgba(229,9,20,0.12)]'
           : 'border-[#222533] hover:border-[#35394d]'
@@ -183,6 +179,6 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
