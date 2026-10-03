@@ -11,7 +11,7 @@ import { DiscoverView } from '@/components/diecast/DiscoverView';
 import { CarDetailView } from '@/components/diecast/CarDetailView';
 import { BottomTabBar, AppNavTab } from '@/components/navigation/BottomTabBar';
 import { PortfolioSummary } from '@/components/admin/PortfolioSummary';
-import { AddDiecastModal } from '@/components/admin/AddDiecastModal';
+import { DiecastFormModal } from '@/components/admin/DiecastFormModal';
 import { HotWheelsFlameLogo } from '@/components/ui/HotWheelsLogo';
 import { WortelemesLogo } from '@/components/ui/WortelemesLogo';
 import {
@@ -524,11 +524,11 @@ export default function Home() {
       )}
 
       {/* Modal Tambah Diecast */}
-      <AddDiecastModal
+      <DiecastFormModal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         seriesList={seriesList}
-        onAdd={handleAddItem}
+        onSave={handleAddItem}
       />
     </main>
   );

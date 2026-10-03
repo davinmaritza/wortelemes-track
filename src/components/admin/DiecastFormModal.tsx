@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CollectionItem, Series } from '@/types/diecast';
-import { Search, Loader2, X, PlusCircle, Check, Edit2 } from 'lucide-react';
+import { Search, Loader2, X, PlusCircle, Check, Edit2, Upload, Camera, Image as ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 
 interface DiecastFormModalProps {
@@ -41,6 +41,44 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
   const [imageUrl, setImageUrl] = useState('');
   const [isForSale, setIsForSale] = useState(true);
   const [notes, setNotes] = useState('');
+
+  // Image Upload State
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setUploadError('');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Gagal mengupload file gambar');
+      }
+
+      setImageUrl(data.url);
+    } catch (err: any) {
+      console.error('Upload error:', err);
+      setUploadError(err.message || 'Gagal upload gambar');
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
 
   // Populate form when itemToEdit changes
   useEffect(() => {
@@ -213,28 +251,79 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
             </div>
           )}
 
-          {/* Image URL & Thumbnail Preview */}
-          <div className="flex items-center gap-3 bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
-            <div className="relative w-16 h-12 bg-white rounded-lg overflow-hidden shrink-0 border border-[#242735]">
-              <Image
-                src={imageUrl || '/cars/erikenstein_rod.png'}
-                alt="preview"
-                fill
-                className="object-contain p-1"
-                unoptimized
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">
-                Image URL / Asset Path
+          {/* Image Upload & Thumbnail Preview Section */}
+          <div className="bg-[#111217] p-3 rounded-xl border border-[#242735] flex flex-col gap-2.5">
+            <div className="flex items-center justify-between">
+              <label className="text-[10px] font-bold text-gray-400 uppercase">
+                Foto / Gambar Diecast
               </label>
-              <input
-                type="text"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="/cars/nama_mobil.png atau URL"
-                className="w-full bg-[#1a1d26] border border-[#242735] rounded-lg px-2 py-1 text-xs text-white font-mono focus:outline-none focus:border-[#0066d6]"
-              />
+              {isUploading && (
+                <span className="text-[10px] text-blue-400 flex items-center gap-1 font-medium">
+                  <Loader2 className="w-3 h-3 animate-spin" /> Mengunggah...
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* Preview Thumbnail */}
+              <div className="relative w-20 h-14 bg-white rounded-xl overflow-hidden shrink-0 border border-[#242735] shadow-inner flex items-center justify-center">
+                {imageUrl ? (
+                  <Image
+                    src={imageUrl}
+                    alt="preview"
+                    fill
+                    className="object-contain p-1"
+                    unoptimized
+                  />
+                ) : (
+                  <ImageIcon className="w-6 h-6 text-gray-400" />
+                )}
+              </div>
+
+              {/* Upload Actions */}
+              <div className="flex-1 flex flex-col gap-1.5">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  accept="image/png,image/jpeg,image/webp,image/jpg"
+                  className="hidden"
+                />
+
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                    className="flex-1 bg-[#1e222f] hover:bg-[#2b3042] text-white border border-[#2c3144] py-1.5 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-sm"
+                  >
+                    <Upload className="w-3.5 h-3.5 text-blue-400" />
+                    <span>{isUploading ? 'Uploading...' : 'Upload Foto'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const sample = prompt('Masukkan URL gambar langsung:', imageUrl);
+                      if (sample !== null) setImageUrl(sample.trim());
+                    }}
+                    className="bg-[#16181f] hover:bg-[#1f222e] text-gray-300 border border-[#242735] px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                    title="Paste Link URL"
+                  >
+                    URL
+                  </button>
+                </div>
+
+                <p className="text-[10px] text-gray-500 truncate">
+                  {imageUrl ? imageUrl : 'Format: PNG, JPG, WebP. Atau cari via Wiki di atas.'}
+                </p>
+
+                {uploadError && (
+                  <p className="text-[10px] text-red-400 font-medium">
+                    {uploadError}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
