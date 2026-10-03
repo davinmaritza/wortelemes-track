@@ -1,13 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { showcaseCars, showcaseSeries } from '@/lib/data/mockData';
+import { showcaseSeries } from '@/lib/data/mockData';
 import { CollectionItem, Series } from '@/types/diecast';
 import { PortfolioSummary } from '@/components/admin/PortfolioSummary';
-import { AddDiecastModal } from '@/components/admin/AddDiecastModal';
+import { DiecastFormModal } from '@/components/admin/DiecastFormModal';
+import { QuickPriceEditModal } from '@/components/admin/QuickPriceEditModal';
 import { HotWheelsFlameLogo } from '@/components/ui/HotWheelsLogo';
+import {
+  getStoredCollections,
+  saveStoredCollections,
+  resetStoredCollections,
+} from '@/lib/storage/collectionStorage';
 import {
   Lock,
   Unlock,
@@ -23,6 +29,10 @@ import {
   EyeOff,
   Star,
   ExternalLink,
+  CheckSquare,
+  Square,
+  RotateCcw,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -30,14 +40,36 @@ export default function AdminPage() {
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState(false);
 
-  // Data Collections
-  const [collections, setCollections] = useState<CollectionItem[]>(showcaseCars);
+  // Data Collections with Local Persistence
+  const [collections, setCollections] = useState<CollectionItem[]>([]);
   const [seriesList] = useState<Series[]>(showcaseSeries);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [tierFilter, setTierFilter] = useState<string>('all');
 
-  // Edit State
+  // Multi-Selection State for Select All / Bulk Delete
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  // Modals State
+  const [showFormModal, setShowFormModal] = useState(false);
   const [editingItem, setEditingItem] = useState<CollectionItem | null>(null);
+
+  // Quick Price Adjust Modal State
+  const [priceEditingItem, setPriceEditingItem] = useState<CollectionItem | null>(null);
+
+  // Load from Storage on Mount
+  useEffect(() => {
+    const data = getStoredCollections();
+    setCollections(data);
+
+    const handleUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent<CollectionItem[]>;
+      if (customEvent.detail) {
+        setCollections(customEvent.detail);
+      }
+    };
+    window.addEventListener('diecast-inventory-updated', handleUpdate);
+    return () => window.removeEventListener('diecast-inventory-updated', handleUpdate);
+  }, []);
 
   const handleVerifyPin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,36 +82,120 @@ export default function AdminPage() {
     }
   };
 
-  const handleAddItem = (newItem: CollectionItem) => {
-    setCollections((prev) => [newItem, ...prev]);
+  const handleSaveItem = (savedItem: CollectionItem) => {
+    setCollections((prev) => {
+      const exists = prev.some((item) => item.id === savedItem.id);
+      const updated = exists
+        ? prev.map((item) => (item.id === savedItem.id ? savedItem : item))
+        : [savedItem, ...prev];
+      saveStoredCollections(updated);
+      return updated;
+    });
+    setEditingItem(null);
   };
 
-  const handleDeleteItem = (id: string) => {
-    if (confirm('Yakin ingin menghapus mobil ini dari database?')) {
-      setCollections((prev) => prev.filter((item) => item.id !== id));
+  const handleDeleteSingle = (id: string, name: string) => {
+    if (confirm(`Yakin ingin menghapus "${name}" dari garasi?`)) {
+      setCollections((prev) => {
+        const updated = prev.filter((item) => item.id !== id);
+        saveStoredCollections(updated);
+        return updated;
+      });
+      setSelectedIds((prev) => prev.filter((item) => item !== id));
     }
   };
 
   const handleToggleForSale = (id: string) => {
-    setCollections((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, is_for_sale: !item.is_for_sale } : item))
-    );
+    setCollections((prev) => {
+      const updated = prev.map((item) =>
+        item.id === id ? { ...item, is_for_sale: !item.is_for_sale } : item
+      );
+      saveStoredCollections(updated);
+      return updated;
+    });
   };
 
   const handleUpdatePrice = (id: string, buyPrice: number, sellPrice: number) => {
-    setCollections((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, buy_price: buyPrice, sell_price: sellPrice } : item))
+    setCollections((prev) => {
+      const updated = prev.map((item) =>
+        item.id === id ? { ...item, buy_price: buyPrice, sell_price: sellPrice } : item
+      );
+      saveStoredCollections(updated);
+      return updated;
+    });
+  };
+
+  const handleResetToDefault = () => {
+    if (confirm('Reset seluruh data ke katalog default awal? Perubahan kustom akan dihapus.')) {
+      const def = resetStoredCollections();
+      setCollections(def);
+      setSelectedIds([]);
+    }
+  };
+
+  // Filter items based on search and tier filter
+  const filteredItems = collections.filter((item) => {
+    const matchesSearch =
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.tier_badge.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.color.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesTier = tierFilter === 'all' || item.tier_badge === tierFilter;
+    return matchesSearch && matchesTier;
+  });
+
+  // Checkbox Select All Logic
+  const allFilteredSelected =
+    filteredItems.length > 0 &&
+    filteredItems.every((item) => selectedIds.includes(item.id));
+
+  const handleToggleSelectAll = () => {
+    if (allFilteredSelected) {
+      // Unselect all currently filtered items
+      const filteredIdSet = new Set(filteredItems.map((item) => item.id));
+      setSelectedIds((prev) => prev.filter((id) => !filteredIdSet.has(id)));
+    } else {
+      // Select all currently filtered items
+      const newSelected = new Set([...selectedIds, ...filteredItems.map((item) => item.id)]);
+      setSelectedIds(Array.from(newSelected));
+    }
+  };
+
+  const handleToggleRowSelect = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
-  const filteredItems = collections.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.tier_badge.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.color.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Bulk Delete Action
+  const handleBulkDelete = () => {
+    if (selectedIds.length === 0) return;
+    if (
+      confirm(
+        `PERINGATAN: Yakin ingin menghapus massal ${selectedIds.length} diecast yang dipilih?`
+      )
+    ) {
+      setCollections((prev) => {
+        const updated = prev.filter((item) => !selectedIds.includes(item.id));
+        saveStoredCollections(updated);
+        return updated;
+      });
+      setSelectedIds([]);
+    }
+  };
 
-  // RENDER: LOGIN FORM JIKA BELUM TERVERIFIKASI
+  // Bulk Mark For Sale Action
+  const handleBulkToggleSale = (status: boolean) => {
+    if (selectedIds.length === 0) return;
+    setCollections((prev) => {
+      const updated = prev.map((item) =>
+        selectedIds.includes(item.id) ? { ...item, is_for_sale: status } : item
+      );
+      saveStoredCollections(updated);
+      return updated;
+    });
+  };
+
+  // RENDER: LOGIN PIN FORM JIKA BELUM TERVERIFIKASI
   if (!isAuthenticated) {
     return (
       <main className="min-h-screen bg-[#0c0d10] text-white flex flex-col items-center justify-center p-4">
@@ -93,8 +209,8 @@ export default function AdminPage() {
           <h1 className="text-xl font-black uppercase tracking-tight text-white text-center">
             GARASI ADMIN PORTAL
           </h1>
-          <p className="text-xs text-gray-400 text-center mt-1 mb-6">
-            Akses privat khusus pemilik untuk kelola modal rahasia, valuasi pasar, dan inventori koleksi.
+          <p className="text-xs text-gray-400 text-center mt-1 mb-6 leading-relaxed">
+            Akses privat khusus pemilik untuk kelola modal rahasia, valuasi pasar, penyesuaian harga, dan CRUD koleksi.
           </p>
 
           <form onSubmit={handleVerifyPin} className="w-full flex flex-col gap-3">
@@ -145,31 +261,44 @@ export default function AdminPage() {
 
   // RENDER: DASHBOARD ADMIN LENGKAP (SUDAH LOGIN)
   return (
-    <main className="min-h-screen bg-[#0c0d10] text-white flex flex-col items-center pb-20">
+    <main className="min-h-screen bg-[#0c0d10] text-white flex flex-col items-center pb-24">
       {/* Top Admin Header */}
-      <header className="w-full max-w-7xl px-4 sm:px-8 py-4 border-b border-[#1f222e] bg-[#121318]/90 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
+      <header className="w-full max-w-7xl px-4 sm:px-8 py-3.5 border-b border-[#1f222e] bg-[#121318]/95 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <HotWheelsFlameLogo className="w-24 h-7" />
-          <span className="text-xs font-black uppercase bg-red-950/80 text-red-400 border border-red-800/40 px-2.5 py-1 rounded-full">
+          <span className="text-[10px] font-black uppercase bg-red-950/80 text-red-400 border border-red-800/40 px-2.5 py-1 rounded-full flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
             Admin Workspace
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-bold text-xs px-3.5 py-2 rounded-xl active:scale-95 transition-all shadow"
+            onClick={() => {
+              setEditingItem(null);
+              setShowFormModal(true);
+            }}
+            className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2 rounded-xl active:scale-95 transition-all shadow"
           >
             <Plus className="w-4 h-4" />
             <span>Tambah Mobil</span>
           </button>
 
+          <button
+            onClick={handleResetToDefault}
+            className="hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-[#1a1d26] border border-[#242735] px-2.5 py-2 rounded-xl transition-colors"
+            title="Reset ke katalog default"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Reset Default</span>
+          </button>
+
           <Link
             href="/"
-            className="flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-[#1a1d26] border border-[#242735] px-3 py-2 rounded-xl transition-colors"
+            className="flex items-center gap-1 text-xs text-gray-300 hover:text-white bg-[#1a1d26] border border-[#242735] px-3 py-2 rounded-xl transition-colors font-medium"
           >
-            <ExternalLink className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Lihat Web Publik</span>
+            <ExternalLink className="w-3.5 h-3.5 text-blue-400" />
+            <span className="hidden sm:inline">Web Publik</span>
           </Link>
 
           <button
@@ -177,155 +306,302 @@ export default function AdminPage() {
             className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 bg-red-950/30 border border-red-900/30 px-3 py-2 rounded-xl transition-colors font-bold"
           >
             <Unlock className="w-3.5 h-3.5" />
-            <span>Keluar</span>
+            <span className="hidden sm:inline">Keluar</span>
           </button>
         </div>
       </header>
 
-      {/* Main Admin Content */}
+      {/* Main Admin Content Container */}
       <div className="w-full max-w-7xl px-4 sm:px-8 pt-6 flex flex-col gap-6">
         {/* Ringkasan Portofolio & Keuangan */}
         <PortfolioSummary items={collections} />
 
-        {/* Inventory Control Table / List */}
+        {/* Inventory Control Table / List Card */}
         <div className="bg-[#14151b] border border-[#242735] rounded-2xl p-4 sm:p-6 flex flex-col gap-4 shadow-xl">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          {/* Header Controls: Title & Filters */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-black uppercase text-white tracking-tight">
-                Kelola Inventori & Harga Modal
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-black uppercase text-white tracking-tight">
+                  Kelola Inventori & Penyesuaian Harga
+                </h2>
+                <span className="text-[11px] font-mono font-bold bg-[#1e212b] text-gray-300 px-2 py-0.5 rounded-full border border-[#2d3142]">
+                  {collections.length} Unit
+                </span>
+              </div>
               <p className="text-xs text-gray-400 mt-0.5">
-                Total {collections.length} mobil terdaftar dalam database.
+                Edit data mobil, ubah harga modal & harga jual, centang select all untuk hapus massal.
               </p>
             </div>
 
-            {/* Search Input */}
-            <div className="relative w-full sm:w-72">
-              <Search className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cari model atau seri..."
-                className="w-full bg-[#1a1d26] border border-[#242735] rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6]"
-              />
+            {/* Filter and Search Toolbar */}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Tier Filter */}
+              <select
+                value={tierFilter}
+                onChange={(e) => setTierFilter(e.target.value)}
+                className="bg-[#1a1d26] border border-[#242735] rounded-xl px-2.5 py-2 text-xs text-gray-200 focus:outline-none focus:border-[#0066d6]"
+              >
+                <option value="all">Semua Tier</option>
+                <option value="Mainline">Mainline</option>
+                <option value="Silver Series">Silver Series</option>
+                <option value="RLC">RLC</option>
+                <option value="Hot Wheels XL">Hot Wheels XL</option>
+                <option value="Super Treasure Hunt">STH</option>
+                <option value="Screen Time">Screen Time</option>
+              </select>
+
+              {/* Search Input */}
+              <div className="relative w-full sm:w-64">
+                <Search className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Cari model atau seri..."
+                  className="w-full bg-[#1a1d26] border border-[#242735] rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6]"
+                />
+              </div>
             </div>
           </div>
 
+          {/* Bulk Action Banner when items are selected */}
+          {selectedIds.length > 0 && (
+            <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-red-950/20 border border-red-900/40 rounded-xl">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                <span className="text-xs font-bold text-red-300">
+                  {selectedIds.length} mobil dipilih
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleBulkToggleSale(true)}
+                  className="bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/40 text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors"
+                >
+                  Set For Sale
+                </button>
+                <button
+                  onClick={() => handleBulkToggleSale(false)}
+                  className="bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-600 text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors"
+                >
+                  Set NFS
+                </button>
+                <button
+                  onClick={handleBulkDelete}
+                  className="bg-red-600 hover:bg-red-700 active:scale-95 text-white text-[11px] font-black px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all shadow"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Hapus ({selectedIds.length})</span>
+                </button>
+                <button
+                  onClick={() => setSelectedIds([])}
+                  className="text-xs text-gray-400 hover:text-white px-2 py-1"
+                >
+                  Batal
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Desktop Table View */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-xl border border-[#242735]">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-[#242735] text-gray-400 font-bold uppercase text-[10px]">
+                <tr className="bg-[#111217] border-b border-[#242735] text-gray-400 font-bold uppercase text-[10px]">
+                  {/* Select All Checkbox */}
+                  <th className="py-3 px-3 w-10 text-center">
+                    <button
+                      type="button"
+                      onClick={handleToggleSelectAll}
+                      className="text-gray-400 hover:text-white transition-colors"
+                      title={allFilteredSelected ? 'Batalkan pilihan semua' : 'Pilih semua'}
+                    >
+                      {allFilteredSelected ? (
+                        <CheckSquare className="w-4 h-4 text-[#0066d6]" />
+                      ) : (
+                        <Square className="w-4 h-4" />
+                      )}
+                    </button>
+                  </th>
                   <th className="py-3 px-3">Mobil</th>
                   <th className="py-3 px-3">Seri / Tier</th>
                   <th className="py-3 px-3">Kondisi</th>
-                  <th className="py-3 px-3">Modal Beli (Hide)</th>
+                  <th className="py-3 px-3">Modal Beli (Privat)</th>
                   <th className="py-3 px-3">Harga Pasaran</th>
                   <th className="py-3 px-3">Margin Profit</th>
                   <th className="py-3 px-3">Status Jual</th>
-                  <th className="py-3 px-3 text-right">Aksi</th>
+                  <th className="py-3 px-3 text-right">Aksi & Sesuaikan</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#242735]/60">
-                {filteredItems.map((item) => {
-                  const profit = (item.sell_price || 0) - (item.buy_price || 0);
-                  const marginPercent =
-                    item.buy_price && item.buy_price > 0
-                      ? Math.round((profit / item.buy_price) * 100)
-                      : 0;
+              <tbody className="divide-y divide-[#242735]/60 bg-[#14151b]">
+                {filteredItems.length === 0 ? (
+                  <tr>
+                    <td colSpan={9} className="py-8 text-center text-gray-500">
+                      Tidak ada diecast yang sesuai dengan pencarian.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredItems.map((item) => {
+                    const profit = (item.sell_price || 0) - (item.buy_price || 0);
+                    const marginPercent =
+                      item.buy_price && item.buy_price > 0
+                        ? Math.round((profit / item.buy_price) * 100)
+                        : 0;
+                    const isSelected = selectedIds.includes(item.id);
 
-                  return (
-                    <tr key={item.id} className="hover:bg-[#1a1d26]/40 transition-colors">
-                      {/* Car Thumbnail & Name */}
-                      <td className="py-3 px-3 flex items-center gap-3">
-                        <div className="relative w-12 h-9 bg-white rounded-lg p-1 shrink-0 overflow-hidden border border-[#242735]">
-                          <Image
-                            src={item.image_url}
-                            alt={item.name}
-                            fill
-                            className="object-contain"
-                            unoptimized
-                          />
-                        </div>
-                        <div>
-                          <span className="font-extrabold text-white uppercase block">
-                            {item.name}
+                    return (
+                      <tr
+                        key={item.id}
+                        className={`hover:bg-[#1a1d26]/60 transition-colors ${
+                          isSelected ? 'bg-blue-950/20' : ''
+                        }`}
+                      >
+                        {/* Row Selection Checkbox */}
+                        <td className="py-3 px-3 text-center">
+                          <button
+                            type="button"
+                            onClick={() => handleToggleRowSelect(item.id)}
+                            className="text-gray-400 hover:text-white transition-colors"
+                          >
+                            {isSelected ? (
+                              <CheckSquare className="w-4 h-4 text-[#0066d6]" />
+                            ) : (
+                              <Square className="w-4 h-4 text-gray-600" />
+                            )}
+                          </button>
+                        </td>
+
+                        {/* Car Thumbnail & Name */}
+                        <td className="py-3 px-3 flex items-center gap-3">
+                          <div className="relative w-12 h-9 bg-white rounded-lg p-1 shrink-0 overflow-hidden border border-[#242735]">
+                            <Image
+                              src={item.image_url}
+                              alt={item.name}
+                              fill
+                              className="object-contain"
+                              unoptimized
+                            />
+                          </div>
+                          <div>
+                            <span className="font-extrabold text-white uppercase block leading-tight">
+                              {item.name}
+                            </span>
+                            <span className="text-[10px] text-gray-400 font-mono">
+                              {item.release_year} • {item.color} • Qty: {item.qty}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* Series / Tier */}
+                        <td className="py-3 px-3">
+                          <span className="bg-[#242735] text-gray-200 text-[10px] font-bold px-2 py-0.5 rounded uppercase inline-block">
+                            {item.tier_badge}
                           </span>
-                          <span className="text-[10px] text-gray-400 font-mono">
-                            {item.release_year} • {item.color}
+                        </td>
+
+                        {/* Condition */}
+                        <td className="py-3 px-3 text-gray-300">
+                          {item.condition}
+                        </td>
+
+                        {/* Buy Price (Modal Privat) */}
+                        <td className="py-3 px-3 font-mono font-bold text-red-400 whitespace-nowrap">
+                          Rp {item.buy_price?.toLocaleString('id-ID')}
+                        </td>
+
+                        {/* Sell Price (Pasaran) */}
+                        <td className="py-3 px-3 font-mono font-bold text-white whitespace-nowrap">
+                          Rp {item.sell_price?.toLocaleString('id-ID')}
+                        </td>
+
+                        {/* Margin Profit */}
+                        <td className="py-3 px-3 whitespace-nowrap">
+                          <span
+                            className={`font-bold font-mono text-[11px] ${
+                              profit >= 0 ? 'text-emerald-400' : 'text-red-400'
+                            }`}
+                          >
+                            {profit >= 0 ? '+' : ''}Rp {profit.toLocaleString('id-ID')} ({marginPercent}%)
                           </span>
-                        </div>
-                      </td>
+                        </td>
 
-                      {/* Series / Tier */}
-                      <td className="py-3 px-3">
-                        <span className="bg-[#242735] text-gray-200 text-[10px] font-bold px-2 py-0.5 rounded uppercase">
-                          {item.tier_badge}
-                        </span>
-                      </td>
+                        {/* For Sale Toggle Button */}
+                        <td className="py-3 px-3">
+                          <button
+                            onClick={() => handleToggleForSale(item.id)}
+                            className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${
+                              item.is_for_sale
+                                ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800/40 hover:bg-emerald-900'
+                                : 'bg-gray-800/60 text-gray-400 border-gray-700/40 hover:bg-gray-700'
+                            }`}
+                          >
+                            {item.is_for_sale ? 'For Sale' : 'NFS'}
+                          </button>
+                        </td>
 
-                      {/* Condition */}
-                      <td className="py-3 px-3 text-gray-300">
-                        {item.condition}
-                      </td>
+                        {/* Actions: Quick Price Edit, Full Edit, Delete */}
+                        <td className="py-3 px-3 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {/* Fast Price Adjust Button */}
+                            <button
+                              onClick={() => setPriceEditingItem(item)}
+                              className="p-1.5 rounded-lg bg-emerald-950/40 text-emerald-400 hover:bg-emerald-900/60 transition-colors border border-emerald-800/30"
+                              title="Sesuaikan Harga Cepat"
+                            >
+                              <DollarSign className="w-3.5 h-3.5" />
+                            </button>
 
-                      {/* Buy Price (Modal) */}
-                      <td className="py-3 px-3 font-mono font-bold text-red-400">
-                        Rp {item.buy_price?.toLocaleString('id-ID')}
-                      </td>
+                            {/* Full Edit Modal */}
+                            <button
+                              onClick={() => {
+                                setEditingItem(item);
+                                setShowFormModal(true);
+                              }}
+                              className="p-1.5 rounded-lg bg-[#242735] text-gray-200 hover:bg-[#0066d6] hover:text-white transition-colors"
+                              title="Edit Data Mobil"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
 
-                      {/* Sell Price (Pasaran) */}
-                      <td className="py-3 px-3 font-mono font-bold text-white">
-                        Rp {item.sell_price?.toLocaleString('id-ID')}
-                      </td>
-
-                      {/* Margin Profit */}
-                      <td className="py-3 px-3">
-                        <span className="text-emerald-400 font-bold font-mono">
-                          +{profit.toLocaleString('id-ID')} ({marginPercent}%)
-                        </span>
-                      </td>
-
-                      {/* For Sale Toggle */}
-                      <td className="py-3 px-3">
-                        <button
-                          onClick={() => handleToggleForSale(item.id)}
-                          className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${
-                            item.is_for_sale
-                              ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800/40'
-                              : 'bg-gray-800/60 text-gray-400 border-gray-700/40'
-                          }`}
-                        >
-                          {item.is_for_sale ? 'For Sale' : 'Not For Sale (NFS)'}
-                        </button>
-                      </td>
-
-                      {/* Actions */}
-                      <td className="py-3 px-3 text-right">
-                        <button
-                          onClick={() => handleDeleteItem(item.id)}
-                          className="p-1.5 rounded-lg bg-red-950/30 text-red-400 hover:bg-red-900/50 hover:text-red-200 transition-colors"
-                          title="Hapus Mobil"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                            {/* Delete Single */}
+                            <button
+                              onClick={() => handleDeleteSingle(item.id, item.name)}
+                              className="p-1.5 rounded-lg bg-red-950/30 text-red-400 hover:bg-red-900/50 hover:text-red-200 transition-colors border border-red-900/20"
+                              title="Hapus Mobil"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      {/* Modal Tambah Diecast */}
-      <AddDiecastModal
-        isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
+      {/* Modal Add / Edit Diecast */}
+      <DiecastFormModal
+        isOpen={showFormModal}
+        onClose={() => {
+          setShowFormModal(false);
+          setEditingItem(null);
+        }}
         seriesList={seriesList}
-        onAdd={handleAddItem}
+        itemToEdit={editingItem}
+        onSave={handleSaveItem}
+      />
+
+      {/* Modal Quick Price Adjustment */}
+      <QuickPriceEditModal
+        isOpen={Boolean(priceEditingItem)}
+        onClose={() => setPriceEditingItem(null)}
+        item={priceEditingItem}
+        onSave={handleUpdatePrice}
       />
     </main>
   );

@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { showcaseCars, showcaseSeries } from '@/lib/data/mockData';
 import { CollectionItem, Series } from '@/types/diecast';
+import { getStoredCollections, saveStoredCollections } from '@/lib/storage/collectionStorage';
 import { DiecastCard } from '@/components/diecast/DiecastCard';
 import { SeriesSection } from '@/components/diecast/SeriesSection';
 import { DiscoverView } from '@/components/diecast/DiscoverView';
@@ -36,8 +38,23 @@ export default function Home() {
   const [selectedCar, setSelectedCar] = useState<CollectionItem | null>(null);
 
   // Data State
-  const [collections, setCollections] = useState<CollectionItem[]>(showcaseCars);
+  const [collections, setCollections] = useState<CollectionItem[]>([]);
   const [seriesList] = useState<Series[]>(showcaseSeries);
+
+  // Sync with Local Storage
+  React.useEffect(() => {
+    const initialData = getStoredCollections();
+    setCollections(initialData);
+
+    const handleUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent<CollectionItem[]>;
+      if (customEvent.detail) {
+        setCollections(customEvent.detail);
+      }
+    };
+    window.addEventListener('diecast-inventory-updated', handleUpdate);
+    return () => window.removeEventListener('diecast-inventory-updated', handleUpdate);
+  }, []);
 
   // Admin Mode State (Passcode PIN)
   const [isAdmin, setIsAdmin] = useState(false);
@@ -76,19 +93,31 @@ export default function Home() {
   });
 
   const handleUpdateQty = (id: string, delta: number) => {
-    setCollections((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, qty: Math.max(0, c.qty + delta) } : c))
-    );
+    setCollections((prev) => {
+      const updated = prev.map((c) =>
+        c.id === id ? { ...c, qty: Math.max(0, c.qty + delta) } : c
+      );
+      saveStoredCollections(updated);
+      return updated;
+    });
   };
 
   const handleToggleFavorite = (id: string) => {
-    setCollections((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, is_favorite: !c.is_favorite } : c))
-    );
+    setCollections((prev) => {
+      const updated = prev.map((c) =>
+        c.id === id ? { ...c, is_favorite: !c.is_favorite } : c
+      );
+      saveStoredCollections(updated);
+      return updated;
+    });
   };
 
   const handleAddItem = (newItem: CollectionItem) => {
-    setCollections((prev) => [newItem, ...prev]);
+    setCollections((prev) => {
+      const updated = [newItem, ...prev];
+      saveStoredCollections(updated);
+      return updated;
+    });
   };
 
   if (selectedCar) {
@@ -170,6 +199,15 @@ export default function Home() {
 
         {/* Right Desktop Controls */}
         <div className="flex items-center gap-3">
+          <Link
+            href="/admin"
+            className="flex items-center gap-1.5 bg-[#16181f] hover:bg-[#20232d] text-gray-200 border border-[#242735] hover:border-red-500/50 px-3.5 py-2 rounded-xl text-xs font-bold transition-all"
+            title="Buka Garasi Admin Portal"
+          >
+            <Lock className="w-3.5 h-3.5 text-red-400" />
+            <span>Garasi Admin</span>
+          </Link>
+
           {isAdmin && (
             <button
               onClick={() => setShowAddModal(true)}
@@ -196,7 +234,7 @@ export default function Home() {
             ) : (
               <>
                 <Lock className="w-3.5 h-3.5" />
-                <span>Login PIN</span>
+                <span>Quick PIN</span>
               </>
             )}
           </button>
@@ -215,7 +253,14 @@ export default function Home() {
         </div>
 
         <div className="md:hidden flex items-center justify-between pb-3">
-          <div className="w-8" />
+          <Link
+            href="/admin"
+            className="p-1.5 rounded-full text-red-400 bg-red-950/30 border border-red-900/30"
+            title="Garasi Admin"
+          >
+            <Lock className="w-3.5 h-3.5" />
+          </Link>
+
           {/* Centered Hot Wheels Logo on Mobile (Sesuai Screenshot 2) */}
           <HotWheelsFlameLogo className="w-24 h-7" />
 
