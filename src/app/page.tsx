@@ -252,26 +252,24 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="md:hidden flex items-center justify-between pb-3">
+        <div className="md:hidden flex items-center justify-between pb-3 pt-1">
           <Link
             href="/admin"
-            className="p-1.5 rounded-full text-red-400 bg-red-950/30 border border-red-900/30"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors"
             title="Garasi Admin"
           >
-            <Lock className="w-3.5 h-3.5" />
+            <Lock className="w-4 h-4" />
           </Link>
 
           {/* Centered Hot Wheels Logo on Mobile (Sesuai Screenshot 2) */}
-          <HotWheelsFlameLogo className="w-24 h-7" />
+          <HotWheelsFlameLogo className="w-26 h-7" />
 
           <button
             onClick={() => (isAdmin ? setIsAdmin(false) : setShowPinModal(true))}
-            className={`p-1.5 rounded-full transition-all ${
-              isAdmin ? 'text-red-400 bg-red-950/40' : 'text-gray-400 hover:text-white'
-            }`}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors"
             title="Admin PIN"
           >
-            {isAdmin ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+            {isAdmin ? <Unlock className="w-4 h-4 text-red-400" /> : <Lock className="w-4 h-4" />}
           </button>
         </div>
 

@@ -52,10 +52,10 @@ export const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ items }) => 
         {/* Total Modal */}
         <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
-            <DollarSign className="w-3.5 h-3.5 text-amber-400" />
+            <DollarSign className="w-3.5 h-3.5 text-gray-400" />
             <span>Total Modal</span>
           </div>
-          <div className="text-amber-400 font-extrabold text-sm sm:text-base font-mono truncate">
+          <div className="text-white font-extrabold text-sm sm:text-base font-mono truncate">
             {formatRupiah(totalModal)}
           </div>
         </div>
@@ -63,10 +63,10 @@ export const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ items }) => 
         {/* Total Valuasi Pasar */}
         <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
-            <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+            <TrendingUp className="w-3.5 h-3.5 text-gray-400" />
             <span>Valuasi Pasar</span>
           </div>
-          <div className="text-emerald-400 font-extrabold text-sm sm:text-base font-mono truncate">
+          <div className="text-white font-extrabold text-sm sm:text-base font-mono truncate">
             {formatRupiah(totalValuasi)}
           </div>
         </div>
@@ -74,12 +74,12 @@ export const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ items }) => 
         {/* Potensi Margin Profit */}
         <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
-            <TrendingUp className="w-3.5 h-3.5 text-purple-400" />
+            <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
             <span>Potensi Profit</span>
           </div>
-          <div className="text-purple-300 font-extrabold text-sm sm:text-base font-mono truncate">
+          <div className="text-emerald-400 font-extrabold text-sm sm:text-base font-mono truncate">
             +{formatRupiah(totalPotentialProfit)}
-            <span className="text-[10px] text-purple-400 ml-1">({profitMarginPercent}%)</span>
+            <span className="text-[10px] text-emerald-500 font-semibold ml-1">({profitMarginPercent}%)</span>
           </div>
         </div>
       </div>
