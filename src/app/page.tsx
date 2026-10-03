@@ -248,8 +248,12 @@ export default function Home() {
           </div>
         ) : currentNav === 'profile' ? (
           <div className="py-16 text-center text-gray-400 flex flex-col items-center gap-3">
-            <div className="w-20 h-20 rounded-full bg-[#16181f] border border-[#242735] flex items-center justify-center text-white font-black text-2xl shadow-xl">
-              W
+            <div className="relative w-24 h-24 rounded-full bg-[#16181f] border-2 border-[#242735] overflow-hidden shadow-2xl">
+              <img
+                src="/logo.png"
+                alt="Wortelemes Avatar"
+                className="w-full h-full object-cover"
+              />
             </div>
             <h2 className="text-white font-extrabold text-2xl">Garasi Wortelemes</h2>
             <p className="text-xs text-gray-400">Kolektor Diecast & Penjual Terpercaya</p>
