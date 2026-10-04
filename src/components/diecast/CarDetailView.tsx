@@ -68,7 +68,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
       </div>
 
       {/* Main Content: Responsive Split on Desktop (Asset on left, Specs on right) */}
-      <div className="max-w-5xl mx-auto w-full px-4 md:px-8 py-6 flex flex-col md:flex-row gap-8 items-start">
+      <div className="max-w-5xl mx-auto w-full px-4 md:px-8 py-6 pb-24 flex flex-col md:flex-row gap-8 items-start">
         {/* Left: Showcase Asset Preview */}
         <div className="w-full md:w-1/2 flex flex-col items-center">
           <div className="relative w-full aspect-[4/3] bg-white rounded-3xl border border-[#242735] flex items-center justify-center p-6 overflow-hidden shadow-2xl">
@@ -203,38 +203,40 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
             )}
           </div>
 
-          {/* Action Button */}
-          {isAdmin ? (
-            <div className="bg-[#0066d6] text-white rounded-full p-2 flex items-center justify-between shadow-[0_8px_30px_rgba(0,102,214,0.4)]">
-              <button
-                onClick={() => onUpdateQty?.(car.id, 1)}
-                className="flex-1 py-2.5 flex items-center justify-center hover:bg-white/10 rounded-full active:scale-95 transition-all font-bold text-xs"
-                title="Tambah Stok"
-              >
-                <Plus className="w-5 h-5 mr-1" />
-                Tambah Stok
-              </button>
-              <div className="w-[1px] h-6 bg-white/20" />
-              <button
-                onClick={() => onToggleFavorite?.(car.id)}
-                className="flex-1 py-2.5 flex items-center justify-center hover:bg-white/10 rounded-full active:scale-95 transition-all text-xs font-bold"
-                title="Favorit"
-              >
-                <Star className={`w-5 h-5 mr-1 ${car.is_favorite ? 'fill-white' : ''}`} />
-                Favorit
-              </button>
-            </div>
-          ) : (
-            car.is_for_sale && (
-              <button
-                onClick={handleWhatsAppOrder}
-                className="w-full bg-[#0066d6] hover:bg-blue-600 text-white rounded-full py-3.5 px-6 font-bold text-sm flex items-center justify-center gap-2 shadow-[0_8px_30px_rgba(0,102,214,0.4)] active:scale-95 transition-all"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Beli Koleksi Ini (Chat WhatsApp)</span>
-              </button>
-            )
-          )}
+          {/* Action Button: Sticky Bottom Bar on Mobile, Inline on Desktop */}
+          <div className="fixed md:static bottom-0 left-0 right-0 p-4 md:p-0 bg-[#0c0d10]/95 md:bg-transparent backdrop-blur-lg md:backdrop-blur-none border-t md:border-t-0 border-[#1f222e] z-30">
+            {isAdmin ? (
+              <div className="bg-[#0066d6] text-white rounded-full p-2 flex items-center justify-between shadow-[0_8px_30px_rgba(0,102,214,0.4)] max-w-md mx-auto">
+                <button
+                  onClick={() => onUpdateQty?.(car.id, 1)}
+                  className="flex-1 py-2.5 flex items-center justify-center hover:bg-white/10 rounded-full active:scale-95 transition-all font-bold text-xs"
+                  title="Tambah Stok"
+                >
+                  <Plus className="w-5 h-5 mr-1" />
+                  Tambah Stok
+                </button>
+                <div className="w-[1px] h-6 bg-white/20" />
+                <button
+                  onClick={() => onToggleFavorite?.(car.id)}
+                  className="flex-1 py-2.5 flex items-center justify-center hover:bg-white/10 rounded-full active:scale-95 transition-all text-xs font-bold"
+                  title="Favorit"
+                >
+                  <Star className={`w-5 h-5 mr-1 ${car.is_favorite ? 'fill-white' : ''}`} />
+                  Favorit
+                </button>
+              </div>
+            ) : (
+              car.is_for_sale && (
+                <button
+                  onClick={handleWhatsAppOrder}
+                  className="w-full max-w-md mx-auto bg-[#0066d6] hover:bg-blue-600 text-white rounded-full py-3.5 px-6 font-bold text-sm flex items-center justify-center gap-2 shadow-[0_8px_30px_rgba(0,102,214,0.4)] active:scale-95 transition-all"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Beli Koleksi Ini (Chat WhatsApp)</span>
+                </button>
+              )
+            )}
+          </div>
         </div>
       </div>
     </div>

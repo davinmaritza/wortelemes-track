@@ -30,6 +30,9 @@ body {
   background: #242735;
   border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #353a4e;
+/* Hide Next.js floating dev indicator badge */
+nextjs-portal,
+[data-nextjs-toast],
+[data-nextjs-dev-tools-button] {
+  display: none !important;
 }
