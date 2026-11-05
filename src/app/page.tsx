@@ -8,6 +8,8 @@ import { DiecastCard } from '@/components/diecast/DiecastCard';
 import { SeriesSection } from '@/components/diecast/SeriesSection';
 import { DiscoverView } from '@/components/diecast/DiscoverView';
 import { CarDetailView } from '@/components/diecast/CarDetailView';
+import { CollectorJournalView } from '@/components/news/CollectorJournalView';
+import { CollectorProfileView } from '@/components/profile/CollectorProfileView';
 import { BottomTabBar, AppNavTab } from '@/components/navigation/BottomTabBar';
 import { WortelemesLogo } from '@/components/ui/WortelemesLogo';
 import {
@@ -18,13 +20,15 @@ import {
   Compass,
   Newspaper,
   User,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 export default function Home() {
   const [currentNav, setCurrentNav] = useState<AppNavTab>('garage');
   const [garageSubTab, setGarageSubTab] = useState<'Vehicles' | 'Series' | 'Lists'>('Vehicles');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSort, setSelectedSort] = useState<'newest' | 'price-asc' | 'price-desc'>('newest');
+  const [selectedSort, setSelectedSort] = useState<'newest' | 'price-asc' | 'price-desc' | 'name-asc'>('newest');
+  const [selectedTier, setSelectedTier] = useState<string>('all');
   const [filterForSaleOnly, setFilterForSaleOnly] = useState(false);
 
   // Selected car for full-screen detail view
@@ -55,15 +59,21 @@ export default function Home() {
       item.color.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.tier_badge.toLowerCase().includes(searchQuery.toLowerCase());
 
+    const matchesTier =
+      selectedTier === 'all' ||
+      item.tier_badge?.toLowerCase().includes(selectedTier.toLowerCase());
+
+    if (!matchesSearch || !matchesTier) return false;
     if (filterForSaleOnly && !item.is_for_sale) return false;
     if (garageSubTab === 'Lists' && !item.is_favorite) return false;
-    return matchesSearch;
+    return true;
   });
 
   const sortedItems = [...filteredItems].sort((a, b) => {
     if (selectedSort === 'price-asc') return a.sell_price - b.sell_price;
     if (selectedSort === 'price-desc') return b.sell_price - a.sell_price;
-    return 0;
+    if (selectedSort === 'name-asc') return a.name.localeCompare(b.name);
+    return b.release_year - a.release_year;
   });
 
   const handleUpdateQty = (id: string, delta: number) => {
@@ -208,24 +218,9 @@ export default function Home() {
             onToggleFavorite={handleToggleFavorite}
           />
         ) : currentNav === 'news' ? (
-          <div className="py-24 text-center text-gray-400 flex flex-col items-center gap-2">
-            <h2 className="text-white font-extrabold text-xl">Diecast Collector News</h2>
-            <p className="text-xs max-w-sm text-gray-500 mt-1">
-              Agenda drop RLC, update rilisan batch 2026, dan liputan diecast terkini dari seluruh dunia.
-            </p>
-          </div>
+          <CollectorJournalView />
         ) : currentNav === 'profile' ? (
-          <div className="py-16 text-center text-gray-400 flex flex-col items-center gap-3">
-            <div className="relative w-24 h-24 rounded-full bg-[#16181f] border-2 border-[#242735] overflow-hidden shadow-2xl">
-              <img
-                src="/logo.png"
-                alt="Wortelemes Avatar"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <h2 className="text-white font-extrabold text-2xl">Garasi Wortelemes</h2>
-            <p className="text-xs text-gray-400">Kolektor Diecast & Penjual Terpercaya</p>
-          </div>
+          <CollectorProfileView />
         ) : (
           /* MY GARAGE */
           <>
@@ -271,47 +266,85 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Filter Bar */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 mb-3">
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 text-[11px]">
-                <div className="flex items-center gap-1 bg-[#16181f] border border-[#232632] px-3 py-1.5 rounded-full text-gray-300 font-medium shrink-0">
-                  <span>Date Added: New-Old</span>
-                  <ChevronDown className="w-3 h-3 text-gray-500" />
+            {/* Interactive Filter & Sort Bar */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Sort Dropdown */}
+                <div className="relative">
+                  <select
+                    value={selectedSort}
+                    onChange={(e) => setSelectedSort(e.target.value as any)}
+                    className="appearance-none bg-[#14151b] border border-white/10 hover:border-white/20 rounded-xl pl-3 pr-8 py-2 text-xs text-gray-200 focus:outline-none focus:border-[#0066d6] transition-colors cursor-pointer font-medium"
+                  >
+                    <option value="newest">Urutkan: Batch Terbaru</option>
+                    <option value="price-asc">Harga: Terendah ke Tertinggi</option>
+                    <option value="price-desc">Harga: Tertinggi ke Terendah</option>
+                    <option value="name-asc">Nama: A - Z</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
-                <div className="flex items-center gap-1 bg-[#16181f] border border-[#232632] px-3 py-1.5 rounded-full text-gray-300 font-medium shrink-0">
-                  <span>Segment</span>
-                  <ChevronDown className="w-3 h-3 text-gray-500" />
+
+                {/* Tier Filter */}
+                <div className="relative">
+                  <select
+                    value={selectedTier}
+                    onChange={(e) => setSelectedTier(e.target.value)}
+                    className="appearance-none bg-[#14151b] border border-white/10 hover:border-white/20 rounded-xl pl-3 pr-8 py-2 text-xs text-gray-200 focus:outline-none focus:border-[#0066d6] transition-colors cursor-pointer font-medium"
+                  >
+                    <option value="all">Semua Kategori</option>
+                    <option value="RLC">Red Line Club (RLC)</option>
+                    <option value="Silver Series">Silver Series</option>
+                    <option value="Mainline">Mainline</option>
+                    <option value="Super Treasure Hunt">STH</option>
+                    <option value="Screen Time">Screen Time</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
-                <div className="flex items-center gap-1 bg-[#16181f] border border-[#232632] px-3 py-1.5 rounded-full text-gray-300 font-medium shrink-0">
-                  <span>Assortment</span>
-                  <ChevronDown className="w-3 h-3 text-gray-500" />
-                </div>
+
+                {/* For Sale Filter Toggle */}
+                <button
+                  onClick={() => setFilterForSaleOnly(!filterForSaleOnly)}
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border ${
+                    filterForSaleOnly
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-sm'
+                      : 'bg-[#14151b] text-gray-400 hover:text-white border-white/10'
+                  }`}
+                >
+                  {filterForSaleOnly ? '✓ Hanya For Sale' : 'Tampilkan For Sale'}
+                </button>
               </div>
 
-              {/* Search Bar */}
+              {/* Realtime Search Bar */}
               <div className="relative w-full md:w-80">
-                <Search className="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by vehicles, SKU, and more"
-                  className="w-full bg-[#16181f] border border-[#232632] rounded-[14px] pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6]"
+                  placeholder="Cari model casting, warna, atau tier..."
+                  className="w-full bg-[#14151b] border border-white/10 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6] transition-colors"
                 />
               </div>
             </div>
 
-            {/* Counter Bar: 181 / 250 Vehicles [Upgrade] [Select] */}
-            <div className="flex items-center justify-between py-2 text-xs text-gray-400 font-semibold mb-1">
+            {/* Counter & Status Bar */}
+            <div className="flex items-center justify-between py-1 text-xs text-gray-400 font-semibold mb-2">
               <div className="flex items-center gap-2">
-                <span>{collections.reduce((sum, i) => sum + (i.qty || 1), 0)} / 250 Vehicles</span>
-                <span className="bg-[#0066d6] text-white text-[9.5px] font-black px-2 py-0.5 rounded-full">
-                  Upgrade
+                <span className="text-white font-mono font-bold">
+                  {sortedItems.length} Unit
                 </span>
+                <span className="text-gray-600">•</span>
+                <span>{collections.filter((c) => c.is_for_sale).length} Siap Adopsi</span>
               </div>
-              <button className="text-[#0066d6] hover:text-blue-400 font-bold text-xs">
-                Select
-              </button>
+
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="text-[11px] text-blue-400 hover:underline"
+                >
+                  Hapus pencarian
+                </button>
+              )}
             </div>
 
             {/* SUB-TAB DISPLAY */}
