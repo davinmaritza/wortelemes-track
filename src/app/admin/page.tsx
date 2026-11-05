@@ -4,16 +4,25 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { showcaseSeries } from '@/lib/data/mockData';
-import { CollectionItem, Series } from '@/types/diecast';
+import { CollectionItem, Series, ArticleItem, UpcomingDropItem } from '@/types/diecast';
 import { PortfolioSummary } from '@/components/admin/PortfolioSummary';
 import { DiecastFormModal } from '@/components/admin/DiecastFormModal';
 import { QuickPriceEditModal } from '@/components/admin/QuickPriceEditModal';
+import { ArticleFormModal } from '@/components/admin/ArticleFormModal';
+import { DropFormModal } from '@/components/admin/DropFormModal';
 import { WortelemesLogo } from '@/components/ui/WortelemesLogo';
 import {
   getStoredCollections,
   saveStoredCollections,
   resetStoredCollections,
 } from '@/lib/storage/collectionStorage';
+import {
+  getStoredArticles,
+  saveStoredArticles,
+  getStoredDrops,
+  saveStoredDrops,
+  resetStoredNews,
+} from '@/lib/storage/newsStorage';
 import {
   Lock,
   Unlock,
@@ -33,12 +42,21 @@ import {
   Square,
   RotateCcw,
   SlidersHorizontal,
+  Newspaper,
+  Calendar,
+  Sparkles,
+  BookOpen,
+  Clock,
+  FileText,
 } from 'lucide-react';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState(false);
+
+  // Tab State: 'inventory' | 'journal'
+  const [activeAdminTab, setActiveAdminTab] = useState<'inventory' | 'journal'>('inventory');
 
   // Data Collections with Local Persistence
   const [collections, setCollections] = useState<CollectionItem[]>([]);
@@ -49,26 +67,45 @@ export default function AdminPage() {
   // Multi-Selection State for Select All / Bulk Delete
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  // Modals State
+  // Diecast Modals State
   const [showFormModal, setShowFormModal] = useState(false);
   const [editingItem, setEditingItem] = useState<CollectionItem | null>(null);
-
-  // Quick Price Adjust Modal State
   const [priceEditingItem, setPriceEditingItem] = useState<CollectionItem | null>(null);
+
+  // News Journal & Drop Calendar State
+  const [articles, setArticles] = useState<ArticleItem[]>([]);
+  const [drops, setDrops] = useState<UpcomingDropItem[]>([]);
+  const [showArticleModal, setShowArticleModal] = useState(false);
+  const [editingArticle, setEditingArticle] = useState<ArticleItem | null>(null);
+  const [showDropModal, setShowDropModal] = useState(false);
+  const [editingDrop, setEditingDrop] = useState<UpcomingDropItem | null>(null);
 
   // Load from Storage on Mount
   useEffect(() => {
     const data = getStoredCollections();
     setCollections(data);
+    setArticles(getStoredArticles());
+    setDrops(getStoredDrops());
 
-    const handleUpdate = (e: Event) => {
+    const handleInventoryUpdate = (e: Event) => {
       const customEvent = e as CustomEvent<CollectionItem[]>;
       if (customEvent.detail) {
         setCollections(customEvent.detail);
       }
     };
-    window.addEventListener('diecast-inventory-updated', handleUpdate);
-    return () => window.removeEventListener('diecast-inventory-updated', handleUpdate);
+
+    const handleJournalUpdate = () => {
+      setArticles(getStoredArticles());
+      setDrops(getStoredDrops());
+    };
+
+    window.addEventListener('diecast-inventory-updated', handleInventoryUpdate);
+    window.addEventListener('journal-data-updated', handleJournalUpdate);
+
+    return () => {
+      window.removeEventListener('diecast-inventory-updated', handleInventoryUpdate);
+      window.removeEventListener('journal-data-updated', handleJournalUpdate);
+    };
   }, []);
 
   const handleVerifyPin = (e: React.FormEvent) => {
@@ -130,6 +167,60 @@ export default function AdminPage() {
       const def = resetStoredCollections();
       setCollections(def);
       setSelectedIds([]);
+    }
+  };
+
+  // Article CRUD Handlers
+  const handleSaveArticle = (savedArticle: ArticleItem) => {
+    setArticles((prev) => {
+      const exists = prev.some((a) => a.id === savedArticle.id);
+      const updated = exists
+        ? prev.map((a) => (a.id === savedArticle.id ? savedArticle : a))
+        : [savedArticle, ...prev];
+      saveStoredArticles(updated);
+      return updated;
+    });
+    setEditingArticle(null);
+  };
+
+  const handleDeleteArticle = (id: string, title: string) => {
+    if (confirm(`Are you sure you want to delete article "${title}"?`)) {
+      setArticles((prev) => {
+        const updated = prev.filter((a) => a.id !== id);
+        saveStoredArticles(updated);
+        return updated;
+      });
+    }
+  };
+
+  // Drop Event CRUD Handlers
+  const handleSaveDrop = (savedDrop: UpcomingDropItem) => {
+    setDrops((prev) => {
+      const exists = prev.some((d) => d.id === savedDrop.id);
+      const updated = exists
+        ? prev.map((d) => (d.id === savedDrop.id ? savedDrop : d))
+        : [savedDrop, ...prev];
+      saveStoredDrops(updated);
+      return updated;
+    });
+    setEditingDrop(null);
+  };
+
+  const handleDeleteDrop = (id: string, model: string) => {
+    if (confirm(`Are you sure you want to remove release drop event "${model}"?`)) {
+      setDrops((prev) => {
+        const updated = prev.filter((d) => d.id !== id);
+        saveStoredDrops(updated);
+        return updated;
+      });
+    }
+  };
+
+  const handleResetNewsToDefault = () => {
+    if (confirm('Reset all journal articles and release drops to default?')) {
+      const def = resetStoredNews();
+      setArticles(def.articles);
+      setDrops(def.drops);
     }
   };
 
@@ -281,25 +372,62 @@ export default function AdminPage() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            onClick={() => {
-              setEditingItem(null);
-              setShowFormModal(true);
-            }}
-            className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2 rounded-xl active:scale-95 transition-all shadow"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Add Vehicle</span>
-          </button>
+          {activeAdminTab === 'inventory' ? (
+            <>
+              <button
+                onClick={() => {
+                  setEditingItem(null);
+                  setShowFormModal(true);
+                }}
+                className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2 rounded-xl active:scale-95 transition-all shadow"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Vehicle</span>
+              </button>
 
-          <button
-            onClick={handleResetToDefault}
-            className="hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-[#1a1d26] border border-[#242735] px-2.5 py-2 rounded-xl transition-colors"
-            title="Reset to default catalog"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset Default</span>
-          </button>
+              <button
+                onClick={handleResetToDefault}
+                className="hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-[#1a1d26] border border-[#242735] px-2.5 py-2 rounded-xl transition-colors"
+                title="Reset to default catalog"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Reset Default</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => {
+                  setEditingArticle(null);
+                  setShowArticleModal(true);
+                }}
+                className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2 rounded-xl active:scale-95 transition-all shadow"
+              >
+                <Plus className="w-4 h-4" />
+                <span>New Article</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setEditingDrop(null);
+                  setShowDropModal(true);
+                }}
+                className="flex items-center gap-1.5 bg-[#1e2330] hover:bg-[#282f40] text-blue-400 border border-blue-500/30 font-bold text-xs px-3 py-2 rounded-xl active:scale-95 transition-all"
+              >
+                <Calendar className="w-3.5 h-3.5" />
+                <span>Add Drop</span>
+              </button>
+
+              <button
+                onClick={handleResetNewsToDefault}
+                className="hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-[#1a1d26] border border-[#242735] px-2.5 py-2 rounded-xl transition-colors"
+                title="Reset news to default"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Reset News</span>
+              </button>
+            </>
+          )}
 
           <Link
             href="/"
@@ -321,8 +449,50 @@ export default function AdminPage() {
 
       {/* Main Admin Content Container */}
       <div className="w-full max-w-7xl px-4 sm:px-8 pt-6 flex flex-col gap-6">
-        {/* Ringkasan Portofolio & Keuangan */}
-        <PortfolioSummary items={collections} />
+        {/* Navigation Tabs */}
+        <div className="flex items-center justify-between border-b border-[#242735] pb-3">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setActiveAdminTab('inventory')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeAdminTab === 'inventory'
+                  ? 'bg-[#0066d6] text-white shadow-lg shadow-blue-500/20'
+                  : 'bg-[#14151b] text-gray-400 hover:text-white border border-[#242735]'
+              }`}
+            >
+              <Package className="w-3.5 h-3.5" />
+              <span>Vehicles & Inventory</span>
+              <span className="text-[10px] bg-black/40 px-2 py-0.5 rounded-full font-mono text-gray-300">
+                {collections.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveAdminTab('journal')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeAdminTab === 'journal'
+                  ? 'bg-[#0066d6] text-white shadow-lg shadow-blue-500/20'
+                  : 'bg-[#14151b] text-gray-400 hover:text-white border border-[#242735]'
+              }`}
+            >
+              <Newspaper className="w-3.5 h-3.5" />
+              <span>News Articles & Release Radar</span>
+              <span className="text-[10px] bg-black/40 px-2 py-0.5 rounded-full font-mono text-gray-300">
+                {articles.length + drops.length}
+              </span>
+            </button>
+          </div>
+
+          <div className="text-xs text-gray-400 hidden sm:flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[11px] font-medium text-gray-400">Sync Live to Showcase</span>
+          </div>
+        </div>
+
+        {activeAdminTab === 'inventory' ? (
+          <>
+            {/* Ringkasan Portofolio & Keuangan */}
+            <PortfolioSummary items={collections} />
 
         {/* Inventory Control Table / List Card */}
         <div className="bg-[#14151b] border border-[#242735] rounded-2xl p-4 sm:p-6 flex flex-col gap-4 shadow-xl">
@@ -590,6 +760,222 @@ export default function AdminPage() {
             </table>
           </div>
         </div>
+          </>
+        ) : (
+          /* News & Release Drop Radar Management */
+          <div className="flex flex-col gap-6">
+            {/* Release Drop Radar Manager */}
+            <div className="bg-[#14151b] border border-[#242735] rounded-2xl p-4 sm:p-6 flex flex-col gap-5 shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-lg font-black uppercase text-white tracking-tight flex items-center gap-2">
+                      <Calendar className="w-5 h-5 text-blue-400" />
+                      Release Drop Radar
+                    </h2>
+                    <span className="text-[11px] font-mono font-bold bg-[#1e212b] text-gray-300 px-2 py-0.5 rounded-full border border-[#2d3142]">
+                      {drops.length} Drops
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Manage upcoming release dates, case waves, and retail drop status shown in the public Drop Radar.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setEditingDrop(null);
+                    setShowDropModal(true);
+                  }}
+                  className="inline-flex items-center justify-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2.5 rounded-xl active:scale-95 transition-all shadow"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Add Drop Event</span>
+                </button>
+              </div>
+
+              {drops.length === 0 ? (
+                <div className="py-12 flex flex-col items-center justify-center text-center border border-dashed border-[#242735] rounded-xl bg-[#0f1015]">
+                  <Calendar className="w-10 h-10 text-gray-600 mb-2" />
+                  <p className="text-sm font-bold text-gray-400">No scheduled drops found</p>
+                  <p className="text-xs text-gray-500 max-w-sm mt-1">
+                    Add upcoming Hot Wheels releases or restock events to keep collectors informed.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {drops.map((drop) => {
+                    const statusColor =
+                      drop.status === 'Confirmed'
+                        ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800/50'
+                        : drop.status === 'Live'
+                        ? 'bg-blue-950/60 text-blue-400 border-blue-800/50'
+                        : drop.status === 'Sold Out'
+                        ? 'bg-red-950/60 text-red-400 border-red-800/50'
+                        : 'bg-amber-950/60 text-amber-400 border-amber-800/50';
+
+                    return (
+                      <div
+                        key={drop.id}
+                        className="bg-[#1a1d26] border border-[#242735] hover:border-[#383d54] rounded-xl p-4 flex flex-col justify-between gap-3 transition-colors group"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="bg-[#0066d6]/20 border border-[#0066d6]/40 text-blue-400 font-mono font-black text-[11px] px-2 py-1 rounded-lg">
+                              {drop.month} {drop.date}
+                            </span>
+                            <span
+                              className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-md border ${statusColor}`}
+                            >
+                              {drop.status}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={() => {
+                                setEditingDrop(drop);
+                                setShowDropModal(true);
+                              }}
+                              className="p-1.5 rounded-lg bg-[#242735] text-gray-200 hover:bg-[#0066d6] hover:text-white transition-colors"
+                              title="Edit Drop"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteDrop(drop.id, drop.model)}
+                              className="p-1.5 rounded-lg bg-red-950/30 text-red-400 hover:bg-red-900/50 hover:text-red-200 transition-colors border border-red-900/20"
+                              title="Delete Drop"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h3 className="font-bold text-white text-sm leading-snug line-clamp-1">
+                            {drop.model}
+                          </h3>
+                          <p className="text-xs text-gray-400 mt-0.5 line-clamp-1 font-medium">
+                            {drop.series}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Collector Journal Articles Manager */}
+            <div className="bg-[#14151b] border border-[#242735] rounded-2xl p-4 sm:p-6 flex flex-col gap-5 shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-lg font-black uppercase text-white tracking-tight flex items-center gap-2">
+                      <Newspaper className="w-5 h-5 text-blue-400" />
+                      Collector Journal Stories & Articles
+                    </h2>
+                    <span className="text-[11px] font-mono font-bold bg-[#1e212b] text-gray-300 px-2 py-0.5 rounded-full border border-[#2d3142]">
+                      {articles.length} Stories
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Publish market analyses, collector spotlights, and valuation insights readable on the public showcase.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setEditingArticle(null);
+                    setShowArticleModal(true);
+                  }}
+                  className="inline-flex items-center justify-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2.5 rounded-xl active:scale-95 transition-all shadow"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Write Article</span>
+                </button>
+              </div>
+
+              {articles.length === 0 ? (
+                <div className="py-12 flex flex-col items-center justify-center text-center border border-dashed border-[#242735] rounded-xl bg-[#0f1015]">
+                  <FileText className="w-10 h-10 text-gray-600 mb-2" />
+                  <p className="text-sm font-bold text-gray-400">No articles published yet</p>
+                  <p className="text-xs text-gray-500 max-w-sm mt-1">
+                    Create your first article or guide to share expertise with fellow diecast collectors.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {articles.map((article) => (
+                    <div
+                      key={article.id}
+                      className="bg-[#1a1d26] border border-[#242735] hover:border-[#383d54] rounded-xl p-5 flex flex-col justify-between gap-3 transition-colors group"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-[10px] font-black uppercase bg-blue-950/60 text-blue-400 border border-blue-800/40 px-2 py-0.5 rounded-md">
+                            {article.category}
+                          </span>
+                          <span className="text-[10px] font-mono font-bold text-gray-300 bg-[#242735] px-2 py-0.5 rounded-md">
+                            #{article.tag}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => {
+                              setEditingArticle(article);
+                              setShowArticleModal(true);
+                            }}
+                            className="p-1.5 rounded-lg bg-[#242735] text-gray-200 hover:bg-[#0066d6] hover:text-white transition-colors"
+                            title="Edit Article"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteArticle(article.id, article.title)}
+                            className="p-1.5 rounded-lg bg-red-950/30 text-red-400 hover:bg-red-900/50 hover:text-red-200 transition-colors border border-red-900/20"
+                            title="Delete Article"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 className="font-bold text-white text-base leading-snug group-hover:text-blue-400 transition-colors">
+                          {article.title}
+                        </h3>
+                        <p className="text-xs text-gray-400 mt-1.5 line-clamp-2 leading-relaxed">
+                          {article.excerpt}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between text-[11px] text-gray-500 pt-2 border-t border-[#242735]">
+                        <div className="flex items-center gap-3">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3 text-gray-400" />
+                            {article.date}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-3 h-3 text-gray-400" />
+                            {article.readTime}
+                          </span>
+                        </div>
+                        {article.content && (
+                          <span className="text-[10px] text-emerald-400 bg-emerald-950/40 border border-emerald-800/30 px-2 py-0.5 rounded font-medium">
+                            Full Story Attached
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Modal Add / Edit Diecast */}
@@ -610,6 +996,28 @@ export default function AdminPage() {
         onClose={() => setPriceEditingItem(null)}
         item={priceEditingItem}
         onSave={handleUpdatePrice}
+      />
+
+      {/* Modal Add / Edit Article */}
+      <ArticleFormModal
+        isOpen={showArticleModal}
+        onClose={() => {
+          setShowArticleModal(false);
+          setEditingArticle(null);
+        }}
+        articleToEdit={editingArticle}
+        onSave={handleSaveArticle}
+      />
+
+      {/* Modal Add / Edit Drop Event */}
+      <DropFormModal
+        isOpen={showDropModal}
+        onClose={() => {
+          setShowDropModal(false);
+          setEditingDrop(null);
+        }}
+        dropToEdit={editingDrop}
+        onSave={handleSaveDrop}
       />
     </main>
   );

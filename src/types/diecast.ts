@@ -41,3 +41,23 @@ export interface WikiSearchResult {
   url: string;
   thumbnail?: string;
 }
+
+export interface ArticleItem {
+  id: string;
+  category: string;
+  title: string;
+  excerpt: string;
+  content?: string;
+  date: string;
+  readTime: string;
+  tag: string;
+}
+
+export interface UpcomingDropItem {
+  id: string;
+  month: string;
+  date: string;
+  model: string;
+  series: string;
+  status: string;
+}
