@@ -21,7 +21,7 @@ export const defaultProfile: CollectorProfile = {
       id: 'pillar-2',
       icon: 'package',
       title: 'Safe Box Packing',
-      description: 'Double-wall boxes & layered bubble wrap complimentary to preserve card integrity.',
+      description: 'Double-wall boxes and corner guards included on every order.',
     },
     {
       id: 'pillar-3',
@@ -34,7 +34,7 @@ export const defaultProfile: CollectorProfile = {
     {
       id: 'faq-1',
       q: 'Are all diecasts guaranteed 100% authentic?',
-      a: '100% genuine factory releases (Mattel, Hot Wheels, and authorized global distributors). We never collect or sell replicas, resealed custom cards, or counterfeit loose castings.',
+      a: 'Every model comes directly from factory cases and authorized distribution. We do not stock reproductions, resealed cards, or custom clones.',
     },
     {
       id: 'faq-2',
@@ -44,12 +44,12 @@ export const defaultProfile: CollectorProfile = {
     {
       id: 'faq-3',
       q: 'Can I request close-up physical inspection photos before checkout?',
-      a: 'Absolutely! You can reach us directly on WhatsApp to request 4-sided high-resolution photos, base rivet inspection, and blister clarity checks before packing.',
+      a: 'Yes. Message us on WhatsApp for 4-sided macro photos, base rivet inspection, and blister bubble clarity checks before purchase.',
     },
     {
       id: 'faq-4',
       q: 'How are shipments packed and protected?',
-      a: 'Every order is packaged with heavy-duty double-wall corrugated cardboard and multi-layered bubble wrap at no additional charge to ensure zero transit damage.',
+      a: 'We pack every shipment in double-wall corrugated boxes with wrapped card protectors and reinforced corners. Free of charge.',
     },
   ],
 };

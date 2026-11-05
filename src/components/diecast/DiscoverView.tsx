@@ -62,7 +62,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
             DISCOVERY ARCHIVE
           </h1>
           <p className="text-xs text-gray-400 mt-0.5">
-            Curated archive of rare Red Line Club issues, Super Treasure Hunts, and available units.
+            Red Line Club exclusives, Super Treasure Hunts, and available inventory.
           </p>
         </div>
 
@@ -144,7 +144,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
             </h2>
 
             <p className="text-xs text-gray-400 leading-relaxed">
-              Curator-grade casting preservation with authentic tamper-evident blister packaging and certified factory tampos.
+              Factory-sealed blister with original hang tab, intact corner cardstock, and verified tampos.
             </p>
 
             <div className="pt-2 flex items-center gap-3">

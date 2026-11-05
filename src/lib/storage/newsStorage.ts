@@ -10,14 +10,14 @@ export const defaultArticles: ArticleItem[] = [
     id: 'art-1',
     category: 'RLC Drops & Calendar',
     title: '2026 Red Line Club (RLC) Drop Calendar: Iconic Collector Castings',
-    excerpt: 'Review official RLC quarterly drop schedules featuring the BMW M3 E30, Datsun 240Z, and Porsche 930 Turbo in signature Spectraflame finishes.',
-    content: `The 2026 Red Line Club lineup sets an extraordinary benchmark for premium 1:64 diecast engineering. With full opening hoods, detailed engine bays, and Spectraflame coatings paired with Real Riders vintage deep-dish wheels, this quarter highlights three must-have releases:
+    excerpt: 'Official RLC quarterly drop schedules featuring the BMW M3 E30, Datsun 240Z, and Porsche 930 Turbo in Spectraflame finishes.',
+    content: `The 2026 Red Line Club quarter introduces opening hoods, detailed engine bays, and Spectraflame finishes paired with Real Riders deep-dish wheels across three releases:
 
-1. 1991 BMW M3 E30: Finished in deep olive Spectraflame with authentic race liveries.
-2. Datsun 240Z Custom: Featuring a bespoke roll cage and hand-detailed interior gauges.
-3. Porsche 930 Turbo: Built with an opening decklid displaying the intercooler apparatus.
+1. 1991 BMW M3 E30: Olive Spectraflame with authentic race liveries.
+2. Datsun 240Z Custom: Bespoke roll cage and detailed interior dials.
+3. Porsche 930 Turbo: Functional decklid displaying the rear-mounted intercooler.
 
-Collectors are advised to set calendar reminders 15 minutes before the official countdown, as production numbers are strictly capped at 25,000 numbered units worldwide with acrylic display display cases.`,
+Production is strictly capped at 25,000 numbered units worldwide with acrylic display cases. Reminders should be set 15 minutes before the drop countdown.`,
     date: 'Nov 3, 2026',
     readTime: '3 min read',
     tag: 'Drop Alert',
@@ -44,8 +44,8 @@ Storing your protected pieces in a climate-controlled room between 20°C–24°C
     id: 'art-3',
     category: 'Market Insights',
     title: '1:64 Diecast Market Watch: Why JDM Classics and Vintage Porsches Dominate',
-    excerpt: 'Deep dive into long-term market valuations for Japanese Domestic Market (JDM) and Porsche heritage castings among serious collectors.',
-    content: `Secondary market transaction data over the past 24 months demonstrates strong resilience in Japanese Domestic Market (JDM) icons—specifically the Nissan Skyline GT-R (R32, R33, R34), Datsun 510 Wagon, and vintage air-cooled Porsche 911s.
+    excerpt: 'Resale pricing trends and auction data for Japanese Domestic Market (JDM) and Porsche heritage castings.',
+    content: `Secondary market transaction data over the past 24 months demonstrates strong resilience in Japanese Domestic Market (JDM) castings, specifically the Nissan Skyline GT-R (R32, R33, R34), Datsun 510 Wagon, and air-cooled Porsche 911s.
 
 Market Dynamics Observed:
 • Limited Batch Mainlines with accurate tampo printing appreciate 300% to 500% within 18 months of retail clearance.
@@ -65,7 +65,7 @@ Maintaining immaculate blister conditions remains the single highest driver of l
     content: `With increasing values for vintage castings, counterfeits and resealed carded blisters require rigorous verification before completing transactions.
 
 Inspection Checklist:
-1. Waffle Pattern Embossing: Factory Mattel heat-sealing utilizes an automated micro-waffle or cross-hatch crimp along the blister flange that cannot be replicated with conventional glue.
+1. Waffle Pattern Embossing: Factory Mattel heat-sealing uses an automated micro-waffle or cross-hatch crimp along the blister flange that cannot be replicated with conventional glue.
 2. Fiber Tear Test: Authentic cards exhibit clean paper fiber tear lines under high-intensity ultraviolet blacklight if tampered with.
 3. Base Rivets: Always inspect the bottom rivets using a 10x jeweler loupe to ensure spun factory heads haven't been drilled or substituted with aftermarket screws.
 
