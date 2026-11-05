@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { CollectionItem } from '@/types/diecast';
 import { ChevronLeft, Share2, MessageCircle, Star, Sparkles, ShieldCheck } from 'lucide-react';
+import { getStoredWhatsAppNumber } from '@/lib/storage/profileStorage';
 
 interface CarDetailViewProps {
   car: CollectionItem;
@@ -31,7 +32,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
   };
 
   const handleWhatsAppOrder = () => {
-    const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '6281234567890';
+    const phone = getStoredWhatsAppNumber().replace(/[^0-9]/g, '') || '6281234567890';
     const text = `Hi Wortelemes, I'm interested in your diecast collection *${car.name}* (${car.release_year}, ${car.tier_badge || '1:64'}) listed at *${formatRupiah(car.sell_price)}*. Is this unit still available?`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
   };

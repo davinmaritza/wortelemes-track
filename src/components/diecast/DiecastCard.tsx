@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { CollectionItem } from '@/types/diecast';
 import { Star, MessageCircle, Eye } from 'lucide-react';
+import { getStoredWhatsAppNumber } from '@/lib/storage/profileStorage';
 
 interface DiecastCardProps {
   item: CollectionItem;
@@ -30,7 +31,7 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
 
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '6281234567890';
+    const phone = getStoredWhatsAppNumber().replace(/[^0-9]/g, '') || '6281234567890';
     const text = `Hello Wortelemes, I am interested in the diecast casting *${item.name}* (${item.release_year}) listed for *${formatRupiah(item.sell_price)}*. Is this item still available?`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
   };

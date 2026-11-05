@@ -10,6 +10,7 @@ import { DiecastFormModal } from '@/components/admin/DiecastFormModal';
 import { QuickPriceEditModal } from '@/components/admin/QuickPriceEditModal';
 import { ArticleFormModal } from '@/components/admin/ArticleFormModal';
 import { DropFormModal } from '@/components/admin/DropFormModal';
+import { ProfileEditor } from '@/components/admin/ProfileEditor';
 import { WortelemesLogo } from '@/components/ui/WortelemesLogo';
 import {
   getStoredCollections,
@@ -48,6 +49,7 @@ import {
   BookOpen,
   Clock,
   FileText,
+  User,
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -55,8 +57,8 @@ export default function AdminPage() {
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState(false);
 
-  // Tab State: 'inventory' | 'journal'
-  const [activeAdminTab, setActiveAdminTab] = useState<'inventory' | 'journal'>('inventory');
+  // Tab State: 'inventory' | 'journal' | 'profile'
+  const [activeAdminTab, setActiveAdminTab] = useState<'inventory' | 'journal' | 'profile'>('inventory');
 
   // Data Collections with Local Persistence
   const [collections, setCollections] = useState<CollectionItem[]>([]);
@@ -394,7 +396,7 @@ export default function AdminPage() {
                 <span>Reset Default</span>
               </button>
             </>
-          ) : (
+          ) : activeAdminTab === 'journal' ? (
             <>
               <button
                 onClick={() => {
@@ -427,6 +429,14 @@ export default function AdminPage() {
                 <span>Reset News</span>
               </button>
             </>
+          ) : (
+            <Link
+              href="/#profile"
+              className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 bg-blue-950/30 border border-blue-900/30 px-3 py-2 rounded-xl transition-colors font-bold"
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>Preview Public Profile</span>
+            </Link>
           )}
 
           <Link
@@ -450,8 +460,8 @@ export default function AdminPage() {
       {/* Main Admin Content Container */}
       <div className="w-full max-w-7xl px-4 sm:px-8 pt-6 flex flex-col gap-6">
         {/* Navigation Tabs */}
-        <div className="flex items-center justify-between border-b border-[#242735] pb-3">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#242735] pb-3 gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setActiveAdminTab('inventory')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
@@ -476,10 +486,22 @@ export default function AdminPage() {
               }`}
             >
               <Newspaper className="w-3.5 h-3.5" />
-              <span>News Articles & Release Radar</span>
+              <span>News & Drop Radar</span>
               <span className="text-[10px] bg-black/40 px-2 py-0.5 rounded-full font-mono text-gray-300">
                 {articles.length + drops.length}
               </span>
+            </button>
+
+            <button
+              onClick={() => setActiveAdminTab('profile')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeAdminTab === 'profile'
+                  ? 'bg-[#0066d6] text-white shadow-lg shadow-blue-500/20'
+                  : 'bg-[#14151b] text-gray-400 hover:text-white border border-[#242735]'
+              }`}
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>Collector Profile & FAQ</span>
             </button>
           </div>
 
@@ -761,7 +783,7 @@ export default function AdminPage() {
           </div>
         </div>
           </>
-        ) : (
+        ) : activeAdminTab === 'journal' ? (
           /* News & Release Drop Radar Management */
           <div className="flex flex-col gap-6">
             {/* Release Drop Radar Manager */}
@@ -975,6 +997,9 @@ export default function AdminPage() {
               )}
             </div>
           </div>
+        ) : (
+          /* Collector Profile & FAQ Management */
+          <ProfileEditor />
         )}
       </div>
 

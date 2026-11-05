@@ -61,3 +61,29 @@ export interface UpcomingDropItem {
   series: string;
   status: string;
 }
+
+export interface ProfileFaqItem {
+  id: string;
+  q: string;
+  a: string;
+}
+
+export interface ProfilePillarItem {
+  id: string;
+  icon: 'award' | 'package' | 'truck' | 'shield';
+  title: string;
+  description: string;
+}
+
+export interface CollectorProfile {
+  garageName: string;
+  collectorBadge: string;
+  bio: string;
+  whatsappNumber: string;
+  location: string;
+  avatarUrl: string;
+  instagramHandle?: string;
+  pillars: ProfilePillarItem[];
+  faqs: ProfileFaqItem[];
+}
+
