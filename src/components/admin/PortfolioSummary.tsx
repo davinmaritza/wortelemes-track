@@ -24,62 +24,62 @@ export const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ items }) => 
   const profitMarginPercent = totalModal > 0 ? Math.round((totalPotentialProfit / totalModal) * 100) : 0;
 
   return (
-    <div className="bg-[#16181f] border border-red-900/40 rounded-2xl p-4 mb-4 flex flex-col gap-3 shadow-lg">
-      <div className="flex items-center justify-between pb-2 border-b border-[#242735]">
+    <div className="bg-[#12141c] border border-white/[0.08] rounded-2xl p-4 mb-4 flex flex-col gap-3 shadow-sm">
+      <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-red-500" />
-          <h2 className="text-white text-sm font-black uppercase tracking-wide">
-            Portfolio & Financial Ledger (Private)
+          <ShieldCheck className="w-4 h-4 text-amber-400" />
+          <h2 className="text-white text-xs font-semibold uppercase tracking-wider">
+            Portfolio & Financial Ledger
           </h2>
         </div>
-        <span className="text-[10px] bg-red-950/60 text-red-300 border border-red-800/50 px-2 py-0.5 rounded-full font-mono">
-          Private Mode
+        <span className="text-[10px] bg-amber-400/10 text-amber-300 border border-amber-400/20 px-2 py-0.5 rounded-full font-mono font-medium">
+          Confidential
         </span>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         {/* Total Koleksi */}
-        <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
+        <div className="bg-[#0b0c10] p-3 rounded-xl border border-white/[0.06]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
-            <Package className="w-3.5 h-3.5 text-blue-400" />
+            <Package className="w-3.5 h-3.5 text-white/60" />
             <span>Total Units</span>
           </div>
-          <div className="text-white font-extrabold text-base font-mono">
-            {totalItems} Units
+          <div className="text-white font-bold text-base font-mono">
+            {totalItems} <span className="text-xs font-normal text-gray-400">pcs</span>
           </div>
         </div>
 
         {/* Total Modal */}
-        <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
+        <div className="bg-[#0b0c10] p-3 rounded-xl border border-white/[0.06]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
             <DollarSign className="w-3.5 h-3.5 text-gray-400" />
-            <span>Total Cost (Private)</span>
+            <span>Total Cost</span>
           </div>
-          <div className="text-white font-extrabold text-sm sm:text-base font-mono truncate">
+          <div className="text-white font-bold text-sm sm:text-base font-mono truncate">
             {formatRupiah(totalModal)}
           </div>
         </div>
 
         {/* Total Valuasi Pasar */}
-        <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
+        <div className="bg-[#0b0c10] p-3 rounded-xl border border-white/[0.06]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
             <TrendingUp className="w-3.5 h-3.5 text-gray-400" />
             <span>Market Valuation</span>
           </div>
-          <div className="text-white font-extrabold text-sm sm:text-base font-mono truncate">
+          <div className="text-white font-bold text-sm sm:text-base font-mono truncate">
             {formatRupiah(totalValuasi)}
           </div>
         </div>
 
         {/* Potensi Margin Profit */}
-        <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
+        <div className="bg-[#0b0c10] p-3 rounded-xl border border-white/[0.06]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
             <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Potential Profit</span>
+            <span>Potential Margin</span>
           </div>
-          <div className="text-emerald-400 font-extrabold text-sm sm:text-base font-mono truncate">
+          <div className="text-emerald-400 font-bold text-sm sm:text-base font-mono truncate">
             +{formatRupiah(totalPotentialProfit)}
-            <span className="text-[10px] text-emerald-500 font-semibold ml-1">({profitMarginPercent}%)</span>
+            <span className="text-[10px] text-emerald-400/80 font-medium ml-1">({profitMarginPercent}%)</span>
           </div>
         </div>
       </div>

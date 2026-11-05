@@ -11,59 +11,33 @@ interface BottomTabBarProps {
 }
 
 export const BottomTabBar: React.FC<BottomTabBarProps> = ({ activeTab, onChangeTab }) => {
+  const tabs: { key: AppNavTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+    { key: 'garage', label: 'Garage', icon: Flame },
+    { key: 'discover', label: 'Discover', icon: Compass },
+    { key: 'news', label: 'Drops', icon: Newspaper },
+    { key: 'profile', label: 'Curator', icon: User },
+  ];
+
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090a0e]/90 backdrop-blur-2xl border-t border-white/[0.08] flex items-center justify-around py-2 px-3 w-full safe-area-pb">
-      {/* 1. My Garage */}
-      <button
-        onClick={() => onChangeTab('garage')}
-        className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all ${
-          activeTab === 'garage'
-            ? 'text-[#0066d6] font-extrabold scale-105'
-            : 'text-gray-400 hover:text-gray-200 font-semibold'
-        }`}
-      >
-        <Flame className={`w-5 h-5 ${activeTab === 'garage' ? 'fill-[#0066d6]' : ''}`} />
-        <span className="text-[10px] tracking-tight">Garage</span>
-      </button>
-
-      {/* 2. Discover */}
-      <button
-        onClick={() => onChangeTab('discover')}
-        className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all ${
-          activeTab === 'discover'
-            ? 'text-[#0066d6] font-extrabold scale-105'
-            : 'text-gray-400 hover:text-gray-200 font-semibold'
-        }`}
-      >
-        <Compass className={`w-5 h-5 ${activeTab === 'discover' ? 'stroke-[#0066d6]' : ''}`} />
-        <span className="text-[10px] tracking-tight">Discover</span>
-      </button>
-
-      {/* 3. News */}
-      <button
-        onClick={() => onChangeTab('news')}
-        className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all ${
-          activeTab === 'news'
-            ? 'text-[#0066d6] font-extrabold scale-105'
-            : 'text-gray-400 hover:text-gray-200 font-semibold'
-        }`}
-      >
-        <Newspaper className="w-5 h-5" />
-        <span className="text-[10px] tracking-tight">News</span>
-      </button>
-
-      {/* 4. Profile */}
-      <button
-        onClick={() => onChangeTab('profile')}
-        className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all ${
-          activeTab === 'profile'
-            ? 'text-[#0066d6] font-extrabold scale-105'
-            : 'text-gray-400 hover:text-gray-200 font-semibold'
-        }`}
-      >
-        <User className="w-5 h-5" />
-        <span className="text-[10px] tracking-tight">Profile</span>
-      </button>
+    <nav className="md:hidden fixed bottom-3 left-4 right-4 z-40 max-w-sm mx-auto bg-[#101118]/90 backdrop-blur-2xl border border-white/10 shadow-[0_16px_36px_rgba(0,0,0,0.7)] flex items-center justify-between p-1.5 rounded-2xl safe-area-pb">
+      {tabs.map((tab) => {
+        const Icon = tab.icon;
+        const isActive = activeTab === tab.key;
+        return (
+          <button
+            key={tab.key}
+            onClick={() => onChangeTab(tab.key)}
+            className={`flex-1 flex flex-col items-center justify-center gap-1 py-2 rounded-xl transition-all ${
+              isActive
+                ? 'bg-white/[0.1] text-white font-bold'
+                : 'text-gray-400 hover:text-gray-200 font-medium'
+            }`}
+          >
+            <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+            <span className="text-[10px] tracking-tight">{tab.label}</span>
+          </button>
+        );
+      })}
     </nav>
   );
 };

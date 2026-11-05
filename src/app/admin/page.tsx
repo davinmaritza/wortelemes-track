@@ -326,8 +326,8 @@ export default function AdminPage() {
                 }}
                 placeholder="••••"
                 className={`w-full bg-[#111217] border ${
-                  pinError ? 'border-red-500 ring-2 ring-red-500/20' : 'border-[#242735]'
-                } rounded-xl px-4 py-3 text-center text-white tracking-[0.5em] text-xl font-mono focus:outline-none focus:border-[#0066d6] transition-all`}
+                  pinError ? 'border-red-500 ring-2 ring-red-500/20' : 'border-white/[0.08]'
+                } rounded-xl px-4 py-3 text-center text-white tracking-[0.5em] text-xl font-mono focus:outline-none focus:border-white/40 transition-all`}
                 autoFocus
               />
               {pinError && (
@@ -339,7 +339,7 @@ export default function AdminPage() {
 
             <button
               type="submit"
-              className="w-full mt-2 bg-[#0066d6] hover:bg-blue-600 active:scale-98 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg"
+              className="w-full mt-2 bg-white hover:bg-neutral-200 active:scale-98 text-black font-semibold py-3 rounded-xl text-xs uppercase tracking-wider transition-all shadow-md"
             >
               Access Admin Dashboard
             </button>
@@ -361,15 +361,14 @@ export default function AdminPage() {
   return (
     <main className="min-h-screen bg-[#0c0d10] text-white flex flex-col items-center pb-24">
       {/* Top Admin Header */}
-      <header className="w-full max-w-7xl px-4 sm:px-8 py-3.5 border-b border-[#1f222e] bg-[#121318]/95 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
+      <header className="w-full max-w-7xl px-4 sm:px-8 py-3.5 border-b border-white/[0.06] bg-[#090a0f]/90 backdrop-blur-xl sticky top-0 z-30 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <WortelemesLogo className="w-8 h-8" size={32} />
-          <span className="font-black text-sm tracking-wider text-white uppercase">
+          <span className="font-black text-sm tracking-widest text-white uppercase font-sans">
             WORTELEMES
           </span>
-          <span className="text-[10px] font-black uppercase bg-red-950/80 text-red-400 border border-red-800/40 px-2.5 py-1 rounded-full flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-            Admin Workspace
+          <span className="text-[10px] font-mono uppercase bg-white/[0.04] text-gray-400 border border-white/[0.08] px-2.5 py-1 rounded-md">
+            ADMIN STUDIO
           </span>
         </div>
 
@@ -381,19 +380,19 @@ export default function AdminPage() {
                   setEditingItem(null);
                   setShowFormModal(true);
                 }}
-                className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2 rounded-xl active:scale-95 transition-all shadow"
+                className="flex items-center gap-1.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs px-3.5 py-2 rounded-xl active:scale-95 transition-all shadow-sm"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-3.5 h-3.5" />
                 <span>Add Vehicle</span>
               </button>
 
               <button
                 onClick={handleResetToDefault}
-                className="hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-[#1a1d26] border border-[#242735] px-2.5 py-2 rounded-xl transition-colors"
+                className="hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-white/[0.04] border border-white/[0.08] px-2.5 py-2 rounded-xl transition-colors font-medium"
                 title="Reset to default catalog"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reset Default</span>
+                <span>Reset Catalog</span>
               </button>
             </>
           ) : activeAdminTab === 'journal' ? (
@@ -403,9 +402,9 @@ export default function AdminPage() {
                   setEditingArticle(null);
                   setShowArticleModal(true);
                 }}
-                className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2 rounded-xl active:scale-95 transition-all shadow"
+                className="flex items-center gap-1.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs px-3.5 py-2 rounded-xl active:scale-95 transition-all shadow-sm"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-3.5 h-3.5" />
                 <span>New Article</span>
               </button>
 
@@ -414,7 +413,7 @@ export default function AdminPage() {
                   setEditingDrop(null);
                   setShowDropModal(true);
                 }}
-                className="flex items-center gap-1.5 bg-[#1e2330] hover:bg-[#282f40] text-blue-400 border border-blue-500/30 font-bold text-xs px-3 py-2 rounded-xl active:scale-95 transition-all"
+                className="flex items-center gap-1.5 bg-white/[0.06] hover:bg-white/[0.1] text-gray-200 border border-white/10 font-semibold text-xs px-3 py-2 rounded-xl active:scale-95 transition-all"
               >
                 <Calendar className="w-3.5 h-3.5" />
                 <span>Add Drop</span>
@@ -422,7 +421,7 @@ export default function AdminPage() {
 
               <button
                 onClick={handleResetNewsToDefault}
-                className="hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-[#1a1d26] border border-[#242735] px-2.5 py-2 rounded-xl transition-colors"
+                className="hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-white/[0.04] border border-white/[0.08] px-2.5 py-2 rounded-xl transition-colors font-medium"
                 title="Reset news to default"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -432,24 +431,24 @@ export default function AdminPage() {
           ) : (
             <Link
               href="/#profile"
-              className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 bg-blue-950/30 border border-blue-900/30 px-3 py-2 rounded-xl transition-colors font-bold"
+              className="flex items-center gap-1 text-xs text-gray-300 hover:text-white bg-white/[0.06] border border-white/10 px-3 py-2 rounded-xl transition-colors font-semibold"
             >
               <User className="w-3.5 h-3.5" />
-              <span>Preview Public Profile</span>
+              <span>Public Profile</span>
             </Link>
           )}
 
           <Link
             href="/"
-            className="flex items-center gap-1 text-xs text-gray-300 hover:text-white bg-[#1a1d26] border border-[#242735] px-3 py-2 rounded-xl transition-colors font-medium"
+            className="flex items-center gap-1 text-xs text-gray-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3 py-2 rounded-xl transition-colors font-medium"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-blue-400" />
-            <span className="hidden sm:inline">Public Showcase</span>
+            <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
+            <span className="hidden sm:inline">Showcase</span>
           </Link>
 
           <button
             onClick={() => setIsAuthenticated(false)}
-            className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 bg-red-950/30 border border-red-900/30 px-3 py-2 rounded-xl transition-colors font-bold"
+            className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-400 bg-white/[0.02] hover:bg-red-950/20 border border-white/[0.06] hover:border-red-900/30 px-3 py-2 rounded-xl transition-colors font-medium"
           >
             <Unlock className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Sign Out</span>
@@ -460,44 +459,44 @@ export default function AdminPage() {
       {/* Main Admin Content Container */}
       <div className="w-full max-w-7xl px-4 sm:px-8 pt-6 flex flex-col gap-6">
         {/* Navigation Tabs */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#242735] pb-3 gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/[0.06] pb-3 gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setActiveAdminTab('inventory')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
                 activeAdminTab === 'inventory'
-                  ? 'bg-[#0066d6] text-white shadow-lg shadow-blue-500/20'
-                  : 'bg-[#14151b] text-gray-400 hover:text-white border border-[#242735]'
+                  ? 'bg-white text-black font-bold shadow-sm'
+                  : 'bg-[#12131a] text-gray-400 hover:text-white border border-white/[0.06]'
               }`}
             >
               <Package className="w-3.5 h-3.5" />
               <span>Vehicles & Inventory</span>
-              <span className="text-[10px] bg-black/40 px-2 py-0.5 rounded-full font-mono text-gray-300">
+              <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded font-mono">
                 {collections.length}
               </span>
             </button>
 
             <button
               onClick={() => setActiveAdminTab('journal')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
                 activeAdminTab === 'journal'
-                  ? 'bg-[#0066d6] text-white shadow-lg shadow-blue-500/20'
-                  : 'bg-[#14151b] text-gray-400 hover:text-white border border-[#242735]'
+                  ? 'bg-white text-black font-bold shadow-sm'
+                  : 'bg-[#12131a] text-gray-400 hover:text-white border border-white/[0.06]'
               }`}
             >
               <Newspaper className="w-3.5 h-3.5" />
               <span>News & Drop Radar</span>
-              <span className="text-[10px] bg-black/40 px-2 py-0.5 rounded-full font-mono text-gray-300">
+              <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded font-mono">
                 {articles.length + drops.length}
               </span>
             </button>
 
             <button
               onClick={() => setActiveAdminTab('profile')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
                 activeAdminTab === 'profile'
-                  ? 'bg-[#0066d6] text-white shadow-lg shadow-blue-500/20'
-                  : 'bg-[#14151b] text-gray-400 hover:text-white border border-[#242735]'
+                  ? 'bg-white text-black font-bold shadow-sm'
+                  : 'bg-[#12131a] text-gray-400 hover:text-white border border-white/[0.06]'
               }`}
             >
               <User className="w-3.5 h-3.5" />
@@ -505,9 +504,9 @@ export default function AdminPage() {
             </button>
           </div>
 
-          <div className="text-xs text-gray-400 hidden sm:flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[11px] font-medium text-gray-400">Sync Live to Showcase</span>
+          <div className="text-xs text-gray-400 hidden sm:flex items-center gap-2 font-mono text-[11px]">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span>Vault Synchronized</span>
           </div>
         </div>
 
@@ -540,7 +539,7 @@ export default function AdminPage() {
               <select
                 value={tierFilter}
                 onChange={(e) => setTierFilter(e.target.value)}
-                className="bg-[#1a1d26] border border-[#242735] rounded-xl px-2.5 py-2 text-xs text-gray-200 focus:outline-none focus:border-[#0066d6]"
+                className="bg-[#12141c] border border-white/[0.08] rounded-xl px-2.5 py-2 text-xs text-gray-200 focus:outline-none focus:border-white/40"
               >
                 <option value="all">All Tiers</option>
                 <option value="Mainline">Mainline</option>
@@ -559,7 +558,7 @@ export default function AdminPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search vehicle or series..."
-                  className="w-full bg-[#1a1d26] border border-[#242735] rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6]"
+                  className="w-full bg-[#12141c] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-white/40"
                 />
               </div>
             </div>
@@ -569,7 +568,7 @@ export default function AdminPage() {
           {selectedIds.length > 0 && (
             <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-red-950/20 border border-red-900/40 rounded-xl">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-red-500" />
                 <span className="text-xs font-bold text-red-300">
                   {selectedIds.length} vehicles selected
                 </span>
@@ -605,10 +604,10 @@ export default function AdminPage() {
           )}
 
           {/* Desktop Table View */}
-          <div className="overflow-x-auto rounded-xl border border-[#242735]">
+          <div className="overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#12141c]">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-[#111217] border-b border-[#242735] text-gray-400 font-bold uppercase text-[10px]">
+                <tr className="bg-[#0b0c10] border-b border-white/[0.06] text-gray-400 font-semibold uppercase text-[10px]">
                   {/* Select All Checkbox */}
                   <th className="py-3 px-3 w-10 text-center">
                     <button
@@ -618,7 +617,7 @@ export default function AdminPage() {
                       title={allFilteredSelected ? 'Deselect all' : 'Select all'}
                     >
                       {allFilteredSelected ? (
-                        <CheckSquare className="w-4 h-4 text-[#0066d6]" />
+                        <CheckSquare className="w-4 h-4 text-white" />
                       ) : (
                         <Square className="w-4 h-4" />
                       )}
@@ -634,7 +633,7 @@ export default function AdminPage() {
                   <th className="py-3 px-3 text-right">Actions & Adjust</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#242735]/60 bg-[#14151b]">
+              <tbody className="divide-y divide-white/[0.04] bg-[#12141c]">
                 {filteredItems.length === 0 ? (
                   <tr>
                     <td colSpan={9} className="py-8 text-center text-gray-500">
@@ -653,8 +652,8 @@ export default function AdminPage() {
                     return (
                       <tr
                         key={item.id}
-                        className={`hover:bg-[#1a1d26]/60 transition-colors ${
-                          isSelected ? 'bg-blue-950/20' : ''
+                        className={`hover:bg-white/[0.02] transition-colors ${
+                          isSelected ? 'bg-white/[0.04]' : ''
                         }`}
                       >
                         {/* Row Selection Checkbox */}
@@ -665,7 +664,7 @@ export default function AdminPage() {
                             className="text-gray-400 hover:text-white transition-colors"
                           >
                             {isSelected ? (
-                              <CheckSquare className="w-4 h-4 text-[#0066d6]" />
+                              <CheckSquare className="w-4 h-4 text-white" />
                             ) : (
                               <Square className="w-4 h-4 text-gray-600" />
                             )}
@@ -758,7 +757,7 @@ export default function AdminPage() {
                                 setEditingItem(item);
                                 setShowFormModal(true);
                               }}
-                              className="p-1.5 rounded-lg bg-[#242735] text-gray-200 hover:bg-[#0066d6] hover:text-white transition-colors"
+                              className="p-1.5 rounded-lg bg-white/[0.06] text-gray-200 hover:bg-white/20 hover:text-white transition-colors"
                               title="Edit Vehicle"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
@@ -809,7 +808,7 @@ export default function AdminPage() {
                     setEditingDrop(null);
                     setShowDropModal(true);
                   }}
-                  className="inline-flex items-center justify-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2.5 rounded-xl active:scale-95 transition-all shadow"
+                  className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-neutral-200 text-black font-semibold text-xs px-3.5 py-2.5 rounded-xl active:scale-95 transition-all shadow-md"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add Drop Event</span>
@@ -843,7 +842,7 @@ export default function AdminPage() {
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <span className="bg-[#0066d6]/20 border border-[#0066d6]/40 text-blue-400 font-mono font-black text-[11px] px-2 py-1 rounded-lg">
+                            <span className="bg-white/[0.06] border border-white/10 text-white/90 font-mono font-bold text-[11px] px-2 py-1 rounded-lg">
                               {drop.month} {drop.date}
                             </span>
                             <span
@@ -859,7 +858,7 @@ export default function AdminPage() {
                                 setEditingDrop(drop);
                                 setShowDropModal(true);
                               }}
-                              className="p-1.5 rounded-lg bg-[#242735] text-gray-200 hover:bg-[#0066d6] hover:text-white transition-colors"
+                              className="p-1.5 rounded-lg bg-white/[0.06] text-gray-200 hover:bg-white/20 hover:text-white transition-colors"
                               title="Edit Drop"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
@@ -912,7 +911,7 @@ export default function AdminPage() {
                     setEditingArticle(null);
                     setShowArticleModal(true);
                   }}
-                  className="inline-flex items-center justify-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2.5 rounded-xl active:scale-95 transition-all shadow"
+                  className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-neutral-200 text-black font-semibold text-xs px-3.5 py-2.5 rounded-xl active:scale-95 transition-all shadow-md"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Write Article</span>
@@ -936,10 +935,10 @@ export default function AdminPage() {
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-[10px] font-black uppercase bg-blue-950/60 text-blue-400 border border-blue-800/40 px-2 py-0.5 rounded-md">
+                          <span className="text-[10px] font-semibold uppercase bg-white/[0.06] text-white/90 border border-white/10 px-2 py-0.5 rounded-md">
                             {article.category}
                           </span>
-                          <span className="text-[10px] font-mono font-bold text-gray-300 bg-[#242735] px-2 py-0.5 rounded-md">
+                          <span className="text-[10px] font-mono font-medium text-gray-400 bg-white/[0.04] px-2 py-0.5 rounded-md">
                             #{article.tag}
                           </span>
                         </div>
@@ -950,7 +949,7 @@ export default function AdminPage() {
                               setEditingArticle(article);
                               setShowArticleModal(true);
                             }}
-                            className="p-1.5 rounded-lg bg-[#242735] text-gray-200 hover:bg-[#0066d6] hover:text-white transition-colors"
+                            className="p-1.5 rounded-lg bg-white/[0.06] text-gray-200 hover:bg-white/20 hover:text-white transition-colors"
                             title="Edit Article"
                           >
                             <Edit3 className="w-3.5 h-3.5" />

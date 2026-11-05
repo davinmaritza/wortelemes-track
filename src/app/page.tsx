@@ -109,102 +109,95 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[#000000] text-white flex flex-col items-center pb-24 md:pb-12">
+    <main className="min-h-screen bg-[#090a0f] text-[#ededed] flex flex-col items-center pb-24 md:pb-16 selection:bg-blue-600/30">
       {/* DESKTOP TOP NAVIGATION BAR */}
-      <header className="hidden md:flex w-full max-w-7xl px-8 py-3.5 items-center justify-between border-b border-[#1f222e] bg-[#0c0d10]/90 backdrop-blur-md sticky top-0 z-30">
+      <header className="hidden md:flex w-full max-w-7xl px-8 py-4 items-center justify-between border-b border-white/[0.06] bg-[#090a0f]/80 backdrop-blur-xl sticky top-0 z-30">
         <div className="flex items-center gap-8">
-          {/* Wortelemes Brand */}
+          {/* Brand */}
           <div className="flex items-center gap-3">
             <WortelemesLogo className="w-8 h-8" size={32} />
-            <span className="font-black text-sm tracking-wider text-white uppercase">
-              WORTELEMES
-            </span>
-            <span className="font-extrabold text-xs tracking-widest text-gray-400 uppercase border-l border-[#242735] pl-3">
-              SHOWCASE
-            </span>
+            <div className="flex flex-col">
+              <span className="font-black text-sm tracking-widest text-white uppercase font-sans">
+                WORTELEMES
+              </span>
+              <span className="text-[10px] tracking-wider text-gray-400 font-mono -mt-0.5">
+                COLLECTOR VAULT
+              </span>
+            </div>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="flex items-center gap-2">
+          {/* Navigation Links */}
+          <nav className="flex items-center gap-1.5 bg-[#12131a] p-1 rounded-xl border border-white/[0.06]">
             <button
               onClick={() => setCurrentNav('garage')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentNav === 'garage'
-                  ? 'bg-[#0066d6] text-white shadow'
-                  : 'text-gray-400 hover:text-white hover:bg-[#16181f]'
+                  ? 'bg-[#1e202c] text-white shadow-sm border border-white/10'
+                  : 'text-gray-400 hover:text-white'
               }`}
             >
-              <Flame className="w-4 h-4" />
-              <span>My Garage</span>
+              <Flame className="w-3.5 h-3.5 text-amber-400" />
+              <span>Garage</span>
             </button>
 
             <button
               onClick={() => setCurrentNav('discover')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentNav === 'discover'
-                  ? 'bg-[#0066d6] text-white shadow'
-                  : 'text-gray-400 hover:text-white hover:bg-[#16181f]'
+                  ? 'bg-[#1e202c] text-white shadow-sm border border-white/10'
+                  : 'text-gray-400 hover:text-white'
               }`}
             >
-              <Compass className="w-4 h-4" />
+              <Compass className="w-3.5 h-3.5 text-blue-400" />
               <span>Discover</span>
             </button>
 
             <button
               onClick={() => setCurrentNav('news')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentNav === 'news'
-                  ? 'bg-[#0066d6] text-white shadow'
-                  : 'text-gray-400 hover:text-white hover:bg-[#16181f]'
+                  ? 'bg-[#1e202c] text-white shadow-sm border border-white/10'
+                  : 'text-gray-400 hover:text-white'
               }`}
             >
-              <Newspaper className="w-4 h-4" />
-              <span>News</span>
+              <Newspaper className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Drops & News</span>
             </button>
 
             <button
               onClick={() => setCurrentNav('profile')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentNav === 'profile'
-                  ? 'bg-[#0066d6] text-white shadow'
-                  : 'text-gray-400 hover:text-white hover:bg-[#16181f]'
+                  ? 'bg-[#1e202c] text-white shadow-sm border border-white/10'
+                  : 'text-gray-400 hover:text-white'
               }`}
             >
-              <User className="w-4 h-4" />
-              <span>Profile</span>
+              <User className="w-3.5 h-3.5 text-violet-400" />
+              <span>Curator Profile</span>
             </button>
           </nav>
         </div>
 
-        {/* Right Desktop Info */}
+        {/* Right Info */}
         <div className="flex items-center gap-3">
-          <span className="text-[11px] font-bold tracking-wider text-gray-400 uppercase bg-[#16181f] border border-[#242735] px-3.5 py-1.5 rounded-xl">
-            Diecast Garage
+          <span className="text-[11px] font-mono text-gray-400 bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 rounded-xl">
+            1:64 Scale Catalog
           </span>
         </div>
       </header>
 
-      {/* MAIN CONTAINER: Responsive Width */}
-      <div className="w-full max-w-[430px] md:max-w-6xl lg:max-w-7xl px-4 md:px-8 pt-3 md:pt-6 flex flex-col">
-        {/* MOBILE ONLY: Top Status Bar */}
-        <div className="md:hidden flex items-center justify-between text-[11px] text-gray-400 font-semibold px-2 pb-1.5">
-          <span>9:30</span>
-          <div className="flex items-center gap-1.5 text-gray-300">
-            <span className="text-[9px]">5G</span>
-            <span>100%</span>
-          </div>
-        </div>
-
-        {/* MOBILE ONLY: Brand Header (No Hot Wheels logo & No Admin Button) */}
-        <div className="md:hidden flex items-center justify-between pb-3 pt-1">
+      {/* MAIN CONTAINER: Full responsive width without artificial clamping */}
+      <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-3 md:pt-6 flex flex-col">
+        {/* MOBILE BRAND HEADER (Clean, no fake status bar) */}
+        <div className="md:hidden flex items-center justify-between py-3 border-b border-white/[0.06] mb-4">
           <div className="flex items-center gap-2.5">
-            <WortelemesLogo className="w-8 h-8" size={32} />
+            <WortelemesLogo className="w-7 h-7" size={28} />
             <span className="font-black text-sm tracking-wider text-white uppercase">
               WORTELEMES
             </span>
           </div>
-          <span className="text-[10px] font-black tracking-widest text-gray-400 uppercase bg-[#16181f] border border-[#242735] px-2.5 py-1 rounded-full">
-            SHOWCASE
+          <span className="text-[10px] font-mono text-gray-400 uppercase bg-white/[0.04] border border-white/[0.08] px-2.5 py-1 rounded-lg">
+            1:64 GARAGE
           </span>
         </div>
 
@@ -224,57 +217,60 @@ export default function Home() {
         ) : (
           /* MY GARAGE */
           <>
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mt-1 mb-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-1 mb-3">
               <div>
-                <h1 className="text-2xl md:text-3xl font-black tracking-tight uppercase text-white font-sans">
-                  MY GARAGE
+                <h1 className="text-xl sm:text-2xl font-black tracking-tight uppercase text-white font-sans">
+                  GARAGE INVENTORY
                 </h1>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  Curated physical diecasts, blister condition ratings, and live collection vault.
+                </p>
+              </div>
+
+              {/* Sub-Tab Navigation (Vehicles | Series | Lists) */}
+              <div className="bg-[#12131a] p-1 rounded-xl flex items-center border border-white/[0.06] w-full sm:w-80">
+                <button
+                  onClick={() => setGarageSubTab('Vehicles')}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                    garageSubTab === 'Vehicles'
+                      ? 'bg-[#1e202c] text-white shadow-sm border border-white/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Vehicles
+                </button>
+                <button
+                  onClick={() => setGarageSubTab('Series')}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                    garageSubTab === 'Series'
+                      ? 'bg-[#1e202c] text-white shadow-sm border border-white/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Series Sets
+                </button>
+                <button
+                  onClick={() => setGarageSubTab('Lists')}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                    garageSubTab === 'Lists'
+                      ? 'bg-[#1e202c] text-white shadow-sm border border-white/10'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Favorites
+                </button>
               </div>
             </div>
 
-            {/* Sub-Tab Navigation (Vehicles | Series | Lists) */}
-            <div className="bg-[#14151a] p-1 rounded-full flex items-center border border-[#22242e] w-full md:w-96 mb-3">
-              <button
-                onClick={() => setGarageSubTab('Vehicles')}
-                className={`flex-1 py-1.5 md:py-2 text-xs font-bold rounded-full transition-all ${
-                  garageSubTab === 'Vehicles'
-                    ? 'bg-[#0066d6] text-white shadow'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                Vehicles
-              </button>
-              <button
-                onClick={() => setGarageSubTab('Series')}
-                className={`flex-1 py-1.5 md:py-2 text-xs font-bold rounded-full transition-all ${
-                  garageSubTab === 'Series'
-                    ? 'bg-[#0066d6] text-white shadow'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                Series
-              </button>
-              <button
-                onClick={() => setGarageSubTab('Lists')}
-                className={`flex-1 py-1.5 md:py-2 text-xs font-bold rounded-full transition-all ${
-                  garageSubTab === 'Lists'
-                    ? 'bg-[#0066d6] text-white shadow'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                Lists
-              </button>
-            </div>
-
             {/* Interactive Filter & Sort Bar */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 mb-4">
               <div className="flex flex-wrap items-center gap-2">
                 {/* Sort Dropdown */}
                 <div className="relative">
                   <select
                     value={selectedSort}
                     onChange={(e) => setSelectedSort(e.target.value as any)}
-                    className="appearance-none bg-[#14151b] border border-white/10 hover:border-white/20 rounded-xl pl-3 pr-8 py-2 text-xs text-gray-200 focus:outline-none focus:border-[#0066d6] transition-colors cursor-pointer font-medium"
+                    className="appearance-none bg-[#12131a] border border-white/[0.08] hover:border-white/20 rounded-xl pl-3 pr-8 py-2 text-xs text-gray-200 focus:outline-none focus:border-white/30 transition-colors cursor-pointer font-medium"
                   >
                     <option value="newest">Sort: Newest Batch</option>
                     <option value="price-asc">Price: Low to High</option>
@@ -289,9 +285,9 @@ export default function Home() {
                   <select
                     value={selectedTier}
                     onChange={(e) => setSelectedTier(e.target.value)}
-                    className="appearance-none bg-[#14151b] border border-white/10 hover:border-white/20 rounded-xl pl-3 pr-8 py-2 text-xs text-gray-200 focus:outline-none focus:border-[#0066d6] transition-colors cursor-pointer font-medium"
+                    className="appearance-none bg-[#12131a] border border-white/[0.08] hover:border-white/20 rounded-xl pl-3 pr-8 py-2 text-xs text-gray-200 focus:outline-none focus:border-white/30 transition-colors cursor-pointer font-medium"
                   >
-                    <option value="all">All Categories</option>
+                    <option value="all">All Tiers</option>
                     <option value="RLC">Red Line Club (RLC)</option>
                     <option value="Silver Series">Silver Series</option>
                     <option value="Mainline">Mainline Regular</option>
@@ -304,43 +300,43 @@ export default function Home() {
                 {/* For Sale Filter Toggle */}
                 <button
                   onClick={() => setFilterForSaleOnly(!filterForSaleOnly)}
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border ${
+                  className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all border ${
                     filterForSaleOnly
-                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-sm'
-                      : 'bg-[#14151b] text-gray-400 hover:text-white border-white/10'
+                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                      : 'bg-[#12131a] text-gray-400 hover:text-white border-white/[0.08]'
                   }`}
                 >
-                  {filterForSaleOnly ? '✓ For Sale Only' : 'For Sale Only'}
+                  {filterForSaleOnly ? '✓ For Sale Only' : 'For Sale'}
                 </button>
               </div>
 
               {/* Realtime Search Bar */}
               <div className="relative w-full md:w-80">
-                <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by casting, color, or tier..."
-                  className="w-full bg-[#14151b] border border-white/10 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6] transition-colors"
+                  placeholder="Filter casting name, color, or series..."
+                  className="w-full bg-[#12131a] border border-white/[0.08] focus:border-white/30 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             {/* Counter & Status Bar */}
-            <div className="flex items-center justify-between py-1 text-xs text-gray-400 font-semibold mb-2">
+            <div className="flex items-center justify-between py-1 text-xs text-gray-400 font-medium mb-3">
               <div className="flex items-center gap-2">
                 <span className="text-white font-mono font-bold">
                   {sortedItems.length} Vehicles
                 </span>
                 <span className="text-gray-600">•</span>
-                <span>{collections.filter((c) => c.is_for_sale).length} Available For Sale</span>
+                <span>{collections.filter((c) => c.is_for_sale).length} Available For Purchase</span>
               </div>
 
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="text-[11px] text-blue-400 hover:underline"
+                  className="text-[11px] text-gray-400 hover:text-white underline"
                 >
                   Clear search
                 </button>

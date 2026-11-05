@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { CollectionItem } from '@/types/diecast';
-import { ChevronLeft, Share2, MessageCircle, Star, Sparkles, ShieldCheck } from 'lucide-react';
+import { ChevronLeft, Share2, MessageCircle, Star, ShieldCheck } from 'lucide-react';
 import { getStoredWhatsAppNumber } from '@/lib/storage/profileStorage';
 
 interface CarDetailViewProps {
@@ -20,9 +20,6 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
   onBack,
   onToggleFavorite,
 }) => {
-  const isRLC = car.tier_badge?.toUpperCase().includes('RLC');
-  const isSTH = car.tier_badge?.toUpperCase().includes('TREASURE') || car.tier_badge?.toUpperCase().includes('STH');
-
   const formatRupiah = (val: number) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
@@ -38,32 +35,32 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#090a0d] text-white">
+    <div className="flex flex-col min-h-screen bg-[#090a0f] text-[#ededed]">
       {/* Top Header Bar */}
-      <div className="sticky top-0 z-30 flex items-center justify-between px-4 md:px-8 py-3.5 bg-[#090a0d]/90 backdrop-blur-xl border-b border-white/[0.08]">
+      <div className="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 py-3.5 bg-[#090a0f]/85 backdrop-blur-xl border-b border-white/[0.06]">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white active:scale-95 transition-all text-xs font-bold"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-gray-300 hover:text-white transition-all text-xs font-semibold"
         >
           <ChevronLeft className="w-4 h-4" />
-          <span>Back to Garage</span>
+          <span>Garage Catalog</span>
         </button>
 
-        <h2 className="text-xs sm:text-sm font-extrabold tracking-tight uppercase max-w-[200px] sm:max-w-md truncate text-center text-gray-300">
+        <h2 className="text-xs sm:text-sm font-bold tracking-tight uppercase max-w-[200px] sm:max-w-md truncate text-center text-gray-300 font-mono">
           {car.name}
         </h2>
 
         <div className="flex items-center gap-2">
           <button
             onClick={() => onToggleFavorite?.(car.id)}
-            className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all ${
+            className={`w-8 h-8 rounded-xl flex items-center justify-center border transition-all ${
               car.is_favorite
-                ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
-                : 'bg-white/[0.06] border-white/10 text-gray-400 hover:text-white'
+                ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                : 'bg-white/[0.04] border-white/[0.08] text-gray-400 hover:text-white'
             }`}
             title="Favorite"
           >
-            <Star className={`w-4 h-4 ${car.is_favorite ? 'fill-amber-400' : ''}`} />
+            <Star className={`w-3.5 h-3.5 ${car.is_favorite ? 'fill-amber-400' : ''}`} />
           </button>
 
           <button
@@ -72,52 +69,41 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
                 navigator.share({ title: car.name, url: window.location.href });
               }
             }}
-            className="w-9 h-9 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-gray-400 hover:text-white active:scale-95 transition-all"
+            className="w-8 h-8 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-gray-400 hover:text-white transition-all"
             title="Share"
           >
-            <Share2 className="w-4 h-4" />
+            <Share2 className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
       {/* Main Content Showcase */}
-      <div className="max-w-5xl mx-auto w-full px-4 md:px-8 py-8 pb-32 flex flex-col md:flex-row gap-8 items-start">
-        {/* Left: Showcase Asset Preview Podium */}
+      <div className="max-w-5xl mx-auto w-full px-4 sm:px-8 py-8 pb-32 flex flex-col md:flex-row gap-8 items-start">
+        {/* Left: Physical Studio Canvas */}
         <div className="w-full md:w-1/2 flex flex-col items-center">
-          <div
-            className={`relative w-full aspect-[4/3] rounded-3xl p-6 overflow-hidden shadow-2xl flex items-center justify-center ${
-              isRLC
-                ? 'bg-gradient-to-b from-[#241518] via-[#151012] to-[#0c0d10] border border-red-500/30 shadow-red-950/20'
-                : isSTH
-                ? 'bg-gradient-to-b from-[#251c13] via-[#15120e] to-[#0c0d10] border border-amber-500/30 shadow-amber-950/20'
-                : 'bg-gradient-to-b from-[#181a24] via-[#101117] to-[#0a0a0f] border border-white/10 shadow-black/80'
-            }`}
-          >
-            {/* Subtle Spotlight radial glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.08),transparent_65%)] pointer-events-none" />
-
+          <div className="relative w-full aspect-[4/3] rounded-3xl p-6 overflow-hidden bg-[#111219] border border-white/[0.08] shadow-2xl flex items-center justify-center">
             {car.image_url ? (
               <Image
                 src={car.image_url}
                 alt={car.name}
                 fill
-                className="object-contain p-6 select-none drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)] hover:scale-105 transition-transform duration-500"
+                className="object-contain p-6 select-none drop-shadow-xl"
                 priority
                 unoptimized
               />
             ) : (
-              <span className="text-gray-500 font-mono text-xs">No Asset Available</span>
+              <span className="text-gray-500 font-mono text-xs">No Photo Available</span>
             )}
 
-            {/* Floating Top Badges */}
-            <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+            {/* Status Chip */}
+            <div className="absolute top-4 left-4 z-10">
               {car.is_for_sale ? (
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 backdrop-blur-md">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="inline-flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-950/70 text-emerald-300 border border-emerald-800/40 backdrop-blur-md">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   Available For Sale
                 </span>
               ) : (
-                <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-black/60 text-gray-400 border border-white/10 backdrop-blur-md">
+                <span className="text-[9px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-full bg-black/60 text-gray-400 border border-white/10 backdrop-blur-md">
                   Private Collection
                 </span>
               )}
@@ -125,15 +111,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
 
             {car.tier_badge && (
               <div className="absolute top-4 right-4 z-10">
-                <span
-                  className={`text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full ${
-                    isRLC
-                      ? 'bg-red-600 text-white shadow-lg shadow-red-900/40'
-                      : isSTH
-                      ? 'bg-amber-500 text-black shadow-lg shadow-amber-900/40'
-                      : 'bg-white/15 text-white border border-white/20'
-                  }`}
-                >
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-white/[0.08] text-white border border-white/15">
                   {car.tier_badge}
                 </span>
               </div>
@@ -141,132 +119,128 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
           </div>
 
           {/* Authentic Guarantee pill */}
-          <div className="mt-4 flex items-center gap-2 text-xs text-gray-400 bg-white/[0.03] border border-white/[0.06] px-4 py-2 rounded-full">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>100% Authentic Diecast & Physically Verified</span>
+          <div className="mt-4 flex items-center gap-2 text-xs text-gray-400 bg-white/[0.03] border border-white/[0.06] px-4 py-2 rounded-xl">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span>100% Genuine Factory Release • Tamper-Evident Packaging</span>
           </div>
         </div>
 
         {/* Right: Technical Spec Matrix & Pricing */}
-        <div className="w-full md:w-1/2 flex flex-col gap-6">
+        <div className="w-full md:w-1/2 flex flex-col gap-5">
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-mono font-bold text-[#0066d6] uppercase tracking-wider">
-                Batch #{car.release_year}
-              </span>
-              <span className="text-gray-600">•</span>
-              <span className="text-xs font-mono text-gray-400">
-                Scale {car.scale || '1:64'}
-              </span>
+            <div className="flex items-center gap-2 mb-1.5 text-xs font-mono text-gray-400">
+              <span>Batch #{car.release_year}</span>
+              <span>•</span>
+              <span>Scale {car.scale || '1:64'}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white leading-tight">
+            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white leading-tight font-sans">
               {car.name}
             </h1>
-            <p className="text-xs text-gray-400 mt-1.5 leading-relaxed">
-              Curated premium diecast preserved in immaculate detail, condition: {car.condition}.
+            <p className="text-xs text-gray-400 mt-1 leading-relaxed">
+              Curator-graded casting. Blister and card integrity: {car.condition}.
             </p>
           </div>
 
           {/* Specification Matrix */}
-          <div className="grid grid-cols-2 gap-3 bg-[#111218] p-4 sm:p-5 rounded-2xl border border-white/[0.08]">
-            <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
-              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
+          <div className="grid grid-cols-2 gap-2.5 bg-[#111219] p-4 sm:p-5 rounded-2xl border border-white/[0.06]">
+            <div className="bg-[#151620] p-3 rounded-xl border border-white/[0.04]">
+              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-mono block mb-0.5">
                 Release Year
               </span>
-              <span className="text-white text-sm font-black font-mono">
+              <span className="text-white text-sm font-bold font-mono">
                 {car.release_year}
               </span>
             </div>
 
-            <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
-              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Tier / Category
+            <div className="bg-[#151620] p-3 rounded-xl border border-white/[0.04]">
+              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-mono block mb-0.5">
+                Series / Tier
               </span>
-              <span className="text-white text-sm font-extrabold truncate block">
+              <span className="text-white text-sm font-semibold truncate block">
                 {car.tier_badge || 'Mainline'}
               </span>
             </div>
 
-            <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
-              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Card / Physical Condition
+            <div className="bg-[#151620] p-3 rounded-xl border border-white/[0.04]">
+              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-mono block mb-0.5">
+                Condition Grade
               </span>
-              <span className="text-white text-sm font-extrabold truncate block">
+              <span className="text-white text-sm font-semibold truncate block">
                 {car.condition}
               </span>
             </div>
 
-            <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
-              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Segment Number
+            <div className="bg-[#151620] p-3 rounded-xl border border-white/[0.04]">
+              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-mono block mb-0.5">
+                Segment Index
               </span>
-              <span className="text-white text-sm font-black font-mono">
+              <span className="text-white text-sm font-bold font-mono">
                 {car.segment_number ? `#${car.segment_number}` : 'N/A'}
               </span>
             </div>
 
-            <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
-              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Body Color
+            <div className="bg-[#151620] p-3 rounded-xl border border-white/[0.04]">
+              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-mono block mb-0.5">
+                Colorway
               </span>
-              <span className="text-white text-sm font-extrabold truncate block">
+              <span className="text-white text-sm font-semibold truncate block">
                 {car.color}
               </span>
             </div>
 
-            <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
-              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Casting Code / SKU
+            <div className="bg-[#151620] p-3 rounded-xl border border-white/[0.04]">
+              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-mono block mb-0.5">
+                SKU / Code
               </span>
-              <span className="text-white text-sm font-black font-mono">
+              <span className="text-white text-sm font-bold font-mono">
                 {car.casting_code || 'STANDARD'}
               </span>
             </div>
           </div>
 
           {/* Pricing Info Card */}
-          <div className="p-5 bg-gradient-to-r from-[#12141c] to-[#151722] rounded-2xl border border-white/10 flex items-center justify-between shadow-xl">
+          <div className="p-5 bg-[#111219] rounded-2xl border border-white/[0.08] flex items-center justify-between shadow-lg">
             <div>
-              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5">
-                ESTIMATED MARKET VALUE
+              <span className="text-[10px] text-gray-400 font-mono uppercase tracking-widest block mb-0.5">
+                Market Evaluation Price
               </span>
-              <span className="text-2xl font-black text-white font-mono">
+              <span className="text-2xl font-black text-white font-mono tracking-tight">
                 {formatRupiah(car.sell_price)}
               </span>
-              <span className="block text-[10px] text-gray-400 mt-0.5">
-                {car.is_for_sale ? 'Ready to ship nationwide & worldwide' : 'Private display unit'}
+              <span className="block text-[11px] text-gray-400 mt-0.5">
+                {car.is_for_sale ? 'Available for secure courier delivery' : 'Private vault display unit'}
               </span>
             </div>
 
             {isAdmin && car.buy_price !== undefined && (
-              <div className="text-right bg-red-950/60 px-3.5 py-2 rounded-xl border border-red-800/40">
-                <span className="text-[9px] text-red-400 font-bold uppercase tracking-wider block">
-                  COST PRICE (PRIVATE)
+              <div className="text-right bg-red-950/40 px-3.5 py-2 rounded-xl border border-red-900/30">
+                <span className="text-[9px] text-red-400 font-mono uppercase tracking-wider block">
+                  Cost (Private)
                 </span>
-                <span className="text-sm font-black font-mono text-red-300">
+                <span className="text-sm font-bold font-mono text-red-300">
                   {formatRupiah(car.buy_price)}
                 </span>
               </div>
             )}
           </div>
 
-          {/* Action CTA: Sticky on Mobile, Inline on Desktop */}
-          <div className="fixed md:static bottom-0 left-0 right-0 p-4 md:p-0 bg-[#090a0d]/95 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-t md:border-t-0 border-white/10 z-30">
+          {/* Action CTA */}
+          <div className="fixed md:static bottom-0 left-0 right-0 p-4 md:p-0 bg-[#090a0f]/95 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-t md:border-t-0 border-white/[0.08] z-30">
             {car.is_for_sale ? (
               <button
                 onClick={handleWhatsAppOrder}
-                className="w-full bg-[#0066d6] hover:bg-blue-600 active:scale-[0.98] text-white rounded-full py-4 px-6 font-black text-sm flex items-center justify-center gap-2.5 shadow-[0_10px_35px_rgba(0,102,214,0.4)] transition-all"
+                className="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white rounded-xl py-3.5 px-6 font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-all"
               >
-                <MessageCircle className="w-5 h-5" />
-                <span>Purchase Collection (WhatsApp)</span>
+                <MessageCircle className="w-4 h-4" />
+                <span>Order via Direct WhatsApp</span>
               </button>
             ) : (
               <button
                 onClick={handleWhatsAppOrder}
-                className="w-full bg-white/[0.08] hover:bg-white/15 text-gray-300 rounded-full py-4 px-6 font-bold text-xs flex items-center justify-center gap-2 border border-white/10 transition-all"
+                className="w-full bg-white/[0.05] hover:bg-white/[0.1] text-gray-300 rounded-xl py-3.5 px-6 font-semibold text-xs flex items-center justify-center gap-2 border border-white/[0.08] transition-all"
               >
-                <MessageCircle className="w-4 h-4" />
-                <span>Inquire Availability / Custom Request (WhatsApp)</span>
+                <MessageCircle className="w-4 h-4 text-gray-400" />
+                <span>Inquire Trade or Vault Acquisition (WhatsApp)</span>
               </button>
             )}
           </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Calendar, Newspaper, Sparkles, BookOpen, X, ExternalLink, Clock, Tag, ChevronRight } from 'lucide-react';
+import { Calendar, Newspaper, BookOpen, X, Clock, Settings, ArrowUpRight } from 'lucide-react';
 import { ArticleItem, UpcomingDropItem } from '@/types/diecast';
 import { getStoredArticles, getStoredDrops } from '@/lib/storage/newsStorage';
 
@@ -25,106 +25,103 @@ export const CollectorJournalView: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-8 pb-16 w-full">
+    <div className="flex flex-col gap-6 pb-20 w-full max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pt-2">
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center gap-2">
-            <Newspaper className="w-4 h-4 text-[#0066d6]" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#0066d6]">
-              Wortelemes Journal
-            </span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white uppercase font-sans">
-            COLLECTOR NEWS & RELEASE RADAR
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pt-2">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white uppercase font-sans">
+            RELEASE RADAR & JOURNAL
           </h1>
-          <p className="text-xs text-gray-400 max-w-xl leading-relaxed">
-            Official hub for batch releases, drop schedules, blister preservation guides, and secondary market insights.
+          <p className="text-xs text-gray-400 mt-0.5">
+            Verified release schedules, case assortments, and market valuation reports.
           </p>
         </div>
 
         <Link
           href="/admin"
-          className="self-start md:self-auto inline-flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-white bg-[#14151b] border border-white/10 hover:border-white/20 px-3.5 py-2 rounded-xl transition-colors"
+          className="self-start sm:self-auto inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3.5 py-2 rounded-xl transition-colors font-medium"
         >
-          <span>Manage News in Admin</span>
-          <ChevronRight className="w-3.5 h-3.5" />
+          <Settings className="w-3.5 h-3.5 text-gray-400" />
+          <span>Admin News Management</span>
         </Link>
       </div>
 
-      {/* Release Calendar Bento Section */}
-      <div className="bg-[#121319] border border-white/10 rounded-3xl p-5 sm:p-7 shadow-xl">
-        <div className="flex items-center justify-between pb-4 border-b border-white/5">
-          <div className="flex items-center gap-2.5">
-            <Calendar className="w-5 h-5 text-blue-400" />
-            <div>
-              <h2 className="text-sm font-black uppercase text-white tracking-wide">
-                Release Drop Radar
-              </h2>
-              <span className="text-[11px] text-gray-400">
-                Upcoming drop schedule for premium diecasts and new batches
-              </span>
-            </div>
+      {/* 1. Release Drop Radar */}
+      <div className="bg-[#111219] border border-white/[0.08] rounded-3xl p-5 sm:p-7 shadow-xl flex flex-col gap-4">
+        <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-blue-400" />
+            <h2 className="text-xs font-mono uppercase tracking-widest text-gray-300 font-bold">
+              Upcoming Release Drops & Restocks
+            </h2>
           </div>
-          <span className="text-[10px] font-mono text-blue-400 bg-blue-950/60 border border-blue-800/40 px-2.5 py-1 rounded-full font-bold">
-            Live Radar
+          <span className="text-[10px] font-mono text-gray-400">
+            {upcomingDrops.length} Scheduled
           </span>
         </div>
 
         {upcomingDrops.length === 0 ? (
-          <div className="py-8 text-center text-gray-500 text-xs">
-            No upcoming drop events scheduled. Add new releases in the admin panel.
+          <div className="py-10 text-center text-gray-500 text-xs">
+            No drops scheduled currently. Use the admin workspace to publish new release dates.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mt-4">
-            {upcomingDrops.map((drop) => (
-              <div
-                key={drop.id}
-                className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-4 flex flex-col justify-between gap-3 hover:border-white/15 transition-colors"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-black text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-500/20">
-                    {drop.date}
-                  </span>
-                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
-                    drop.status === 'Confirmed'
-                      ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                      : drop.status === 'Live'
-                      ? 'bg-red-500/15 text-red-400 border border-red-500/30 animate-pulse'
-                      : 'text-gray-400'
-                  }`}>
-                    {drop.status}
-                  </span>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {upcomingDrops.map((drop) => {
+              const statusColor =
+                drop.status === 'Confirmed'
+                  ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/40'
+                  : drop.status === 'Live'
+                  ? 'bg-blue-950/60 text-blue-300 border-blue-800/40'
+                  : drop.status === 'Sold Out'
+                  ? 'bg-red-950/60 text-red-300 border-red-800/40'
+                  : 'bg-amber-950/60 text-amber-300 border-amber-800/40';
 
-                <div>
-                  <h3 className="text-sm font-bold text-white uppercase leading-snug">
-                    {drop.model}
-                  </h3>
-                  <span className="text-[11px] text-gray-400 mt-1 block font-mono">
-                    {drop.series}
-                  </span>
+              return (
+                <div
+                  key={drop.id}
+                  className="bg-[#151620] border border-white/[0.06] rounded-2xl p-4 flex flex-col justify-between gap-3 hover:border-white/20 transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono font-bold text-white bg-white/[0.06] border border-white/10 px-2.5 py-1 rounded-lg">
+                      {drop.month ? `${drop.month} ` : ''}{drop.date}
+                    </span>
+                    <span
+                      className={`text-[9px] font-mono uppercase px-2 py-0.5 rounded-full border ${statusColor}`}
+                    >
+                      {drop.status}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-bold text-white uppercase leading-snug line-clamp-1">
+                      {drop.model}
+                    </h3>
+                    <span className="text-xs text-gray-400 mt-1 block font-mono line-clamp-1">
+                      {drop.series}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
 
-      {/* Featured Articles Grid */}
+      {/* 2. Editorial Stories & Market Analysis */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-black uppercase tracking-wider text-white font-mono">
-            COLLECTOR GUIDES & MARKET INSIGHTS
+          <h2 className="text-xs font-mono uppercase tracking-widest text-gray-300 font-bold flex items-center gap-2">
+            <Newspaper className="w-4 h-4 text-gray-400" />
+            Curator Journal Articles
           </h2>
           <span className="text-xs text-gray-400 font-mono">
-            {articles.length} Articles
+            {articles.length} Stories
           </span>
         </div>
 
         {articles.length === 0 ? (
-          <div className="py-12 text-center text-gray-500 bg-[#121319] rounded-2xl border border-white/5 text-xs">
-            No articles found. Publish new guides in the admin portal.
+          <div className="py-12 text-center text-gray-500 bg-[#111219] rounded-2xl border border-white/[0.06] text-xs">
+            No articles published yet. Publish new stories via the admin workspace.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -132,29 +129,30 @@ export const CollectorJournalView: React.FC = () => {
               <article
                 key={art.id}
                 onClick={() => setSelectedArticle(art)}
-                className="bg-[#121319] border border-white/[0.08] hover:border-[#0066d6]/60 rounded-3xl p-5 sm:p-6 flex flex-col justify-between gap-4 transition-all duration-300 shadow-lg group hover:-translate-y-0.5 cursor-pointer"
+                className="bg-[#111219] border border-white/[0.06] hover:border-white/20 rounded-2xl p-5 flex flex-col justify-between gap-4 transition-all duration-200 cursor-pointer group shadow-sm hover:shadow-xl"
               >
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-blue-400 font-black uppercase tracking-wide">
+                    <span className="text-gray-300 font-mono text-[10px] uppercase tracking-wider bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.06]">
                       {art.category}
                     </span>
-                    <span className="text-gray-400 font-mono">{art.readTime}</span>
+                    <span className="text-gray-500 font-mono">{art.readTime}</span>
                   </div>
 
-                  <h3 className="text-base font-extrabold text-white group-hover:text-blue-300 transition-colors leading-snug">
+                  <h3 className="text-base font-bold text-white group-hover:text-gray-200 transition-colors leading-snug">
                     {art.title}
                   </h3>
 
-                  <p className="text-xs text-gray-400 leading-relaxed">
+                  <p className="text-xs text-gray-400 leading-relaxed line-clamp-2">
                     {art.excerpt}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-white/[0.05] flex items-center justify-between text-xs text-gray-400">
-                  <span className="font-mono text-[11px]">{art.date}</span>
-                  <span className="text-blue-400 font-bold group-hover:underline flex items-center gap-1">
-                    Read Full Article →
+                <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-gray-400">
+                  <span className="font-mono text-[11px] text-gray-500">{art.date}</span>
+                  <span className="text-white font-medium group-hover:underline flex items-center gap-1 text-[11px]">
+                    <span>Read Story</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-gray-400" />
                   </span>
                 </div>
               </article>
@@ -163,14 +161,14 @@ export const CollectorJournalView: React.FC = () => {
         )}
       </div>
 
-      {/* Article Reader Modal */}
+      {/* Interactive Article Reader Modal */}
       {selectedArticle && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-[#14161f] border border-[#242735] w-full max-w-2xl rounded-3xl p-6 sm:p-8 flex flex-col max-h-[85vh] overflow-y-auto shadow-2xl relative">
-            {/* Top Close Button */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="bg-[#12131b] border border-white/10 w-full max-w-2xl rounded-3xl p-6 sm:p-8 flex flex-col max-h-[85vh] overflow-y-auto shadow-2xl relative">
+            {/* Header */}
             <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-blue-400 uppercase tracking-wider bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
+                <span className="text-[10px] font-mono font-bold text-gray-300 uppercase tracking-wider bg-white/[0.06] px-2.5 py-1 rounded-md border border-white/10">
                   {selectedArticle.category}
                 </span>
                 <span className="text-xs text-gray-400 font-mono">
@@ -179,45 +177,44 @@ export const CollectorJournalView: React.FC = () => {
               </div>
               <button
                 onClick={() => setSelectedArticle(null)}
-                className="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                className="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors"
+                title="Close"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Article Content */}
-            <div className="mt-4 flex flex-col gap-4">
+            {/* Story */}
+            <div className="mt-5 flex flex-col gap-4">
               <h1 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight leading-snug">
                 {selectedArticle.title}
               </h1>
 
-              <div className="flex items-center gap-3 text-xs text-gray-400 font-mono pb-2 border-b border-white/[0.05]">
+              <div className="flex items-center gap-2 text-xs text-gray-500 font-mono pb-2 border-b border-white/[0.06]">
                 <span>Published: {selectedArticle.date}</span>
                 <span>•</span>
-                <span>Tag: #{selectedArticle.tag}</span>
+                <span>#{selectedArticle.tag}</span>
               </div>
 
-              <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/[0.06] text-xs text-gray-300 italic leading-relaxed">
-                "{selectedArticle.excerpt}"
-              </div>
+              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-sans font-medium italic border-l-2 border-white/20 pl-4 py-1">
+                &ldquo;{selectedArticle.excerpt}&rdquo;
+              </p>
 
-              {selectedArticle.content ? (
-                <div className="text-xs sm:text-sm text-gray-300 leading-relaxed whitespace-pre-line flex flex-col gap-3 font-sans">
-                  {selectedArticle.content}
-                </div>
-              ) : (
-                <p className="text-xs text-gray-400 leading-relaxed">
-                  Full article text is curated by the garage team. Check back regularly or reach out via WhatsApp for further collector guidance.
-                </p>
-              )}
+              <div className="text-xs sm:text-sm text-gray-300 leading-relaxed whitespace-pre-line font-sans pt-2">
+                {selectedArticle.content || selectedArticle.excerpt}
+              </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-white/[0.08] flex justify-end">
+            {/* Footer */}
+            <div className="mt-8 pt-4 border-t border-white/[0.08] flex items-center justify-between">
+              <span className="text-[11px] text-gray-500 font-mono">
+                Wortelemes Journal Archives
+              </span>
               <button
                 onClick={() => setSelectedArticle(null)}
-                className="bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-6 py-2.5 rounded-full active:scale-95 transition-all shadow"
+                className="text-xs font-semibold px-4 py-2 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-white transition-colors"
               >
-                Close Article
+                Back to Feed
               </button>
             </div>
           </div>

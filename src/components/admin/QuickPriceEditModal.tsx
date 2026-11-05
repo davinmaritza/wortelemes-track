@@ -46,25 +46,25 @@ const QuickPriceEditModalContent: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="bg-[#16181f] border border-[#242735] w-full max-w-sm rounded-2xl p-5 flex flex-col gap-4 shadow-2xl">
-        <div className="flex items-center justify-between pb-2 border-b border-[#242735]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
+      <div className="bg-[#12141c] border border-white/[0.08] w-full max-w-sm rounded-2xl p-5 flex flex-col gap-4 shadow-2xl">
+        <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-white/[0.06] text-white border border-white/10 flex items-center justify-center">
               <DollarSign className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-white font-black text-xs uppercase tracking-wide">
+              <h3 className="text-white font-semibold text-xs uppercase tracking-wider">
                 Adjust Pricing
               </h3>
-              <p className="text-[11px] text-gray-400 font-bold truncate max-w-[180px]">
+              <p className="text-[11px] text-gray-400 font-medium truncate max-w-[180px]">
                 {item.name}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-[#242735] transition-colors"
+            className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/[0.06] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -73,7 +73,7 @@ const QuickPriceEditModalContent: React.FC<{
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           {/* Input Modal Beli */}
           <div>
-            <label className="text-[10px] font-black uppercase text-red-400 block mb-1">
+            <label className="text-[10px] font-semibold uppercase text-gray-300 block mb-1">
               Cost Price (Private)
             </label>
             <div className="relative">
@@ -86,7 +86,7 @@ const QuickPriceEditModalContent: React.FC<{
                 min="0"
                 value={buyPrice}
                 onChange={(e) => setBuyPrice(Number(e.target.value))}
-                className="w-full bg-[#111217] border border-red-900/40 focus:border-red-500 rounded-xl pl-9 pr-3 py-2 text-xs text-white font-mono font-bold focus:outline-none"
+                className="w-full bg-[#161822] border border-white/[0.08] focus:border-white/40 rounded-xl pl-9 pr-3 py-2 text-xs text-white font-mono font-medium focus:outline-none"
                 autoFocus
               />
             </div>
@@ -94,7 +94,7 @@ const QuickPriceEditModalContent: React.FC<{
 
           {/* Input Harga Jual Pasaran */}
           <div>
-            <label className="text-[10px] font-black uppercase text-emerald-400 block mb-1">
+            <label className="text-[10px] font-semibold uppercase text-emerald-400 block mb-1">
               Market Price (Public)
             </label>
             <div className="relative">
@@ -107,17 +107,17 @@ const QuickPriceEditModalContent: React.FC<{
                 min="0"
                 value={sellPrice}
                 onChange={(e) => setSellPrice(Number(e.target.value))}
-                className="w-full bg-[#111217] border border-emerald-900/40 focus:border-emerald-500 rounded-xl pl-9 pr-3 py-2 text-xs text-white font-mono font-bold focus:outline-none"
+                className="w-full bg-[#161822] border border-white/[0.08] focus:border-emerald-500/50 rounded-xl pl-9 pr-3 py-2 text-xs text-white font-mono font-medium focus:outline-none"
               />
             </div>
           </div>
 
           {/* Live Profit Preview Box */}
-          <div className="bg-[#111217] p-3 rounded-xl border border-[#242735] flex items-center justify-between">
+          <div className="bg-[#0b0c10] p-3 rounded-xl border border-white/[0.06] flex items-center justify-between">
             <span className="text-[11px] text-gray-400 font-medium">Estimated Margin:</span>
             <div className="text-right">
               <span
-                className={`text-xs font-black font-mono block ${
+                className={`text-xs font-bold font-mono block ${
                   profit >= 0 ? 'text-emerald-400' : 'text-red-400'
                 }`}
               >
@@ -133,13 +133,13 @@ const QuickPriceEditModalContent: React.FC<{
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-[#1a1d26] hover:bg-[#242735] text-gray-300 font-bold py-2 rounded-xl text-xs transition-colors"
+              className="flex-1 bg-white/[0.04] hover:bg-white/[0.08] text-gray-300 font-medium py-2 rounded-xl text-xs transition-colors border border-white/10"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 bg-[#0066d6] hover:bg-blue-600 active:scale-95 text-white font-black py-2 rounded-xl text-xs uppercase tracking-wider transition-all shadow"
+              className="flex-1 bg-white hover:bg-neutral-200 active:scale-95 text-black font-semibold py-2 rounded-xl text-xs uppercase tracking-wider transition-all shadow-md"
             >
               Save Pricing
             </button>

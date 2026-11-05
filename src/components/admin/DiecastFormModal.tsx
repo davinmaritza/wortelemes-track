@@ -177,32 +177,32 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="bg-[#16181f] border border-[#242735] w-full max-w-lg rounded-2xl p-5 flex flex-col max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
+      <div className="bg-[#12141c] border border-white/[0.08] w-full max-w-lg rounded-2xl p-5 flex flex-col max-h-[90vh] overflow-y-auto shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#242735]">
+        <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
           <div className="flex items-center gap-2">
             {isEditing ? (
-              <Edit2 className="w-5 h-5 text-amber-400" />
+              <Edit2 className="w-4 h-4 text-amber-400" />
             ) : (
-              <PlusCircle className="w-5 h-5 text-[#0066d6]" />
+              <PlusCircle className="w-4 h-4 text-white" />
             )}
-            <h2 className="text-white font-black text-sm uppercase tracking-wide">
+            <h2 className="text-white font-semibold text-sm uppercase tracking-wider">
               {isEditing ? 'Edit Vehicle & Pricing' : 'Add New Vehicle'}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-[#242735] transition-colors"
+            className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/[0.06] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Smart Wiki Autocomplete Box */}
-        <div className="mt-4 p-3 bg-[#111217] rounded-xl border border-blue-900/40">
-          <label className="text-[11px] font-bold text-blue-400 block mb-1">
-            ⚡ Quick Auto-Fill via Hot Wheels Wiki
+        <div className="mt-4 p-3 bg-[#0b0c10] rounded-xl border border-white/[0.06]">
+          <label className="text-[11px] font-semibold text-gray-300 block mb-1">
+            Auto-Fill via Hot Wheels Wiki
           </label>
           <div className="flex gap-2">
             <input
@@ -211,13 +211,13 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               onChange={(e) => setWikiQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleSearchWiki())}
               placeholder="Search casting (e.g. Nissan Skyline, Kool Kombi)..."
-              className="flex-1 bg-[#1a1d26] border border-[#242735] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#0066d6]"
+              className="flex-1 bg-[#161822] border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-white/40"
             />
             <button
               type="button"
               onClick={handleSearchWiki}
               disabled={isSearchingWiki}
-              className="bg-[#0066d6] hover:bg-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold text-white flex items-center gap-1 shrink-0"
+              className="bg-white hover:bg-neutral-200 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-black flex items-center gap-1 shrink-0 transition-colors"
             >
               {isSearchingWiki ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
               Search
@@ -226,16 +226,16 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
 
           {/* Autocomplete Results */}
           {wikiResults.length > 0 && (
-            <div className="mt-2 bg-[#1a1d26] border border-[#242735] rounded-lg overflow-hidden divide-y divide-[#242735]">
+            <div className="mt-2 bg-[#161822] border border-white/[0.08] rounded-lg overflow-hidden divide-y divide-white/[0.04]">
               {wikiResults.map((res, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => handleSelectWikiTitle(res.title)}
-                  className="w-full text-left px-3 py-2 text-xs text-gray-200 hover:bg-[#0066d6]/20 hover:text-white transition-colors flex items-center justify-between"
+                  className="w-full text-left px-3 py-2 text-xs text-gray-200 hover:bg-white/[0.06] hover:text-white transition-colors flex items-center justify-between"
                 >
-                  <span className="font-semibold">{res.title}</span>
-                  <span className="text-[10px] text-blue-400 font-mono">Select & Autofill</span>
+                  <span className="font-medium">{res.title}</span>
+                  <span className="text-[10px] text-gray-400 font-mono">Select & Autofill</span>
                 </button>
               ))}
             </div>
@@ -328,24 +328,24 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
           </div>
 
           <div>
-            <label className="text-[11px] text-gray-400 block mb-1">Model / Casting Name *</label>
+            <label className="text-[11px] font-semibold text-gray-300 block mb-1">Model / Casting Name *</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-[#111217] border border-[#242735] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0066d6]"
+              className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-white/40"
               placeholder="e.g. 1991 BMW M3"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Series</label>
+              <label className="text-[11px] font-semibold text-gray-300 block mb-1">Series</label>
               <select
                 value={seriesId}
                 onChange={(e) => setSeriesId(e.target.value)}
-                className="w-full bg-[#111217] border border-[#242735] rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-[#0066d6]"
+                className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-white/40"
               >
                 {seriesList.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -355,11 +355,11 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Badge / Tier</label>
+              <label className="text-[11px] font-semibold text-gray-300 block mb-1">Badge / Tier</label>
               <select
                 value={tierBadge}
                 onChange={(e) => setTierBadge(e.target.value)}
-                className="w-full bg-[#111217] border border-[#242735] rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-[#0066d6]"
+                className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-white/40"
               >
                 <option value="Mainline">Mainline</option>
                 <option value="Silver Series">Silver Series</option>
@@ -375,62 +375,62 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
 
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Release Year</label>
+              <label className="text-[11px] font-semibold text-gray-300 block mb-1">Release Year</label>
               <input
                 type="number"
                 value={releaseYear}
                 onChange={(e) => setReleaseYear(Number(e.target.value))}
-                className="w-full bg-[#111217] border border-[#242735] rounded-lg px-2.5 py-2 text-xs text-white font-mono"
+                className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-2.5 py-2 text-xs text-white font-mono focus:outline-none focus:border-white/40"
               />
             </div>
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Segment Index</label>
+              <label className="text-[11px] font-semibold text-gray-300 block mb-1">Segment Index</label>
               <input
                 type="number"
                 value={segmentNumber}
                 onChange={(e) => setSegmentNumber(Number(e.target.value))}
-                className="w-full bg-[#111217] border border-[#242735] rounded-lg px-2.5 py-2 text-xs text-white font-mono"
+                className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-2.5 py-2 text-xs text-white font-mono focus:outline-none focus:border-white/40"
               />
             </div>
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Quantity (Qty)</label>
+              <label className="text-[11px] font-semibold text-gray-300 block mb-1">Quantity (Qty)</label>
               <input
                 type="number"
                 min="1"
                 value={qty}
                 onChange={(e) => setQty(Number(e.target.value))}
-                className="w-full bg-[#111217] border border-[#242735] rounded-lg px-2.5 py-2 text-xs text-white font-mono"
+                className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-2.5 py-2 text-xs text-white font-mono focus:outline-none focus:border-white/40"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Body Color</label>
+              <label className="text-[11px] font-semibold text-gray-300 block mb-1">Body Color</label>
               <input
                 type="text"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
                 placeholder="e.g. Vibrant Blue"
-                className="w-full bg-[#111217] border border-[#242735] rounded-lg px-2.5 py-2 text-xs text-white"
+                className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-white/40"
               />
             </div>
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Condition</label>
+              <label className="text-[11px] font-semibold text-gray-300 block mb-1">Condition</label>
               <input
                 type="text"
                 value={condition}
                 onChange={(e) => setCondition(e.target.value)}
                 placeholder="e.g. Carded / Mint"
-                className="w-full bg-[#111217] border border-[#242735] rounded-lg px-2.5 py-2 text-xs text-white"
+                className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-white/40"
               />
             </div>
           </div>
 
           {/* Finansial Inputs (Modal vs Pasaran) */}
-          <div className="p-3 bg-[#111217] rounded-xl border border-red-950/40 flex flex-col gap-2">
+          <div className="p-3 bg-[#0b0c10] rounded-xl border border-white/[0.06] flex flex-col gap-2">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="font-bold text-gray-300">Pricing & Margin Calibration</span>
+              <span className="font-semibold text-gray-300">Pricing & Margin Calibration</span>
               <span className="font-mono font-bold text-emerald-400">
                 Profit: Rp {((Number(sellPrice) || 0) - (Number(buyPrice) || 0)).toLocaleString('id-ID')}
               </span>
@@ -491,7 +491,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               id="is_for_sale_modal"
               checked={isForSale}
               onChange={(e) => setIsForSale(e.target.checked)}
-              className="w-4 h-4 rounded accent-[#0066d6]"
+              className="w-4 h-4 rounded accent-white"
             />
             <label htmlFor="is_for_sale_modal" className="text-xs text-gray-300 font-medium">
               Mark as <span className="text-emerald-400 font-bold">For Sale</span> (Displays WhatsApp purchase button)
@@ -500,7 +500,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
 
           <button
             type="submit"
-            className="w-full mt-2 bg-[#0066d6] hover:bg-blue-600 text-white font-black py-2.5 rounded-xl text-xs active:scale-95 transition-all shadow-lg uppercase tracking-wider"
+            className="w-full mt-2 bg-white hover:bg-neutral-200 text-black font-semibold py-2.5 rounded-xl text-xs active:scale-95 transition-all shadow-md uppercase tracking-wider"
           >
             {isEditing ? 'Save Changes' : 'Add to Garage'}
           </button>

@@ -221,17 +221,17 @@ export const ProfileEditor: React.FC = () => {
         {/* Left Form: 7 cols on LG */}
         <form
           onSubmit={handleSave}
-          className="lg:col-span-7 flex flex-col gap-5 bg-[#14151b] border border-[#242735] rounded-2xl p-4 sm:p-6 shadow-xl"
+          className="lg:col-span-7 flex flex-col gap-5 bg-[#111219] border border-white/[0.08] rounded-2xl p-4 sm:p-6 shadow-xl"
         >
           {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#242735]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
             <div>
-              <h2 className="text-lg font-black uppercase text-white tracking-tight flex items-center gap-2">
-                <User className="w-5 h-5 text-blue-400" />
-                Collector Profile & Branding
+              <h2 className="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-2 font-sans uppercase">
+                <User className="w-4 h-4 text-gray-400" />
+                Curator Identity & Policies
               </h2>
               <p className="text-xs text-gray-400 mt-0.5">
-                Configure your public garage name, curator verification badge, WhatsApp direct contact, and FAQ policies.
+                Configure garage display name, verification insignia, direct WhatsApp hotline, and grading standards.
               </p>
             </div>
 
@@ -239,7 +239,7 @@ export const ProfileEditor: React.FC = () => {
               <button
                 type="button"
                 onClick={handleReset}
-                className="flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-[#1a1d26] border border-[#242735] px-2.5 py-2 rounded-xl transition-colors"
+                className="flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-white/[0.04] border border-white/[0.08] px-2.5 py-1.5 rounded-xl transition-colors font-medium"
                 title="Reset to default profile"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -248,10 +248,10 @@ export const ProfileEditor: React.FC = () => {
 
               <button
                 type="submit"
-                className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-4 py-2 rounded-xl active:scale-95 transition-all shadow"
+                className="flex items-center gap-1.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs px-4 py-1.5 rounded-xl active:scale-95 transition-all shadow-sm"
               >
                 <Save className="w-3.5 h-3.5" />
-                <span>Save Profile</span>
+                <span>Save Changes</span>
               </button>
             </div>
           </div>
@@ -303,7 +303,7 @@ export const ProfileEditor: React.FC = () => {
                   onChange={(e) => setGarageName(e.target.value)}
                   placeholder="e.g. WORTELEMES GARAGE"
                   required
-                  className="w-full bg-[#1a1d26] border border-[#242735] focus:border-[#0066d6] rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-colors"
+                  className="w-full bg-[#12141c] border border-white/[0.08] focus:border-white/40 rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-colors"
                 />
               </div>
 
@@ -317,7 +317,7 @@ export const ProfileEditor: React.FC = () => {
                   onChange={(e) => setCollectorBadge(e.target.value)}
                   placeholder="e.g. Verified Collector"
                   required
-                  className="w-full bg-[#1a1d26] border border-[#242735] focus:border-[#0066d6] rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-colors"
+                  className="w-full bg-[#12141c] border border-white/[0.08] focus:border-white/40 rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-colors"
                 />
               </div>
 
@@ -330,7 +330,7 @@ export const ProfileEditor: React.FC = () => {
                   value={avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
                   placeholder="https://... or /logo.png"
-                  className="w-full bg-[#1a1d26] border border-[#242735] focus:border-[#0066d6] rounded-xl px-3 py-2 text-xs text-gray-300 focus:outline-none font-mono transition-colors"
+                  className="w-full bg-[#12141c] border border-white/[0.08] focus:border-white/40 rounded-xl px-3 py-2 text-xs text-gray-300 focus:outline-none font-mono transition-colors"
                 />
                 {uploadError && <p className="text-[10px] text-red-400 mt-1">{uploadError}</p>}
               </div>
@@ -348,7 +348,7 @@ export const ProfileEditor: React.FC = () => {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Introduce your collection specialties, scale focus, and trading policies..."
               required
-              className="w-full bg-[#1a1d26] border border-[#242735] focus:border-[#0066d6] rounded-xl p-3 text-xs text-white focus:outline-none leading-relaxed transition-colors"
+              className="w-full bg-[#12141c] border border-white/[0.08] focus:border-white/40 rounded-xl p-3 text-xs text-white focus:outline-none leading-relaxed transition-colors"
             />
           </div>
 
@@ -365,14 +365,14 @@ export const ProfileEditor: React.FC = () => {
                 onChange={(e) => setWhatsappNumber(e.target.value)}
                 placeholder="6281234567890"
                 required
-                className="w-full bg-[#1a1d26] border border-[#242735] focus:border-[#0066d6] rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono transition-colors"
+                className="w-full bg-[#12141c] border border-white/[0.08] focus:border-white/40 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono transition-colors"
               />
               <span className="text-[10px] text-gray-500 mt-0.5 block">Format: 628xxx (no + sign)</span>
             </div>
 
             <div>
               <label className="block text-[11px] font-bold text-gray-300 uppercase mb-1 flex items-center gap-1">
-                <MapPin className="w-3 h-3 text-blue-400" />
+                <MapPin className="w-3 h-3 text-white/70" />
                 Base Location
               </label>
               <input
@@ -381,7 +381,7 @@ export const ProfileEditor: React.FC = () => {
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="Indonesia (Worldwide)"
                 required
-                className="w-full bg-[#1a1d26] border border-[#242735] focus:border-[#0066d6] rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-colors"
+                className="w-full bg-[#12141c] border border-white/[0.08] focus:border-white/40 rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-colors"
               />
             </div>
 
@@ -395,14 +395,14 @@ export const ProfileEditor: React.FC = () => {
                 value={instagramHandle}
                 onChange={(e) => setInstagramHandle(e.target.value)}
                 placeholder="@wortelemes"
-                className="w-full bg-[#1a1d26] border border-[#242735] focus:border-[#0066d6] rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-colors"
+                className="w-full bg-[#12141c] border border-white/[0.08] focus:border-white/40 rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-colors"
               />
             </div>
           </div>
 
           {/* 4. Trust Pillars (3 Feature Cards) */}
-          <div className="pt-2 border-t border-[#242735]">
-            <h3 className="text-xs font-black uppercase text-white tracking-wider mb-2 flex items-center gap-1.5">
+          <div className="pt-2 border-t border-white/[0.06]">
+            <h3 className="text-xs font-semibold uppercase text-white/80 tracking-wider mb-2 flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               Trust Pillars & Guarantees (3 Badges)
             </h3>
@@ -411,7 +411,7 @@ export const ProfileEditor: React.FC = () => {
               {pillars.map((pillar, idx) => (
                 <div
                   key={pillar.id || idx}
-                  className="bg-[#1a1d26] border border-[#242735] rounded-xl p-3 flex flex-col gap-2"
+                  className="bg-[#12141c] border border-white/[0.06] rounded-xl p-3 flex flex-col gap-2"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-mono text-gray-400">Pillar #{idx + 1}</span>
@@ -420,7 +420,7 @@ export const ProfileEditor: React.FC = () => {
                       onChange={(e) =>
                         handlePillarChange(idx, 'icon', e.target.value as any)
                       }
-                      className="bg-[#121319] border border-[#2d3142] rounded-md px-1.5 py-0.5 text-[10px] text-gray-300 focus:outline-none"
+                      className="bg-[#0b0c10] border border-white/[0.08] rounded-md px-1.5 py-0.5 text-[10px] text-gray-300 focus:outline-none"
                     >
                       <option value="award">Award</option>
                       <option value="package">Package</option>
@@ -434,7 +434,7 @@ export const ProfileEditor: React.FC = () => {
                     value={pillar.title}
                     onChange={(e) => handlePillarChange(idx, 'title', e.target.value)}
                     placeholder="Pillar title"
-                    className="w-full bg-[#121319] border border-[#242735] rounded-lg px-2 py-1 text-xs font-bold text-white focus:outline-none"
+                    className="w-full bg-[#0b0c10] border border-white/[0.08] rounded-lg px-2 py-1 text-xs font-semibold text-white focus:outline-none"
                   />
 
                   <textarea
@@ -442,7 +442,7 @@ export const ProfileEditor: React.FC = () => {
                     value={pillar.description}
                     onChange={(e) => handlePillarChange(idx, 'description', e.target.value)}
                     placeholder="Brief guarantee explanation..."
-                    className="w-full bg-[#121319] border border-[#242735] rounded-lg p-2 text-[11px] text-gray-300 focus:outline-none leading-snug resize-none"
+                    className="w-full bg-[#0b0c10] border border-white/[0.08] rounded-lg p-2 text-[11px] text-gray-300 focus:outline-none leading-snug resize-none"
                   />
                 </div>
               ))}
@@ -450,17 +450,17 @@ export const ProfileEditor: React.FC = () => {
           </div>
 
           {/* 5. FAQs Editor */}
-          <div className="pt-2 border-t border-[#242735]">
+          <div className="pt-2 border-t border-white/[0.06]">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-black uppercase text-white tracking-wider flex items-center gap-1.5">
-                <HelpCircle className="w-4 h-4 text-blue-400" />
+              <h3 className="text-xs font-semibold uppercase text-white/80 tracking-wider flex items-center gap-1.5">
+                <HelpCircle className="w-4 h-4 text-white/60" />
                 Collector FAQ Management ({faqs.length})
               </h3>
 
               <button
                 type="button"
                 onClick={handleAddFaq}
-                className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-400 hover:text-white bg-blue-950/40 hover:bg-blue-900/60 border border-blue-800/40 px-2.5 py-1 rounded-lg transition-all"
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-white/90 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 px-2.5 py-1 rounded-lg transition-all"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Question</span>
@@ -471,14 +471,14 @@ export const ProfileEditor: React.FC = () => {
               {faqs.map((faq, idx) => (
                 <div
                   key={faq.id || idx}
-                  className="bg-[#1a1d26] border border-[#242735] rounded-xl p-3 flex flex-col gap-2 group"
+                  className="bg-[#12141c] border border-white/[0.06] rounded-xl p-3 flex flex-col gap-2 group"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[10px] font-mono text-gray-400">Q{idx + 1}</span>
                     <button
                       type="button"
                       onClick={() => handleDeleteFaq(idx)}
-                      className="p-1 rounded text-red-400 hover:bg-red-950/50 hover:text-red-300 transition-colors"
+                      className="p-1 rounded text-red-400/80 hover:bg-red-950/40 hover:text-red-300 transition-colors"
                       title="Delete Question"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -490,7 +490,7 @@ export const ProfileEditor: React.FC = () => {
                     value={faq.q}
                     onChange={(e) => handleFaqChange(idx, 'q', e.target.value)}
                     placeholder="Question title..."
-                    className="w-full bg-[#121319] border border-[#242735] rounded-lg px-2.5 py-1.5 text-xs font-bold text-white focus:outline-none"
+                    className="w-full bg-[#0b0c10] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-xs font-semibold text-white focus:outline-none"
                   />
 
                   <textarea
@@ -498,7 +498,7 @@ export const ProfileEditor: React.FC = () => {
                     value={faq.a}
                     onChange={(e) => handleFaqChange(idx, 'a', e.target.value)}
                     placeholder="Answer explanation..."
-                    className="w-full bg-[#121319] border border-[#242735] rounded-lg p-2.5 text-xs text-gray-300 focus:outline-none leading-relaxed"
+                    className="w-full bg-[#0b0c10] border border-white/[0.08] rounded-lg p-2.5 text-xs text-gray-300 focus:outline-none leading-relaxed"
                   />
                 </div>
               ))}
@@ -506,10 +506,10 @@ export const ProfileEditor: React.FC = () => {
           </div>
 
           {/* Form Bottom Submit */}
-          <div className="pt-3 border-t border-[#242735] flex items-center justify-end gap-2">
+          <div className="pt-3 border-t border-white/[0.06] flex items-center justify-end gap-2">
             <button
               type="submit"
-              className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-5 py-2.5 rounded-xl active:scale-95 transition-all shadow"
+              className="flex items-center gap-1.5 bg-white hover:bg-neutral-200 text-black font-semibold text-xs px-5 py-2.5 rounded-xl active:scale-95 transition-all shadow-md"
             >
               <Save className="w-4 h-4" />
               <span>Save All Profile Changes</span>
@@ -521,23 +521,21 @@ export const ProfileEditor: React.FC = () => {
         <div className="lg:col-span-5 flex flex-col gap-4 sticky top-24">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Eye className="w-4 h-4 text-blue-400" />
-              <h3 className="text-xs font-black uppercase text-white tracking-wider">
+              <Eye className="w-4 h-4 text-white/60" />
+              <h3 className="text-xs font-semibold uppercase text-white/80 tracking-wider">
                 Live Public Preview Mirror
               </h3>
             </div>
-            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
               Real-time
             </span>
           </div>
 
           {/* Preview Card */}
-          <div className="bg-[#121319] border border-white/10 rounded-2xl p-5 shadow-2xl flex flex-col gap-5 relative overflow-hidden">
-            <div className="absolute -top-12 -right-12 w-32 h-32 bg-blue-600/10 rounded-full blur-2xl pointer-events-none" />
-
+          <div className="bg-[#12141c] border border-white/[0.08] rounded-2xl p-5 shadow-xl flex flex-col gap-5 relative overflow-hidden">
             {/* Profile Avatar & Header */}
             <div className="flex items-center gap-3.5">
-              <div className="relative w-16 h-16 rounded-2xl bg-[#181a24] border border-white/10 overflow-hidden shadow-lg shrink-0 p-1">
+              <div className="relative w-16 h-16 rounded-2xl bg-[#161822] border border-white/10 overflow-hidden shadow-lg shrink-0 p-1">
                 <div className="relative w-full h-full rounded-xl overflow-hidden bg-black/40">
                   <Image
                     src={avatarUrl || '/logo.png'}
@@ -551,12 +549,12 @@ export const ProfileEditor: React.FC = () => {
 
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h4 className="text-sm font-black text-white uppercase tracking-tight line-clamp-1">
+                  <h4 className="text-sm font-bold text-white uppercase tracking-tight line-clamp-1">
                     {garageName || 'WORTELEMES GARAGE'}
                   </h4>
                 </div>
-                <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30 mt-1">
-                  <ShieldCheck className="w-2.5 h-2.5" />
+                <span className="inline-flex items-center gap-1 text-[9px] font-medium uppercase px-2 py-0.5 rounded-full bg-white/[0.06] text-white/80 border border-white/10 mt-1">
+                  <ShieldCheck className="w-2.5 h-2.5 text-emerald-400" />
                   {collectorBadge || 'Verified Collector'}
                 </span>
               </div>

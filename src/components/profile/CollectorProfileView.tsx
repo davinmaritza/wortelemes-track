@@ -9,12 +9,10 @@ import {
   Truck,
   MessageCircle,
   HelpCircle,
-  ChevronDown,
-  Sparkles,
   Award,
   Shield,
-  ExternalLink,
   Settings,
+  ArrowUpRight,
 } from 'lucide-react';
 import { CollectorProfile } from '@/types/diecast';
 import { getStoredProfile, defaultProfile } from '@/lib/storage/profileStorage';
@@ -37,7 +35,6 @@ const InstagramIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4'
 
 export const CollectorProfileView: React.FC = () => {
   const [profile, setProfile] = useState<CollectorProfile>(defaultProfile);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
     setProfile(getStoredProfile());
@@ -64,33 +61,24 @@ export const CollectorProfileView: React.FC = () => {
   const renderPillarIcon = (iconName: string) => {
     switch (iconName) {
       case 'award':
-        return <Award className="w-5 h-5" />;
+        return <Award className="w-4 h-4 text-amber-400" />;
       case 'package':
-        return <Package className="w-5 h-5" />;
+        return <Package className="w-4 h-4 text-emerald-400" />;
       case 'truck':
-        return <Truck className="w-5 h-5" />;
+        return <Truck className="w-4 h-4 text-blue-400" />;
       case 'shield':
       default:
-        return <Shield className="w-5 h-5" />;
+        return <Shield className="w-4 h-4 text-violet-400" />;
     }
   };
 
-  const getPillarColorClass = (index: number) => {
-    if (index === 0) return 'bg-blue-500/15 border-blue-500/30 text-blue-400';
-    if (index === 1) return 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400';
-    return 'bg-amber-500/15 border-amber-500/30 text-amber-400';
-  };
-
   return (
-    <div className="flex flex-col gap-8 pb-16 w-full max-w-4xl mx-auto">
-      {/* 1. Header Profile & Seller Card */}
-      <div className="bg-[#121319] border border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-2xl relative overflow-hidden">
-        {/* Glow backdrop */}
-        <div className="absolute -top-16 -right-16 w-48 h-48 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="flex flex-col gap-6 pb-20 w-full max-w-4xl mx-auto">
+      {/* 1. Curator Identity Banner */}
+      <div className="bg-[#111219] border border-white/[0.08] rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center md:items-start gap-6 shadow-xl relative">
         {/* Avatar */}
-        <div className="relative w-28 h-28 rounded-3xl bg-[#181a24] border-2 border-white/10 overflow-hidden shadow-2xl shrink-0 p-1">
-          <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/40">
+        <div className="relative w-24 h-24 rounded-2xl bg-[#161722] border border-white/10 overflow-hidden shrink-0 p-1 shadow-inner">
+          <div className="relative w-full h-full rounded-xl overflow-hidden bg-black/40">
             <Image
               src={profile.avatarUrl || '/logo.png'}
               alt={profile.garageName}
@@ -102,28 +90,28 @@ export const CollectorProfileView: React.FC = () => {
         </div>
 
         {/* Profile Info */}
-        <div className="flex flex-col items-center md:items-start text-center md:text-left gap-2 flex-1">
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
+        <div className="flex flex-col items-center md:items-start text-center md:text-left gap-2.5 flex-1">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight uppercase">
               {profile.garageName}
             </h1>
-            <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30">
-              <ShieldCheck className="w-3 h-3 text-blue-400" />
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-800/40">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               {profile.collectorBadge}
             </span>
           </div>
 
-          <p className="text-xs text-gray-400 leading-relaxed max-w-lg">
+          <p className="text-xs text-gray-300 leading-relaxed max-w-xl">
             {profile.bio}
           </p>
 
-          <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
+          <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-2.5">
             <button
               onClick={handleWhatsAppChat}
-              className="inline-flex items-center gap-2 bg-[#0066d6] hover:bg-blue-600 text-white font-bold text-xs px-5 py-2.5 rounded-full shadow-lg active:scale-95 transition-all"
+              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95"
             >
-              <MessageCircle className="w-4 h-4" />
-              <span>Contact on WhatsApp</span>
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>Direct WhatsApp Inquiries</span>
             </button>
 
             {profile.instagramHandle && (
@@ -131,92 +119,76 @@ export const CollectorProfileView: React.FC = () => {
                 href={`https://instagram.com/${profile.instagramHandle.replace('@', '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white bg-[#1a1d26] border border-[#242735] px-3.5 py-2.5 rounded-full transition-colors font-medium"
+                className="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3.5 py-2 rounded-xl transition-colors font-medium"
               >
                 <InstagramIcon className="w-3.5 h-3.5 text-pink-400" />
                 <span>{profile.instagramHandle}</span>
+                <ArrowUpRight className="w-3 h-3 text-gray-500" />
               </a>
             )}
 
-            <span className="text-xs text-gray-400 font-mono">
-              Location: {profile.location}
+            <span className="text-xs text-gray-400 font-mono bg-white/[0.02] border border-white/[0.06] px-3 py-2 rounded-xl">
+              {profile.location}
             </span>
           </div>
         </div>
       </div>
 
-      {/* 2. Key Pillars / Trust Badges */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* 2. Trust Pillars */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {profile.pillars.map((pillar, idx) => (
           <div
             key={pillar.id || idx}
-            className="bg-[#121319] border border-white/[0.08] rounded-2xl p-4 flex items-start gap-3"
+            className="bg-[#111219] border border-white/[0.06] rounded-2xl p-4 flex flex-col gap-2"
           >
-            <div
-              className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${getPillarColorClass(
-                idx
-              )}`}
-            >
-              {renderPillarIcon(pillar.icon)}
-            </div>
-            <div>
-              <h3 className="text-xs font-black uppercase text-white tracking-wide">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0">
+                {renderPillarIcon(pillar.icon)}
+              </div>
+              <h3 className="text-xs font-bold uppercase text-white tracking-wide">
                 {pillar.title}
               </h3>
-              <p className="text-[11px] text-gray-400 mt-0.5 leading-snug">
-                {pillar.description}
-              </p>
             </div>
+            <p className="text-[11px] text-gray-400 leading-relaxed">
+              {pillar.description}
+            </p>
           </div>
         ))}
       </div>
 
-      {/* 3. Collector FAQ Accordion */}
-      <div className="bg-[#121319] border border-white/10 rounded-3xl p-6 sm:p-7 shadow-xl flex flex-col gap-4">
-        <div className="flex items-center justify-between pb-3 border-b border-white/5">
+      {/* 3. Collector Standards & FAQs (Clean 2-Column Grid instead of generic accordion) */}
+      <div className="bg-[#111219] border border-white/[0.08] rounded-3xl p-5 sm:p-7 shadow-xl flex flex-col gap-5">
+        <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
           <div className="flex items-center gap-2">
-            <HelpCircle className="w-5 h-5 text-blue-400" />
-            <h2 className="text-sm font-black uppercase text-white tracking-wide">
-              Frequently Asked Questions (FAQ)
+            <HelpCircle className="w-4 h-4 text-gray-400" />
+            <h2 className="text-xs font-mono uppercase tracking-widest text-gray-300 font-bold">
+              Collector Standards & Inspection FAQ
             </h2>
           </div>
 
           <Link
             href="/admin"
-            className="text-[11px] text-gray-400 hover:text-blue-400 font-medium transition-colors flex items-center gap-1"
+            className="text-[11px] text-gray-400 hover:text-white font-medium transition-colors flex items-center gap-1"
           >
-            <Settings className="w-3.5 h-3.5 text-blue-400" />
-            <span className="hidden sm:inline">Manage Profile & FAQ in Admin</span>
+            <Settings className="w-3 h-3 text-gray-400" />
+            <span className="hidden sm:inline">Admin Settings</span>
           </Link>
         </div>
 
-        <div className="flex flex-col gap-2.5">
-          {profile.faqs.map((faq, index) => {
-            const isOpen = openFaq === index;
-            return (
-              <div
-                key={faq.id || index}
-                className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden transition-all"
-              >
-                <button
-                  onClick={() => setOpenFaq(isOpen ? null : index)}
-                  className="w-full px-4 py-3.5 text-left flex items-center justify-between gap-3 text-xs font-bold text-gray-200 hover:text-white transition-colors"
-                >
-                  <span>{faq.q}</span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                      isOpen ? 'rotate-180 text-blue-400' : ''
-                    }`}
-                  />
-                </button>
-                {isOpen && (
-                  <div className="px-4 pb-4 pt-1 text-xs text-gray-400 leading-relaxed border-t border-white/[0.04]">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          {profile.faqs.map((faq, index) => (
+            <div
+              key={faq.id || index}
+              className="bg-[#151620] border border-white/[0.06] rounded-2xl p-4 flex flex-col gap-1.5"
+            >
+              <h3 className="text-xs font-bold text-white leading-snug">
+                {faq.q}
+              </h3>
+              <p className="text-[11px] text-gray-400 leading-relaxed">
+                {faq.a}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

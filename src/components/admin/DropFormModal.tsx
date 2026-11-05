@@ -61,23 +61,23 @@ export const DropFormModal: React.FC<DropFormModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="bg-[#16181f] border border-[#242735] w-full max-w-sm rounded-2xl p-5 flex flex-col shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
+      <div className="bg-[#12141c] border border-white/[0.08] w-full max-w-sm rounded-2xl p-5 flex flex-col shadow-2xl">
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#242735]">
+        <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
           <div className="flex items-center gap-2">
             {isEditing ? (
-              <Edit3 className="w-5 h-5 text-amber-400" />
+              <Edit3 className="w-4 h-4 text-amber-400" />
             ) : (
-              <PlusCircle className="w-5 h-5 text-[#0066d6]" />
+              <PlusCircle className="w-4 h-4 text-white" />
             )}
-            <h2 className="text-white font-black text-sm uppercase tracking-wide">
+            <h2 className="text-white font-semibold text-sm uppercase tracking-wider">
               {isEditing ? 'Edit Drop Event' : 'Add Drop Event'}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-[#242735] transition-colors"
+            className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/[0.06] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -86,7 +86,7 @@ export const DropFormModal: React.FC<DropFormModalProps> = ({
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-3">
           <div>
-            <label className="text-[11px] font-bold text-gray-400 block mb-1">
+            <label className="text-[11px] font-semibold text-gray-300 block mb-1">
               Vehicle Model / Release Name *
             </label>
             <input
@@ -95,13 +95,13 @@ export const DropFormModal: React.FC<DropFormModalProps> = ({
               value={model}
               onChange={(e) => setModel(e.target.value)}
               placeholder="e.g. 1993 McLaren F1 (RLC Exclusive)"
-              className="w-full bg-[#111217] border border-[#242735] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0066d6]"
+              className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-white/40"
               autoFocus
             />
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-gray-400 block mb-1">
+            <label className="text-[11px] font-semibold text-gray-300 block mb-1">
               Series / Line *
             </label>
             <input
@@ -110,13 +110,13 @@ export const DropFormModal: React.FC<DropFormModalProps> = ({
               value={series}
               onChange={(e) => setSeries(e.target.value)}
               placeholder="e.g. Red Line Club, Silver Series"
-              className="w-full bg-[#111217] border border-[#242735] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0066d6]"
+              className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-white/40"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-[11px] font-bold text-gray-400 block mb-1">
+              <label className="text-[11px] font-semibold text-gray-300 block mb-1">
                 Drop Date Label
               </label>
               <input
@@ -124,12 +124,12 @@ export const DropFormModal: React.FC<DropFormModalProps> = ({
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 placeholder="e.g. Nov 18"
-                className="w-full bg-[#111217] border border-[#242735] rounded-xl px-3 py-2 text-xs text-white font-mono"
+                className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white font-mono"
               />
             </div>
 
             <div>
-              <label className="text-[11px] font-bold text-gray-400 block mb-1">
+              <label className="text-[11px] font-semibold text-gray-300 block mb-1">
                 Month Tag
               </label>
               <input
@@ -137,19 +137,19 @@ export const DropFormModal: React.FC<DropFormModalProps> = ({
                 value={month}
                 onChange={(e) => setMonth(e.target.value)}
                 placeholder="e.g. NOV 2026"
-                className="w-full bg-[#111217] border border-[#242735] rounded-xl px-3 py-2 text-xs text-white font-mono uppercase"
+                className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white font-mono uppercase"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-gray-400 block mb-1">
+            <label className="text-[11px] font-semibold text-gray-300 block mb-1">
               Drop Status
             </label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full bg-[#111217] border border-[#242735] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-[#0066d6]"
+              className="w-full bg-[#161822] border border-white/[0.08] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-white/40"
             >
               <option value="Upcoming">Upcoming</option>
               <option value="Confirmed">Confirmed</option>
@@ -162,13 +162,13 @@ export const DropFormModal: React.FC<DropFormModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-[#1a1d26] hover:bg-[#242735] text-gray-300 font-bold py-2.5 rounded-xl text-xs transition-colors"
+              className="flex-1 bg-white/[0.04] hover:bg-white/[0.08] text-gray-300 font-medium py-2.5 rounded-xl text-xs transition-colors border border-white/10"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 bg-[#0066d6] hover:bg-blue-600 active:scale-95 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow"
+              className="flex-1 bg-white hover:bg-neutral-200 active:scale-95 text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-md"
             >
               {isEditing ? 'Save Event' : 'Add Event'}
             </button>

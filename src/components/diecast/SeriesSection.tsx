@@ -33,18 +33,18 @@ export const SeriesSection: React.FC<SeriesSectionProps> = ({
         <div className="flex items-start justify-between gap-3">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
-              <Layers className="w-4 h-4 text-[#0066d6]" />
-              <h2 className="text-white text-lg sm:text-xl font-black tracking-tight uppercase">
+              <Layers className="w-4 h-4 text-gray-400" />
+              <h2 className="text-white text-base sm:text-lg font-bold tracking-tight uppercase font-sans">
                 {series.name}
               </h2>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="bg-white/10 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase border border-white/10">
+              <span className="bg-white/[0.06] text-gray-300 text-[10px] font-mono px-2 py-0.5 rounded-md border border-white/[0.08]">
                 {series.category}
               </span>
               {series.pantone_code && (
-                <span className="bg-[#1b1c24] text-gray-300 text-[10px] font-mono px-2 py-0.5 rounded-full border border-white/5">
+                <span className="text-gray-500 text-[10px] font-mono">
                   {series.pantone_code}
                 </span>
               )}
@@ -52,22 +52,22 @@ export const SeriesSection: React.FC<SeriesSectionProps> = ({
           </div>
 
           <div className="text-right">
-            <span className="text-white text-xs sm:text-sm font-black font-mono">
+            <span className="text-white text-xs sm:text-sm font-bold font-mono">
               {currentCount} / {targetCount}
             </span>
-            <span className="block text-[10px] text-gray-400 font-semibold">
-              {progressPercentage === 100 ? 'Set Complete' : `${progressPercentage}% Collected`}
+            <span className="block text-[10px] text-gray-400 font-mono">
+              {progressPercentage === 100 ? 'Set Completed' : `${progressPercentage}% collected`}
             </span>
           </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full h-1.5 bg-[#14161f] rounded-full overflow-hidden border border-white/5">
+        <div className="w-full h-1 bg-white/[0.06] rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-500 ${
               progressPercentage === 100
-                ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
-                : 'bg-gradient-to-r from-[#0066d6] to-blue-400'
+                ? 'bg-emerald-400'
+                : 'bg-white/70'
             }`}
             style={{ width: `${progressPercentage}%` }}
           />

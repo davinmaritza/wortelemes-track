@@ -1,12 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0c0d10;
+  --background: #090a0f;
   --foreground: #ffffff;
-  --card-surface: #16181f;
-  --card-border: #242735;
-  --hw-blue: #0066d6;
-  --hw-red: #e50914;
+  --card-surface: #12141c;
+  --card-border: rgba(255, 255, 255, 0.08);
 }
 
 body {
