@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { showcaseCars, showcaseSeries } from '@/lib/data/mockData';
 import { CollectionItem, Series } from '@/types/diecast';
 import { getStoredCollections, saveStoredCollections } from '@/lib/storage/collectionStorage';
@@ -10,18 +9,11 @@ import { SeriesSection } from '@/components/diecast/SeriesSection';
 import { DiscoverView } from '@/components/diecast/DiscoverView';
 import { CarDetailView } from '@/components/diecast/CarDetailView';
 import { BottomTabBar, AppNavTab } from '@/components/navigation/BottomTabBar';
-import { PortfolioSummary } from '@/components/admin/PortfolioSummary';
-import { DiecastFormModal } from '@/components/admin/DiecastFormModal';
-import { HotWheelsFlameLogo } from '@/components/ui/HotWheelsLogo';
 import { WortelemesLogo } from '@/components/ui/WortelemesLogo';
 import {
   Search,
-  Lock,
-  Unlock,
-  Plus,
   Flame,
   LayoutGrid,
-  Camera,
   ChevronDown,
   Compass,
   Newspaper,
@@ -56,25 +48,6 @@ export default function Home() {
     window.addEventListener('diecast-inventory-updated', handleUpdate);
     return () => window.removeEventListener('diecast-inventory-updated', handleUpdate);
   }, []);
-
-  // Admin Mode State (Passcode PIN)
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [showPinModal, setShowPinModal] = useState(false);
-  const [pinInput, setPinInput] = useState('');
-  const [pinError, setPinError] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
-
-  const handleVerifyPin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pinInput === '1234' || pinInput === '0000') {
-      setIsAdmin(true);
-      setShowPinModal(false);
-      setPinInput('');
-      setPinError(false);
-    } else {
-      setPinError(true);
-    }
-  };
 
   const filteredItems = collections.filter((item) => {
     const matchesSearch =
@@ -113,19 +86,11 @@ export default function Home() {
     });
   };
 
-  const handleAddItem = (newItem: CollectionItem) => {
-    setCollections((prev) => {
-      const updated = [newItem, ...prev];
-      saveStoredCollections(updated);
-      return updated;
-    });
-  };
-
   if (selectedCar) {
     return (
       <CarDetailView
         car={selectedCar}
-        isAdmin={isAdmin}
+        isAdmin={false}
         onBack={() => setSelectedCar(null)}
         onToggleFavorite={handleToggleFavorite}
         onUpdateQty={handleUpdateQty}
@@ -138,11 +103,13 @@ export default function Home() {
       {/* DESKTOP TOP NAVIGATION BAR */}
       <header className="hidden md:flex w-full max-w-7xl px-8 py-3.5 items-center justify-between border-b border-[#1f222e] bg-[#0c0d10]/90 backdrop-blur-md sticky top-0 z-30">
         <div className="flex items-center gap-8">
-          {/* Authentic Flame Logo & Wortelemes Brand */}
+          {/* Wortelemes Brand */}
           <div className="flex items-center gap-3">
             <WortelemesLogo className="w-8 h-8" size={32} />
-            <HotWheelsFlameLogo className="w-26 h-7" />
-            <span className="font-extrabold text-sm tracking-widest text-gray-400 uppercase border-l border-[#242735] pl-3">
+            <span className="font-black text-sm tracking-wider text-white uppercase">
+              WORTELEMES
+            </span>
+            <span className="font-extrabold text-xs tracking-widest text-gray-400 uppercase border-l border-[#242735] pl-3">
               SHOWCASE
             </span>
           </div>
@@ -199,53 +166,17 @@ export default function Home() {
           </nav>
         </div>
 
-        {/* Right Desktop Controls */}
+        {/* Right Desktop Info */}
         <div className="flex items-center gap-3">
-          <Link
-            href="/admin"
-            className="flex items-center gap-1.5 bg-[#16181f] hover:bg-[#20232d] text-gray-200 border border-[#242735] hover:border-red-500/50 px-3.5 py-2 rounded-xl text-xs font-bold transition-all"
-            title="Buka Garasi Admin Portal"
-          >
-            <Lock className="w-3.5 h-3.5 text-red-400" />
-            <span>Garasi Admin</span>
-          </Link>
-
-          {isAdmin && (
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow active:scale-95 transition-all"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Tambah Koleksi</span>
-            </button>
-          )}
-
-          <button
-            onClick={() => (isAdmin ? setIsAdmin(false) : setShowPinModal(true))}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-              isAdmin
-                ? 'bg-red-600/20 text-red-400 border border-red-500/40'
-                : 'bg-[#16181f] text-gray-300 border border-[#242735] hover:text-white'
-            }`}
-          >
-            {isAdmin ? (
-              <>
-                <Unlock className="w-3.5 h-3.5 text-red-400" />
-                <span>Admin Aktif</span>
-              </>
-            ) : (
-              <>
-                <Lock className="w-3.5 h-3.5" />
-                <span>Quick PIN</span>
-              </>
-            )}
-          </button>
+          <span className="text-[11px] font-bold tracking-wider text-gray-400 uppercase bg-[#16181f] border border-[#242735] px-3.5 py-1.5 rounded-xl">
+            Diecast Garage
+          </span>
         </div>
       </header>
 
       {/* MAIN CONTAINER: Responsive Width */}
       <div className="w-full max-w-[430px] md:max-w-6xl lg:max-w-7xl px-4 md:px-8 pt-3 md:pt-6 flex flex-col">
-        {/* MOBILE ONLY: Top Status Bar & Centered Flame Logo */}
+        {/* MOBILE ONLY: Top Status Bar */}
         <div className="md:hidden flex items-center justify-between text-[11px] text-gray-400 font-semibold px-2 pb-1.5">
           <span>9:30</span>
           <div className="flex items-center gap-1.5 text-gray-300">
@@ -254,39 +185,31 @@ export default function Home() {
           </div>
         </div>
 
+        {/* MOBILE ONLY: Brand Header (No Hot Wheels logo & No Admin Button) */}
         <div className="md:hidden flex items-center justify-between pb-3 pt-1">
-          <Link
-            href="/admin"
-            className="flex items-center gap-1.5"
-            title="Garasi Admin"
-          >
+          <div className="flex items-center gap-2.5">
             <WortelemesLogo className="w-8 h-8" size={32} />
-          </Link>
-
-          {/* Centered Hot Wheels Logo on Mobile */}
-          <HotWheelsFlameLogo className="w-26 h-7" />
-
-          <button
-            onClick={() => (isAdmin ? setIsAdmin(false) : setShowPinModal(true))}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-            title="Admin PIN"
-          >
-            {isAdmin ? <Unlock className="w-4 h-4 text-red-400" /> : <Lock className="w-4 h-4" />}
-          </button>
+            <span className="font-black text-sm tracking-wider text-white uppercase">
+              WORTELEMES
+            </span>
+          </div>
+          <span className="text-[10px] font-black tracking-widest text-gray-400 uppercase bg-[#16181f] border border-[#242735] px-2.5 py-1 rounded-full">
+            SHOWCASE
+          </span>
         </div>
 
         {/* SCREEN VIEWS */}
         {currentNav === 'discover' ? (
           <DiscoverView
             cars={collections}
-            isAdmin={isAdmin}
+            isAdmin={false}
             onSelectCar={(car) => setSelectedCar(car)}
             onUpdateQty={handleUpdateQty}
             onToggleFavorite={handleToggleFavorite}
           />
         ) : currentNav === 'news' ? (
           <div className="py-24 text-center text-gray-400 flex flex-col items-center gap-2">
-            <h2 className="text-white font-extrabold text-xl">Hot Wheels Collector News</h2>
+            <h2 className="text-white font-extrabold text-xl">Diecast Collector News</h2>
             <p className="text-xs max-w-sm text-gray-500 mt-1">
               Agenda drop RLC, update rilisan batch 2026, dan liputan diecast terkini dari seluruh dunia.
             </p>
@@ -302,7 +225,6 @@ export default function Home() {
             </div>
             <h2 className="text-white font-extrabold text-2xl">Garasi Wortelemes</h2>
             <p className="text-xs text-gray-400">Kolektor Diecast & Penjual Terpercaya</p>
-            {isAdmin && <PortfolioSummary items={collections} />}
           </div>
         ) : (
           /* MY GARAGE */
@@ -313,22 +235,7 @@ export default function Home() {
                   MY GARAGE
                 </h1>
               </div>
-
-              {isAdmin && (
-                <div className="md:hidden flex justify-end">
-                  <button
-                    onClick={() => setShowAddModal(true)}
-                    className="flex items-center gap-1 bg-[#0066d6] hover:bg-blue-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shadow active:scale-95 transition-all"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Tambah</span>
-                  </button>
-                </div>
-              )}
             </div>
-
-            {/* Financial Summary (Only shown for admin) */}
-            {isAdmin && <PortfolioSummary items={collections} />}
 
             {/* Sub-Tab Navigation (Vehicles | Series | Lists) */}
             <div className="bg-[#14151a] p-1 rounded-full flex items-center border border-[#22242e] w-full md:w-96 mb-3">
@@ -394,7 +301,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Counter Bar: 181 / 250 Vehicles [Upgrade] [Select] (Sesuai Screenshot 2) */}
+            {/* Counter Bar: 181 / 250 Vehicles [Upgrade] [Select] */}
             <div className="flex items-center justify-between py-2 text-xs text-gray-400 font-semibold mb-1">
               <div className="flex items-center gap-2">
                 <span>{collections.reduce((sum, i) => sum + (i.qty || 1), 0)} / 250 Vehicles</span>
@@ -417,7 +324,7 @@ export default function Home() {
                       key={series.id}
                       series={series}
                       items={seriesItems}
-                      isAdmin={isAdmin}
+                      isAdmin={false}
                       onSelectCar={(car) => setSelectedCar(car)}
                       onUpdateQty={handleUpdateQty}
                       onToggleFavorite={handleToggleFavorite}
@@ -442,7 +349,7 @@ export default function Home() {
                       >
                         <DiecastCard
                           item={item}
-                          isAdmin={isAdmin}
+                          isAdmin={false}
                           onUpdateQty={handleUpdateQty}
                           onToggleFavorite={handleToggleFavorite}
                         />
@@ -454,82 +361,10 @@ export default function Home() {
             )}
           </>
         )}
-
-        {/* Floating Camera Button (Hanya di mobile) */}
-        <button
-          onClick={() => (isAdmin ? setShowAddModal(true) : setShowPinModal(true))}
-          className="md:hidden fixed bottom-20 right-6 z-30 w-12 h-12 rounded-full bg-[#0066d6] text-white flex items-center justify-center shadow-[0_4px_25px_rgba(0,102,214,0.6)] active:scale-90 transition-transform"
-          title="Scan Foto Diecast"
-        >
-          <Camera className="w-6 h-6" />
-        </button>
       </div>
 
       {/* Persistent Bottom Tab Bar */}
       <BottomTabBar activeTab={currentNav} onChangeTab={(tab) => setCurrentNav(tab)} />
-
-      {/* PIN Login Modal */}
-      {showPinModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#16181f] border border-[#242735] w-full max-w-xs rounded-2xl p-5 flex flex-col items-center shadow-xl">
-            <div className="w-10 h-10 rounded-full bg-red-600/20 text-red-500 flex items-center justify-center mb-3">
-              <Lock className="w-5 h-5" />
-            </div>
-            <h3 className="text-white font-bold text-sm text-center mb-1">
-              Admin Passcode PIN
-            </h3>
-            <p className="text-gray-400 text-[11px] text-center mb-4">
-              Masukkan Master PIN untuk membuka kelola stok dan melihat modal rahasia. (Default: <code className="text-blue-400 font-mono">1234</code>)
-            </p>
-
-            <form onSubmit={handleVerifyPin} className="w-full flex flex-col gap-3">
-              <input
-                type="password"
-                maxLength={8}
-                value={pinInput}
-                onChange={(e) => {
-                  setPinInput(e.target.value);
-                  setPinError(false);
-                }}
-                placeholder="Masukkan PIN"
-                className={`w-full bg-[#111217] border ${
-                  pinError ? 'border-red-500' : 'border-[#242735]'
-                } rounded-xl px-3 py-2 text-center text-white tracking-widest text-lg font-mono focus:outline-none focus:border-[#0066d6]`}
-                autoFocus
-              />
-              {pinError && (
-                <span className="text-red-400 text-[10px] text-center">
-                  PIN salah. Coba 1234
-                </span>
-              )}
-
-              <div className="flex gap-2 mt-1">
-                <button
-                  type="button"
-                  onClick={() => setShowPinModal(false)}
-                  className="flex-1 bg-[#1f222e] text-gray-300 py-2 rounded-xl text-xs font-bold"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 bg-[#0066d6] text-white py-2 rounded-xl text-xs font-bold"
-                >
-                  Buka Admin
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Modal Tambah Diecast */}
-      <DiecastFormModal
-        isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        seriesList={seriesList}
-        onSave={handleAddItem}
-      />
     </main>
   );
 }

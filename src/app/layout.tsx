@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hot Wheels Showcase & Garage Tracker",
+  title: "Wortelemes Showcase & Diecast Garage Tracker",
   description: "Track your diecast cars, manage sets, and showcase your collection.",
   icons: {
     icon: "/icon.png",
