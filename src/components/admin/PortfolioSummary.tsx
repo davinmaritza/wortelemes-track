@@ -29,7 +29,7 @@ export const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ items }) => 
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-5 h-5 text-red-500" />
           <h2 className="text-white text-sm font-black uppercase tracking-wide">
-            Portfolio & Finansial (Admin Secret)
+            Portfolio & Financial Ledger (Private)
           </h2>
         </div>
         <span className="text-[10px] bg-red-950/60 text-red-300 border border-red-800/50 px-2 py-0.5 rounded-full font-mono">
@@ -42,10 +42,10 @@ export const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ items }) => 
         <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
             <Package className="w-3.5 h-3.5 text-blue-400" />
-            <span>Total Unit</span>
+            <span>Total Units</span>
           </div>
           <div className="text-white font-extrabold text-base font-mono">
-            {totalItems} Unit
+            {totalItems} Units
           </div>
         </div>
 
@@ -53,7 +53,7 @@ export const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ items }) => 
         <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
             <DollarSign className="w-3.5 h-3.5 text-gray-400" />
-            <span>Total Modal</span>
+            <span>Total Cost (Private)</span>
           </div>
           <div className="text-white font-extrabold text-sm sm:text-base font-mono truncate">
             {formatRupiah(totalModal)}
@@ -64,7 +64,7 @@ export const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ items }) => 
         <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
             <TrendingUp className="w-3.5 h-3.5 text-gray-400" />
-            <span>Valuasi Pasar</span>
+            <span>Market Valuation</span>
           </div>
           <div className="text-white font-extrabold text-sm sm:text-base font-mono truncate">
             {formatRupiah(totalValuasi)}
@@ -75,7 +75,7 @@ export const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ items }) => 
         <div className="bg-[#111217] p-2.5 rounded-xl border border-[#242735]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
             <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Potensi Profit</span>
+            <span>Potential Profit</span>
           </div>
           <div className="text-emerald-400 font-extrabold text-sm sm:text-base font-mono truncate">
             +{formatRupiah(totalPotentialProfit)}

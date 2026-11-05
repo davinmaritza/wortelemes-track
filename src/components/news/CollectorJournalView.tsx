@@ -17,36 +17,36 @@ const articles: ArticleItem[] = [
   {
     id: 'art-1',
     category: 'RLC Drops & Calendar',
-    title: 'Kalender Rilis Red Line Club (RLC) 2026: Deretan Casting Legendaris',
-    excerpt: 'Simak daftar jadwal drop resmi RLC untuk kuartal ini, termasuk varian BMW M3 E30, Datsun 240Z, dan Porsche 930 Turbo dengan Spectraflame finish eksklusif.',
-    date: '3 Nov 2026',
+    title: '2026 Red Line Club (RLC) Drop Calendar: Iconic Collector Castings',
+    excerpt: 'Review official RLC quarterly drop schedules featuring the BMW M3 E30, Datsun 240Z, and Porsche 930 Turbo in signature Spectraflame finishes.',
+    date: 'Nov 3, 2026',
     readTime: '3 min read',
     tag: 'Drop Alert',
   },
   {
     id: 'art-2',
     category: 'Care & Preservation',
-    title: 'Panduan Memilih Akrilik Protector UV-Resistant untuk Carded Koleksi',
-    excerpt: "Lindungi carded blister dari ancaman soft corner, kerut, dan perubahan warna akibat sinar matahari langsung dengan spesifikasi akrilik tebal 2mm berfilter UV.",
-    date: '28 Okt 2026',
+    title: 'Guide to Selecting UV-Resistant Acrylic Protectors for Carded Collections',
+    excerpt: 'Defend blister cards from soft corners, card crease, and sun discoloration with 2mm museum-grade UV-filtering acrylic.',
+    date: 'Oct 28, 2026',
     readTime: '4 min read',
     tag: 'Collector Guide',
   },
   {
     id: 'art-3',
     category: 'Market Insights',
-    title: 'Analisis Tren Pasar Diecast 1:64: Mengapa Varian JDM dan Porsche Tetap Jadi Primadona',
-    excerpt: 'Eksplorasi valuasi pasar model Japanese Domestic Market (JDM) dan heritage Porsche dari tahun ke tahun di kalangan kolektor Indonesia.',
-    date: '20 Okt 2026',
+    title: '1:64 Diecast Market Watch: Why JDM Classics and Vintage Porsches Dominate',
+    excerpt: 'Deep dive into long-term market valuations for Japanese Domestic Market (JDM) and Porsche heritage castings among serious collectors.',
+    date: 'Oct 20, 2026',
     readTime: '5 min read',
     tag: 'Market Watch',
   },
   {
     id: 'art-4',
     category: 'Authentication',
-    title: 'Cara Membedakan Blister Original Pabrik vs Repackaging / Rekat Ulang',
-    excerpt: 'Perhatikan tekstur sisa lem di cardstock, barcode cetak pabrik, dan kerapatan blister plastik sebelum memutuskan transaksi bernilai tinggi.',
-    date: '15 Okt 2026',
+    title: 'Authentication Guide: Factory Blister Seals vs. Resealed Cards',
+    excerpt: 'Inspect glue residue texture, factory cardstock embossing, and blister heat-seal lines before finalizing high-ticket acquisitions.',
+    date: 'Oct 15, 2026',
     readTime: '4 min read',
     tag: 'Security Tips',
   },
@@ -55,21 +55,21 @@ const articles: ArticleItem[] = [
 const upcomingDrops = [
   {
     month: 'NOV 2026',
-    date: '18 Nov',
+    date: 'Nov 18',
     model: '1993 McLaren F1 (RLC Exclusive)',
     series: 'Red Line Club',
     status: 'Upcoming',
   },
   {
-    month: 'DES 2026',
-    date: '05 Des',
+    month: 'DEC 2026',
+    date: 'Dec 05',
     model: 'Nissan Skyline GT-R R34 (Silver Series)',
     series: 'Silver Series Batch 2',
     status: 'Confirmed',
   },
   {
-    month: 'DES 2026',
-    date: '22 Des',
+    month: 'DEC 2026',
+    date: 'Dec 22',
     model: 'Porsche 911 GT3 RS (Track Day Special)',
     series: 'Premium Car Culture',
     status: 'Upcoming',
@@ -91,7 +91,7 @@ export const CollectorJournalView: React.FC = () => {
           COLLECTOR NEWS & RELEASE RADAR
         </h1>
         <p className="text-xs text-gray-400 max-w-xl leading-relaxed">
-          Pusat informasi rilisan batch terkini, jadwal drop internasional, panduan kurasi blister, dan wawasan pasar diecast.
+          Official hub for batch releases, drop schedules, blister preservation guides, and secondary market insights.
         </p>
       </div>
 
@@ -102,10 +102,10 @@ export const CollectorJournalView: React.FC = () => {
             <Calendar className="w-5 h-5 text-blue-400" />
             <div>
               <h2 className="text-sm font-black uppercase text-white tracking-wide">
-                Kalender Drop Rilis (Late 2026)
+                Release Drop Radar (Late 2026)
               </h2>
               <span className="text-[11px] text-gray-400">
-                Jadwal tentatif drop diecast premium & batch baru
+                Upcoming drop schedule for premium diecasts and new batches
               </span>
             </div>
           </div>
@@ -146,10 +146,10 @@ export const CollectorJournalView: React.FC = () => {
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-black uppercase tracking-wider text-white font-mono">
-            PANDUAN & INSIGHT KOLEKSI
+            COLLECTOR GUIDES & MARKET INSIGHTS
           </h2>
           <span className="text-xs text-gray-400 font-mono">
-            {articles.length} Artikel
+            {articles.length} Articles
           </span>
         </div>
 
@@ -179,7 +179,7 @@ export const CollectorJournalView: React.FC = () => {
               <div className="pt-3 border-t border-white/[0.05] flex items-center justify-between text-xs text-gray-400">
                 <span className="font-mono text-[11px]">{art.date}</span>
                 <span className="text-blue-400 font-bold group-hover:underline flex items-center gap-1">
-                  Baca Selengkapnya
+                  Read Full Article →
                 </span>
               </div>
             </article>

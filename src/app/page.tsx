@@ -276,10 +276,10 @@ export default function Home() {
                     onChange={(e) => setSelectedSort(e.target.value as any)}
                     className="appearance-none bg-[#14151b] border border-white/10 hover:border-white/20 rounded-xl pl-3 pr-8 py-2 text-xs text-gray-200 focus:outline-none focus:border-[#0066d6] transition-colors cursor-pointer font-medium"
                   >
-                    <option value="newest">Urutkan: Batch Terbaru</option>
-                    <option value="price-asc">Harga: Terendah ke Tertinggi</option>
-                    <option value="price-desc">Harga: Tertinggi ke Terendah</option>
-                    <option value="name-asc">Nama: A - Z</option>
+                    <option value="newest">Sort: Newest Batch</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="name-asc">Name: A - Z</option>
                   </select>
                   <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
@@ -291,11 +291,11 @@ export default function Home() {
                     onChange={(e) => setSelectedTier(e.target.value)}
                     className="appearance-none bg-[#14151b] border border-white/10 hover:border-white/20 rounded-xl pl-3 pr-8 py-2 text-xs text-gray-200 focus:outline-none focus:border-[#0066d6] transition-colors cursor-pointer font-medium"
                   >
-                    <option value="all">Semua Kategori</option>
+                    <option value="all">All Categories</option>
                     <option value="RLC">Red Line Club (RLC)</option>
                     <option value="Silver Series">Silver Series</option>
-                    <option value="Mainline">Mainline</option>
-                    <option value="Super Treasure Hunt">STH</option>
+                    <option value="Mainline">Mainline Regular</option>
+                    <option value="Super Treasure Hunt">Super Treasure Hunt</option>
                     <option value="Screen Time">Screen Time</option>
                   </select>
                   <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -310,7 +310,7 @@ export default function Home() {
                       : 'bg-[#14151b] text-gray-400 hover:text-white border-white/10'
                   }`}
                 >
-                  {filterForSaleOnly ? '✓ Hanya For Sale' : 'Tampilkan For Sale'}
+                  {filterForSaleOnly ? '✓ For Sale Only' : 'For Sale Only'}
                 </button>
               </div>
 
@@ -321,7 +321,7 @@ export default function Home() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari model casting, warna, atau tier..."
+                  placeholder="Search by casting, color, or tier..."
                   className="w-full bg-[#14151b] border border-white/10 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6] transition-colors"
                 />
               </div>
@@ -331,10 +331,10 @@ export default function Home() {
             <div className="flex items-center justify-between py-1 text-xs text-gray-400 font-semibold mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-white font-mono font-bold">
-                  {sortedItems.length} Unit
+                  {sortedItems.length} Vehicles
                 </span>
                 <span className="text-gray-600">•</span>
-                <span>{collections.filter((c) => c.is_for_sale).length} Siap Adopsi</span>
+                <span>{collections.filter((c) => c.is_for_sale).length} Available For Sale</span>
               </div>
 
               {searchQuery && (
@@ -342,7 +342,7 @@ export default function Home() {
                   onClick={() => setSearchQuery('')}
                   className="text-[11px] text-blue-400 hover:underline"
                 >
-                  Hapus pencarian
+                  Clear search
                 </button>
               )}
             </div>
@@ -370,7 +370,7 @@ export default function Home() {
                 {sortedItems.length === 0 ? (
                   <div className="py-20 text-center text-gray-500 flex flex-col items-center gap-2">
                     <LayoutGrid className="w-10 h-10 stroke-[1.5] text-gray-600" />
-                    <p className="text-xs">Tidak ada mobil ditemukan.</p>
+                    <p className="text-xs">No vehicles found.</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-3.5">

@@ -55,7 +55,7 @@ const QuickPriceEditModalContent: React.FC<{
             </div>
             <div>
               <h3 className="text-white font-black text-xs uppercase tracking-wide">
-                Sesuaikan Harga
+                Adjust Pricing
               </h3>
               <p className="text-[11px] text-gray-400 font-bold truncate max-w-[180px]">
                 {item.name}
@@ -74,7 +74,7 @@ const QuickPriceEditModalContent: React.FC<{
           {/* Input Modal Beli */}
           <div>
             <label className="text-[10px] font-black uppercase text-red-400 block mb-1">
-              Harga Modal Beli (Privat)
+              Cost Price (Private)
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-mono">
@@ -95,7 +95,7 @@ const QuickPriceEditModalContent: React.FC<{
           {/* Input Harga Jual Pasaran */}
           <div>
             <label className="text-[10px] font-black uppercase text-emerald-400 block mb-1">
-              Harga Jual / Pasaran (Publik)
+              Market Price (Public)
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-mono">
@@ -114,7 +114,7 @@ const QuickPriceEditModalContent: React.FC<{
 
           {/* Live Profit Preview Box */}
           <div className="bg-[#111217] p-3 rounded-xl border border-[#242735] flex items-center justify-between">
-            <span className="text-[11px] text-gray-400 font-medium">Estimasi Margin:</span>
+            <span className="text-[11px] text-gray-400 font-medium">Estimated Margin:</span>
             <div className="text-right">
               <span
                 className={`text-xs font-black font-mono block ${
@@ -135,13 +135,13 @@ const QuickPriceEditModalContent: React.FC<{
               onClick={onClose}
               className="flex-1 bg-[#1a1d26] hover:bg-[#242735] text-gray-300 font-bold py-2 rounded-xl text-xs transition-colors"
             >
-              Batal
+              Cancel
             </button>
             <button
               type="submit"
               className="flex-1 bg-[#0066d6] hover:bg-blue-600 active:scale-95 text-white font-black py-2 rounded-xl text-xs uppercase tracking-wider transition-all shadow"
             >
-              Simpan Harga
+              Save Pricing
             </button>
           </div>
         </form>

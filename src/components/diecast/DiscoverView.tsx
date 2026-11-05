@@ -60,7 +60,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
             DISCOVER DIECAST
           </h1>
           <p className="text-xs text-gray-400 mt-0.5">
-            Jelajahi rilisan casting terlangka, koleksi Red Line Club, dan unit yang siap diadopsi.
+            Explore rare collector castings, Red Line Club vault pieces, and units available for purchase.
           </p>
         </div>
 
@@ -74,7 +74,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
                 : 'bg-white/[0.06] text-gray-400 hover:text-white border border-white/5'
             }`}
           >
-            Semua ({cars.length})
+            All ({cars.length})
           </button>
           <button
             onClick={() => setActiveCategory('rlc')}
@@ -116,7 +116,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Cari berdasarkan model (Porsche, BMW, Mustang), seri, atau warna..."
+          placeholder="Search by model (Porsche, BMW, Mustang), series, or color..."
           className="w-full bg-[#121319] border border-white/10 rounded-2xl pl-11 pr-4 py-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6] transition-colors shadow-inner"
         />
       </div>
@@ -142,7 +142,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
             </h2>
 
             <p className="text-xs text-gray-400 leading-relaxed">
-              Koleksi unggulan dengan casting legendaris dan detail akrilik presisi. Klik untuk melihat spesifikasi lengkap dan estimasi harga pasaran.
+              Featured highlight with iconic casting design and collector-grade precision. Click to view detailed specs and market evaluation.
             </p>
 
             <div className="pt-2 flex items-center gap-3">
@@ -150,7 +150,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
                 Rp {spotlightCar.sell_price.toLocaleString('id-ID')}
               </span>
               <span className="text-xs text-red-400 font-bold bg-red-950/60 border border-red-800/40 px-3 py-1 rounded-full">
-                Lihat Detail Showcase →
+                View Showcase Details →
               </span>
             </div>
           </div>
@@ -173,23 +173,23 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-black tracking-wider text-white uppercase font-mono">
             {searchTerm
-              ? `HASIL PENCARIAN (${filteredCars.length})`
+              ? `SEARCH RESULTS (${filteredCars.length})`
               : activeCategory === 'rlc'
               ? 'RED LINE CLUB VAULT'
               : activeCategory === 'sth'
               ? 'SUPER TREASURE HUNT & CHASE'
               : activeCategory === 'forsale'
-              ? 'READY FOR SALE (BISA DIBELI)'
-              : 'KATALOG EKSKLUSIF'}
+              ? 'AVAILABLE FOR SALE'
+              : 'EXCLUSIVE CATALOG'}
           </h2>
           <span className="text-xs text-gray-500 font-mono">
-            {filteredCars.length} Model
+            {filteredCars.length} Vehicles
           </span>
         </div>
 
         {filteredCars.length === 0 ? (
           <div className="py-16 text-center text-gray-500 flex flex-col items-center gap-2 bg-[#121319] rounded-2xl border border-white/5">
-            <p className="text-xs">Tidak ada mobil yang cocok dengan pencarian.</p>
+            <p className="text-xs">No vehicles found matching your search.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">

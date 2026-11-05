@@ -102,7 +102,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
         <div className="flex items-center justify-between pb-3 border-b border-[#242735]">
           <div className="flex items-center gap-2">
             <PlusCircle className="w-5 h-5 text-[#0066d6]" />
-            <h2 className="text-white font-extrabold text-sm uppercase">Tambah Diecast Baru</h2>
+            <h2 className="text-white font-extrabold text-sm uppercase">Add New Vehicle</h2>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
             <X className="w-5 h-5" />
@@ -120,7 +120,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
               value={wikiQuery}
               onChange={(e) => setWikiQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleSearchWiki())}
-              placeholder="Ketik casting (e.g. Nissan Skyline, Kool Kombi)..."
+              placeholder="Search casting (e.g. Nissan Skyline, Kool Kombi)..."
               className="flex-1 bg-[#1a1d26] border border-[#242735] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#0066d6]"
             />
             <button
@@ -130,7 +130,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
               className="bg-[#0066d6] hover:bg-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold text-white flex items-center gap-1 shrink-0"
             >
               {isSearchingWiki ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
-              Cari
+              Search
             </button>
           </div>
 
@@ -145,7 +145,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
                   className="w-full text-left px-3 py-2 text-xs text-gray-200 hover:bg-[#0066d6]/20 hover:text-white transition-colors flex items-center justify-between"
                 >
                   <span className="font-semibold">{res.title}</span>
-                  <span className="text-[10px] text-blue-400 font-mono">Pilih & Isi</span>
+                  <span className="text-[10px] text-blue-400 font-mono">Select & Autofill</span>
                 </button>
               ))}
             </div>
@@ -157,7 +157,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
           {isLoadingDetails && (
             <div className="flex items-center gap-2 text-blue-400 text-xs py-1">
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              Mengambil gambar & info resmi dari Wiki...
+              Fetching official image & specs from Wiki...
             </div>
           )}
 
@@ -220,7 +220,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
 
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Tahun Rilis</label>
+              <label className="text-[11px] text-gray-400 block mb-1">Release Year</label>
               <input
                 type="number"
                 value={releaseYear}
@@ -229,7 +229,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Nomor Index</label>
+              <label className="text-[11px] text-gray-400 block mb-1">Segment Index</label>
               <input
                 type="number"
                 value={segmentNumber}
@@ -238,7 +238,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Jumlah (Qty)</label>
+              <label className="text-[11px] text-gray-400 block mb-1">Quantity (Qty)</label>
               <input
                 type="number"
                 min="1"
@@ -251,7 +251,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Warna Bodi</label>
+              <label className="text-[11px] text-gray-400 block mb-1">Body Color</label>
               <input
                 type="text"
                 value={color}
@@ -261,7 +261,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Kondisi</label>
+              <label className="text-[11px] text-gray-400 block mb-1">Condition</label>
               <input
                 type="text"
                 value={condition}
@@ -276,7 +276,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
           <div className="grid grid-cols-2 gap-2 p-2.5 bg-[#111217] rounded-xl border border-red-950/40">
             <div>
               <label className="text-[10px] font-bold text-red-400 uppercase block mb-1">
-                Harga Modal (Hide) *
+                Cost Price (Private) *
               </label>
               <input
                 type="number"
@@ -288,7 +288,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
             </div>
             <div>
               <label className="text-[10px] font-bold text-emerald-400 uppercase block mb-1">
-                Harga Pasaran (Publik) *
+                Market Price (Public) *
               </label>
               <input
                 type="number"
@@ -309,7 +309,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
               className="w-4 h-4 rounded accent-[#0066d6]"
             />
             <label htmlFor="is_for_sale" className="text-xs text-gray-300 font-medium">
-              Tandai sebagai <span className="text-emerald-400 font-bold">For Sale</span> (Calon pembeli bisa chat WA)
+              Mark as <span className="text-emerald-400 font-bold">For Sale</span> (Displays WhatsApp inquiry button)
             </label>
           </div>
 
@@ -317,7 +317,7 @@ export const AddDiecastModal: React.FC<AddDiecastModalProps> = ({
             type="submit"
             className="w-full mt-2 bg-[#0066d6] hover:bg-blue-600 text-white font-bold py-2.5 rounded-xl text-xs active:scale-95 transition-all shadow"
           >
-            Simpan ke Garasi
+            Add to Garage
           </button>
         </form>
       </div>

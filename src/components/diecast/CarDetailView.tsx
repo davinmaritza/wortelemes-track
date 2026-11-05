@@ -32,7 +32,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
 
   const handleWhatsAppOrder = () => {
     const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '6281234567890';
-    const text = `Halo Wortelemes, saya tertarik dengan koleksi diecast *${car.name}* (${car.release_year}, ${car.tier_badge || '1:64'}) seharga *${formatRupiah(car.sell_price)}*. Apakah unit ini masih ready?`;
+    const text = `Hi Wortelemes, I'm interested in your diecast collection *${car.name}* (${car.release_year}, ${car.tier_badge || '1:64'}) listed at *${formatRupiah(car.sell_price)}*. Is this unit still available?`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
@@ -45,7 +45,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white active:scale-95 transition-all text-xs font-bold"
         >
           <ChevronLeft className="w-4 h-4" />
-          <span>Kembali ke Garasi</span>
+          <span>Back to Garage</span>
         </button>
 
         <h2 className="text-xs sm:text-sm font-extrabold tracking-tight uppercase max-w-[200px] sm:max-w-md truncate text-center text-gray-300">
@@ -60,7 +60,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
                 ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
                 : 'bg-white/[0.06] border-white/10 text-gray-400 hover:text-white'
             }`}
-            title="Favorit"
+            title="Favorite"
           >
             <Star className={`w-4 h-4 ${car.is_favorite ? 'fill-amber-400' : ''}`} />
           </button>
@@ -72,7 +72,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
               }
             }}
             className="w-9 h-9 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-gray-400 hover:text-white active:scale-95 transition-all"
-            title="Bagikan"
+            title="Share"
           >
             <Share2 className="w-4 h-4" />
           </button>
@@ -117,7 +117,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
                 </span>
               ) : (
                 <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-black/60 text-gray-400 border border-white/10 backdrop-blur-md">
-                  Koleksi Pribadi
+                  Private Collection
                 </span>
               )}
             </div>
@@ -142,7 +142,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
           {/* Authentic Guarantee pill */}
           <div className="mt-4 flex items-center gap-2 text-xs text-gray-400 bg-white/[0.03] border border-white/[0.06] px-4 py-2 rounded-full">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>100% Diecast Original & Terverifikasi Fisik</span>
+            <span>100% Authentic Diecast & Physically Verified</span>
           </div>
         </div>
 
@@ -155,14 +155,14 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
               </span>
               <span className="text-gray-600">•</span>
               <span className="text-xs font-mono text-gray-400">
-                Skala {car.scale || '1:64'}
+                Scale {car.scale || '1:64'}
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white leading-tight">
               {car.name}
             </h1>
             <p className="text-xs text-gray-400 mt-1.5 leading-relaxed">
-              Koleksi diecast premium terawat dengan presisi detail tinggi, kondisi {car.condition}.
+              Curated premium diecast preserved in immaculate detail, condition: {car.condition}.
             </p>
           </div>
 
@@ -170,7 +170,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
           <div className="grid grid-cols-2 gap-3 bg-[#111218] p-4 sm:p-5 rounded-2xl border border-white/[0.08]">
             <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
               <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Tahun Rilis
+                Release Year
               </span>
               <span className="text-white text-sm font-black font-mono">
                 {car.release_year}
@@ -179,7 +179,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
 
             <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
               <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Tier / Kategori
+                Tier / Category
               </span>
               <span className="text-white text-sm font-extrabold truncate block">
                 {car.tier_badge || 'Mainline'}
@@ -188,7 +188,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
 
             <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
               <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Kondisi Card / Fisik
+                Card / Physical Condition
               </span>
               <span className="text-white text-sm font-extrabold truncate block">
                 {car.condition}
@@ -197,7 +197,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
 
             <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
               <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Nomor Segmen
+                Segment Number
               </span>
               <span className="text-white text-sm font-black font-mono">
                 {car.segment_number ? `#${car.segment_number}` : 'N/A'}
@@ -206,7 +206,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
 
             <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
               <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Warna Bodi
+                Body Color
               </span>
               <span className="text-white text-sm font-extrabold truncate block">
                 {car.color}
@@ -215,7 +215,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
 
             <div className="bg-white/[0.02] p-3 rounded-xl border border-white/[0.04]">
               <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-0.5">
-                Kode Casting / SKU
+                Casting Code / SKU
               </span>
               <span className="text-white text-sm font-black font-mono">
                 {car.casting_code || 'STANDARD'}
@@ -227,20 +227,20 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
           <div className="p-5 bg-gradient-to-r from-[#12141c] to-[#151722] rounded-2xl border border-white/10 flex items-center justify-between shadow-xl">
             <div>
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5">
-                ESTIMASI HARGA PASARAN
+                ESTIMATED MARKET VALUE
               </span>
               <span className="text-2xl font-black text-white font-mono">
                 {formatRupiah(car.sell_price)}
               </span>
               <span className="block text-[10px] text-gray-400 mt-0.5">
-                {car.is_for_sale ? 'Siap kirim ke seluruh Indonesia' : 'Unit koleksi display'}
+                {car.is_for_sale ? 'Ready to ship nationwide & worldwide' : 'Private display unit'}
               </span>
             </div>
 
             {isAdmin && car.buy_price !== undefined && (
               <div className="text-right bg-red-950/60 px-3.5 py-2 rounded-xl border border-red-800/40">
                 <span className="text-[9px] text-red-400 font-bold uppercase tracking-wider block">
-                  MODAL RAHASIA (HIDE)
+                  COST PRICE (PRIVATE)
                 </span>
                 <span className="text-sm font-black font-mono text-red-300">
                   {formatRupiah(car.buy_price)}
@@ -257,7 +257,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
                 className="w-full bg-[#0066d6] hover:bg-blue-600 active:scale-[0.98] text-white rounded-full py-4 px-6 font-black text-sm flex items-center justify-center gap-2.5 shadow-[0_10px_35px_rgba(0,102,214,0.4)] transition-all"
               >
                 <MessageCircle className="w-5 h-5" />
-                <span>Beli Koleksi Ini (Chat WhatsApp)</span>
+                <span>Purchase Collection (WhatsApp)</span>
               </button>
             ) : (
               <button
@@ -265,7 +265,7 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
                 className="w-full bg-white/[0.08] hover:bg-white/15 text-gray-300 rounded-full py-4 px-6 font-bold text-xs flex items-center justify-center gap-2 border border-white/10 transition-all"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>Tanya Ketersediaan / Titip Model (WhatsApp)</span>
+                <span>Inquire Availability / Custom Request (WhatsApp)</span>
               </button>
             )}
           </div>

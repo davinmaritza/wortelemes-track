@@ -65,13 +65,13 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Gagal mengupload file gambar');
+        throw new Error(data.error || 'Failed to upload image file');
       }
 
       setImageUrl(data.url);
     } catch (err: any) {
       console.error('Upload error:', err);
-      setUploadError(err.message || 'Gagal upload gambar');
+      setUploadError(err.message || 'Image upload failed');
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) {
@@ -188,7 +188,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               <PlusCircle className="w-5 h-5 text-[#0066d6]" />
             )}
             <h2 className="text-white font-black text-sm uppercase tracking-wide">
-              {isEditing ? 'Edit Data Mobil & Harga' : 'Tambah Diecast Baru'}
+              {isEditing ? 'Edit Vehicle & Pricing' : 'Add New Vehicle'}
             </h2>
           </div>
           <button
@@ -210,7 +210,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               value={wikiQuery}
               onChange={(e) => setWikiQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleSearchWiki())}
-              placeholder="Ketik casting (e.g. Nissan Skyline, Kool Kombi)..."
+              placeholder="Search casting (e.g. Nissan Skyline, Kool Kombi)..."
               className="flex-1 bg-[#1a1d26] border border-[#242735] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#0066d6]"
             />
             <button
@@ -220,7 +220,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               className="bg-[#0066d6] hover:bg-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold text-white flex items-center gap-1 shrink-0"
             >
               {isSearchingWiki ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
-              Cari
+              Search
             </button>
           </div>
 
@@ -235,7 +235,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
                   className="w-full text-left px-3 py-2 text-xs text-gray-200 hover:bg-[#0066d6]/20 hover:text-white transition-colors flex items-center justify-between"
                 >
                   <span className="font-semibold">{res.title}</span>
-                  <span className="text-[10px] text-blue-400 font-mono">Pilih & Isi</span>
+                  <span className="text-[10px] text-blue-400 font-mono">Select & Autofill</span>
                 </button>
               ))}
             </div>
@@ -247,7 +247,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
           {isLoadingDetails && (
             <div className="flex items-center gap-2 text-blue-400 text-xs py-1">
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              Mengambil gambar & info resmi dari Wiki...
+              Fetching official image & specs from Wiki...
             </div>
           )}
 
@@ -255,11 +255,11 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
           <div className="bg-[#111217] p-3 rounded-xl border border-[#242735] flex flex-col gap-2.5">
             <div className="flex items-center justify-between">
               <label className="text-[10px] font-bold text-gray-400 uppercase">
-                Foto / Gambar Diecast
+                Diecast Vehicle Photo
               </label>
               {isUploading && (
                 <span className="text-[10px] text-blue-400 flex items-center gap-1 font-medium">
-                  <Loader2 className="w-3 h-3 animate-spin" /> Mengunggah...
+                  <Loader2 className="w-3 h-3 animate-spin" /> Uploading...
                 </span>
               )}
             </div>
@@ -298,13 +298,13 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
                     className="flex-1 bg-[#1e222f] hover:bg-[#2b3042] text-white border border-[#2c3144] py-1.5 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-sm"
                   >
                     <Upload className="w-3.5 h-3.5 text-blue-400" />
-                    <span>{isUploading ? 'Uploading...' : 'Upload Foto'}</span>
+                    <span>{isUploading ? 'Uploading...' : 'Upload Photo'}</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => {
-                      const sample = prompt('Masukkan URL gambar langsung:', imageUrl);
+                      const sample = prompt('Enter image direct URL:', imageUrl);
                       if (sample !== null) setImageUrl(sample.trim());
                     }}
                     className="bg-[#16181f] hover:bg-[#1f222e] text-gray-300 border border-[#242735] px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors"
@@ -315,7 +315,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
                 </div>
 
                 <p className="text-[10px] text-gray-500 truncate">
-                  {imageUrl ? imageUrl : 'Format: PNG, JPG, WebP. Atau cari via Wiki di atas.'}
+                  {imageUrl ? imageUrl : 'PNG, JPG, WebP format. Or search via Wiki above.'}
                 </p>
 
                 {uploadError && (
@@ -328,7 +328,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
           </div>
 
           <div>
-            <label className="text-[11px] text-gray-400 block mb-1">Nama Model / Casting *</label>
+            <label className="text-[11px] text-gray-400 block mb-1">Model / Casting Name *</label>
             <input
               type="text"
               required
@@ -375,7 +375,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
 
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Tahun Rilis</label>
+              <label className="text-[11px] text-gray-400 block mb-1">Release Year</label>
               <input
                 type="number"
                 value={releaseYear}
@@ -384,7 +384,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Nomor Index</label>
+              <label className="text-[11px] text-gray-400 block mb-1">Segment Index</label>
               <input
                 type="number"
                 value={segmentNumber}
@@ -393,7 +393,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Jumlah (Qty)</label>
+              <label className="text-[11px] text-gray-400 block mb-1">Quantity (Qty)</label>
               <input
                 type="number"
                 min="1"
@@ -406,7 +406,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Warna Bodi</label>
+              <label className="text-[11px] text-gray-400 block mb-1">Body Color</label>
               <input
                 type="text"
                 value={color}
@@ -416,7 +416,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-[11px] text-gray-400 block mb-1">Kondisi</label>
+              <label className="text-[11px] text-gray-400 block mb-1">Condition</label>
               <input
                 type="text"
                 value={condition}
@@ -430,7 +430,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
           {/* Finansial Inputs (Modal vs Pasaran) */}
           <div className="p-3 bg-[#111217] rounded-xl border border-red-950/40 flex flex-col gap-2">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="font-bold text-gray-300">Penyesuaian Harga & Margin</span>
+              <span className="font-bold text-gray-300">Pricing & Margin Calibration</span>
               <span className="font-mono font-bold text-emerald-400">
                 Profit: Rp {((Number(sellPrice) || 0) - (Number(buyPrice) || 0)).toLocaleString('id-ID')}
               </span>
@@ -438,7 +438,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="text-[10px] font-bold text-red-400 uppercase block mb-1">
-                  Modal Beli (Privat) *
+                  Cost Price (Private) *
                 </label>
                 <div className="relative">
                   <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-mono">
@@ -455,7 +455,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               </div>
               <div>
                 <label className="text-[10px] font-bold text-emerald-400 uppercase block mb-1">
-                  Harga Jual / Pasaran *
+                  Market Price *
                 </label>
                 <div className="relative">
                   <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-mono">
@@ -475,12 +475,12 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
 
           {/* Catatan Khusus */}
           <div>
-            <label className="text-[11px] text-gray-400 block mb-1">Catatan Tambahan (Opsional)</label>
+            <label className="text-[11px] text-gray-400 block mb-1">Additional Notes (Optional)</label>
             <input
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. Kondisi blister mulus, ban karet Real Riders"
+              placeholder="e.g. Flawless blister card, Real Riders rubber wheels"
               className="w-full bg-[#111217] border border-[#242735] rounded-lg px-3 py-1.5 text-xs text-white"
             />
           </div>
@@ -494,7 +494,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
               className="w-4 h-4 rounded accent-[#0066d6]"
             />
             <label htmlFor="is_for_sale_modal" className="text-xs text-gray-300 font-medium">
-              Tandai sebagai <span className="text-emerald-400 font-bold">For Sale</span> (Tampil tombol chat WA)
+              Mark as <span className="text-emerald-400 font-bold">For Sale</span> (Displays WhatsApp purchase button)
             </label>
           </div>
 
@@ -502,7 +502,7 @@ export const DiecastFormModal: React.FC<DiecastFormModalProps> = ({
             type="submit"
             className="w-full mt-2 bg-[#0066d6] hover:bg-blue-600 text-white font-black py-2.5 rounded-xl text-xs active:scale-95 transition-all shadow-lg uppercase tracking-wider"
           >
-            {isEditing ? 'Simpan Perubahan' : 'Simpan ke Garasi'}
+            {isEditing ? 'Save Changes' : 'Add to Garage'}
           </button>
         </form>
       </div>

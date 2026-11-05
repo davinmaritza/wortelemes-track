@@ -18,26 +18,26 @@ export const CollectorProfileView: React.FC = () => {
 
   const handleWhatsAppChat = () => {
     const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '6281234567890';
-    const text = 'Halo Wortelemes! Saya ingin bertanya mengenai koleksi diecast di garasi Anda.';
+    const text = 'Hello Wortelemes! I would like to inquire about your diecast collection in your garage.';
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   const faqs = [
     {
-      q: 'Apakah semua diecast dijamin original?',
-      a: '100% original resmi pabrik (Mattel/Hot Wheels/dll). Kami tidak pernah mengoleksi atau menjual barang tiruan, custom rekat ulang (reseal), atau loose palsu.',
+      q: 'Are all diecasts guaranteed 100% authentic?',
+      a: '100% genuine factory releases (Mattel, Hot Wheels, and authorized global distributors). We never collect or sell replicas, resealed custom cards, or counterfeit loose castings.',
     },
     {
-      q: 'Bagaimana standar penilaian kondisi card & blister?',
-      a: 'Setiap diecast diklasifikasikan secara jujur: Carded Mint (karton tegak lurus tanpa tekukan), Blister Soft Corner (ujung karton sedikit tertekan), atau Loose Mint (tanpa kemasan namun bodi mobil mulus tanpa cat terkelupas).',
+      q: 'What is your grading standard for card and blister condition?',
+      a: 'Every piece is classified transparently: Carded Mint (straight unbent cardstock), Blister Soft Corner (minor corner soft bend), or Loose Mint (flawless casting body and unchipped factory paint).',
     },
     {
-      q: 'Apakah bisa minta foto fisik detail sebelum checkout?',
-      a: 'Tentu saja! Anda dapat menghubungi WhatsApp kami untuk meminta foto close-up 4 sisi, kondisi rivet dasar, serta detail blister sebelum paket dikirim.',
+      q: 'Can I request close-up physical inspection photos before checkout?',
+      a: 'Absolutely! You can reach us directly on WhatsApp to request 4-sided high-resolution photos, base rivet inspection, and blister clarity checks before packing.',
     },
     {
-      q: 'Bagaimana standar proteksi packing paket?',
-      a: 'Semua pesanan dibungkus menggunakan kardus ganda tebal (double-wall corrugated) dan bubble wrap berlapis tebal secara gratis tanpa biaya tambahan agar carded tidak penyok di perjalanan ekspedisi.',
+      q: 'How are shipments packed and protected?',
+      a: 'Every order is packaged with heavy-duty double-wall corrugated cardboard and multi-layered bubble wrap at no additional charge to ensure zero transit damage.',
     },
   ];
 
@@ -65,7 +65,7 @@ export const CollectorProfileView: React.FC = () => {
         <div className="flex flex-col items-center md:items-start text-center md:text-left gap-2 flex-1">
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
-              GARASI WORTELEMES
+              WORTELEMES GARAGE
             </h1>
             <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30">
               <ShieldCheck className="w-3 h-3 text-blue-400" />
@@ -74,7 +74,7 @@ export const CollectorProfileView: React.FC = () => {
           </div>
 
           <p className="text-xs text-gray-400 leading-relaxed max-w-lg">
-            Kurator dan kolektor diecast skala 1:64 dengan fokus pada lini RLC, Silver Series, vintage castings, dan rilisan batch modern. Melayani adopsi koleksi, tukar tambah (WTT), dan konsultasi seputar diecast.
+            1:64 scale diecast curator and collector specializing in RLC, Silver Series, vintage castings, and modern releases. Open for acquisitions, trade inquiries (WTT), and collector consultations.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
@@ -83,10 +83,10 @@ export const CollectorProfileView: React.FC = () => {
               className="inline-flex items-center gap-2 bg-[#0066d6] hover:bg-blue-600 text-white font-bold text-xs px-5 py-2.5 rounded-full shadow-lg active:scale-95 transition-all"
             >
               <MessageCircle className="w-4 h-4" />
-              <span>Hubungi via WhatsApp</span>
+              <span>Contact on WhatsApp</span>
             </button>
             <span className="text-xs text-gray-400 font-mono">
-              Lokasi: Indonesia
+              Location: Indonesia (Worldwide Shipping)
             </span>
           </div>
         </div>
@@ -100,10 +100,10 @@ export const CollectorProfileView: React.FC = () => {
           </div>
           <div>
             <h3 className="text-xs font-black uppercase text-white tracking-wide">
-              100% Original
+              100% Authentic
             </h3>
             <p className="text-[11px] text-gray-400 mt-0.5 leading-snug">
-              Semua casting terverifikasi keasliannya dari distributor resmi.
+              Every casting is verified genuine from authorized official distribution channels.
             </p>
           </div>
         </div>
@@ -117,7 +117,7 @@ export const CollectorProfileView: React.FC = () => {
               Safe Box Packing
             </h3>
             <p className="text-[11px] text-gray-400 mt-0.5 leading-snug">
-              Kardus tebal & bubble wrap gratis untuk menjaga integritas blister.
+              Double-wall boxes & layered bubble wrap complimentary to preserve card integrity.
             </p>
           </div>
         </div>
@@ -128,10 +128,10 @@ export const CollectorProfileView: React.FC = () => {
           </div>
           <div>
             <h3 className="text-xs font-black uppercase text-white tracking-wide">
-              Kirim Se-Indonesia
+              Worldwide Shipping
             </h3>
             <p className="text-[11px] text-gray-400 mt-0.5 leading-snug">
-              Mendukung JNE, SiCepat, Paxel, serta opsi COD yang disepakati.
+              Domestic courier delivery (JNE, SiCepat, Paxel) and international tracked post.
             </p>
           </div>
         </div>
@@ -142,7 +142,7 @@ export const CollectorProfileView: React.FC = () => {
         <div className="flex items-center gap-2 pb-3 border-b border-white/5">
           <HelpCircle className="w-5 h-5 text-blue-400" />
           <h2 className="text-sm font-black uppercase text-white tracking-wide">
-            Pertanyaan yang Sering Diajukan (FAQ)
+            Frequently Asked Questions (FAQ)
           </h2>
         </div>
 

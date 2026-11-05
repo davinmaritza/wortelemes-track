@@ -31,7 +31,7 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '6281234567890';
-    const text = `Halo Wortelemes, saya tertarik dengan koleksi diecast *${item.name}* (${item.release_year}) seharga *${formatRupiah(item.sell_price)}*. Apakah unit ini masih ready?`;
+    const text = `Hello Wortelemes, I am interested in the diecast casting *${item.name}* (${item.release_year}) listed for *${formatRupiah(item.sell_price)}*. Is this item still available?`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
@@ -77,7 +77,7 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
             </span>
           ) : (
             <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-black/50 text-gray-400 border border-white/10 backdrop-blur-md">
-              Koleksi
+              Collection
             </span>
           )}
         </div>
@@ -94,7 +94,7 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
               ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 scale-100'
               : 'bg-black/40 text-gray-400 border border-white/10 hover:text-white opacity-0 group-hover:opacity-100'
           }`}
-          title="Tandai Favorit"
+          title="Toggle Favorite"
         >
           <Star className={`w-3 h-3 ${item.is_favorite ? 'fill-amber-400' : ''}`} />
         </button>
@@ -146,7 +146,7 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
         <div className="mt-1 pt-1.5 border-t border-white/[0.06] flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-[8.5px] font-bold text-gray-400 uppercase tracking-wider">
-              {item.is_for_sale ? 'Harga Pasaran' : 'Status'}
+              {item.is_for_sale ? 'Market Value' : 'Status'}
             </span>
             <span className="text-xs font-black text-white font-mono">
               {item.is_for_sale ? formatRupiah(item.sell_price) : 'NFS'}
@@ -159,23 +159,23 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
               type="button"
               onClick={handleWhatsAppClick}
               className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 text-[10px] font-black tracking-wide transition-all active:scale-95"
-              title="Pesan via WhatsApp"
+              title="Order via WhatsApp"
             >
               <MessageCircle className="w-3 h-3" />
-              <span>Beli</span>
+              <span>Buy</span>
             </button>
           ) : (
             <span className="inline-flex items-center gap-1 text-[10px] text-gray-400 font-semibold">
               <Eye className="w-3 h-3" />
-              <span>Detail</span>
+              <span>View</span>
             </span>
           )}
         </div>
 
-        {/* Modal Beli (Hanya jika admin login) */}
+        {/* Cost Price (Private admin only) */}
         {isAdmin && item.buy_price !== undefined && (
           <div className="flex items-center justify-between text-[10px] bg-red-950/50 px-2 py-0.5 rounded text-red-300 border border-red-900/40 mt-0.5">
-            <span className="font-bold text-red-400 text-[9px] uppercase">Modal:</span>
+            <span className="font-bold text-red-400 text-[9px] uppercase">Cost:</span>
             <span className="font-mono font-bold">{formatRupiah(item.buy_price)}</span>
           </div>
         )}

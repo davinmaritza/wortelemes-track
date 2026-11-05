@@ -56,7 +56,7 @@ export const SeriesSection: React.FC<SeriesSectionProps> = ({
               {currentCount} / {targetCount}
             </span>
             <span className="block text-[10px] text-gray-400 font-semibold">
-              {progressPercentage === 100 ? 'Set Lengkap' : `${progressPercentage}% Terkumpul`}
+              {progressPercentage === 100 ? 'Set Complete' : `${progressPercentage}% Collected`}
             </span>
           </div>
         </div>

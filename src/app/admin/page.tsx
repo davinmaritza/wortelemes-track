@@ -95,7 +95,7 @@ export default function AdminPage() {
   };
 
   const handleDeleteSingle = (id: string, name: string) => {
-    if (confirm(`Yakin ingin menghapus "${name}" dari garasi?`)) {
+    if (confirm(`Are you sure you want to remove "${name}" from the garage?`)) {
       setCollections((prev) => {
         const updated = prev.filter((item) => item.id !== id);
         saveStoredCollections(updated);
@@ -126,7 +126,7 @@ export default function AdminPage() {
   };
 
   const handleResetToDefault = () => {
-    if (confirm('Reset seluruh data ke katalog default awal? Perubahan kustom akan dihapus.')) {
+    if (confirm('Reset all garage inventory to default catalog? Custom changes will be restored to defaults.')) {
       const def = resetStoredCollections();
       setCollections(def);
       setSelectedIds([]);
@@ -171,7 +171,7 @@ export default function AdminPage() {
     if (selectedIds.length === 0) return;
     if (
       confirm(
-        `PERINGATAN: Yakin ingin menghapus massal ${selectedIds.length} diecast yang dipilih?`
+        `WARNING: Are you sure you want to delete ${selectedIds.length} selected vehicles?`
       )
     ) {
       setCollections((prev) => {
@@ -212,10 +212,10 @@ export default function AdminPage() {
           </div>
 
           <h1 className="text-xl font-black uppercase tracking-tight text-white text-center">
-            GARASI ADMIN PORTAL
+            ADMIN GARAGE PORTAL
           </h1>
           <p className="text-xs text-gray-400 text-center mt-1 mb-6 leading-relaxed">
-            Akses privat khusus pemilik untuk kelola modal rahasia, valuasi pasar, penyesuaian harga, dan CRUD koleksi.
+            Private owner access to manage private cost records, market values, rapid price adjustments, and inventory.
           </p>
 
           <form onSubmit={handleVerifyPin} className="w-full flex flex-col gap-3">
@@ -239,7 +239,7 @@ export default function AdminPage() {
               />
               {pinError && (
                 <span className="text-red-400 text-xs text-center block mt-1.5 font-medium">
-                  PIN salah. Coba default: 1234
+                  Invalid PIN. Try default: 1234
                 </span>
               )}
             </div>
@@ -248,7 +248,7 @@ export default function AdminPage() {
               type="submit"
               className="w-full mt-2 bg-[#0066d6] hover:bg-blue-600 active:scale-98 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg"
             >
-              Masuk Dashboard Admin
+              Access Admin Dashboard
             </button>
 
             <Link
@@ -256,7 +256,7 @@ export default function AdminPage() {
               className="text-xs text-gray-500 hover:text-gray-300 text-center mt-2 flex items-center justify-center gap-1 transition-colors"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
-              Kembali ke Galeri Publik
+              Back to Public Showcase
             </Link>
           </form>
         </div>
@@ -289,13 +289,13 @@ export default function AdminPage() {
             className="flex items-center gap-1.5 bg-[#0066d6] hover:bg-blue-600 text-white font-black text-xs px-3.5 py-2 rounded-xl active:scale-95 transition-all shadow"
           >
             <Plus className="w-4 h-4" />
-            <span>Tambah Mobil</span>
+            <span>Add Vehicle</span>
           </button>
 
           <button
             onClick={handleResetToDefault}
             className="hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-white bg-[#1a1d26] border border-[#242735] px-2.5 py-2 rounded-xl transition-colors"
-            title="Reset ke katalog default"
+            title="Reset to default catalog"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset Default</span>
@@ -306,7 +306,7 @@ export default function AdminPage() {
             className="flex items-center gap-1 text-xs text-gray-300 hover:text-white bg-[#1a1d26] border border-[#242735] px-3 py-2 rounded-xl transition-colors font-medium"
           >
             <ExternalLink className="w-3.5 h-3.5 text-blue-400" />
-            <span className="hidden sm:inline">Web Publik</span>
+            <span className="hidden sm:inline">Public Showcase</span>
           </Link>
 
           <button
@@ -314,7 +314,7 @@ export default function AdminPage() {
             className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 bg-red-950/30 border border-red-900/30 px-3 py-2 rounded-xl transition-colors font-bold"
           >
             <Unlock className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Keluar</span>
+            <span className="hidden sm:inline">Sign Out</span>
           </button>
         </div>
       </header>
@@ -331,14 +331,14 @@ export default function AdminPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-black uppercase text-white tracking-tight">
-                  Kelola Inventori & Penyesuaian Harga
+                  Inventory & Pricing Management
                 </h2>
                 <span className="text-[11px] font-mono font-bold bg-[#1e212b] text-gray-300 px-2 py-0.5 rounded-full border border-[#2d3142]">
-                  {collections.length} Unit
+                  {collections.length} Units
                 </span>
               </div>
               <p className="text-xs text-gray-400 mt-0.5">
-                Edit data mobil, ubah harga modal & harga jual, centang select all untuk hapus massal.
+                Manage vehicles, adjust cost and market prices, toggle sale availability, and perform bulk operations.
               </p>
             </div>
 
@@ -350,7 +350,7 @@ export default function AdminPage() {
                 onChange={(e) => setTierFilter(e.target.value)}
                 className="bg-[#1a1d26] border border-[#242735] rounded-xl px-2.5 py-2 text-xs text-gray-200 focus:outline-none focus:border-[#0066d6]"
               >
-                <option value="all">Semua Tier</option>
+                <option value="all">All Tiers</option>
                 <option value="Mainline">Mainline</option>
                 <option value="Silver Series">Silver Series</option>
                 <option value="RLC">RLC</option>
@@ -366,7 +366,7 @@ export default function AdminPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari model atau seri..."
+                  placeholder="Search vehicle or series..."
                   className="w-full bg-[#1a1d26] border border-[#242735] rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#0066d6]"
                 />
               </div>
@@ -379,7 +379,7 @@ export default function AdminPage() {
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
                 <span className="text-xs font-bold text-red-300">
-                  {selectedIds.length} mobil dipilih
+                  {selectedIds.length} vehicles selected
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -400,13 +400,13 @@ export default function AdminPage() {
                   className="bg-red-600 hover:bg-red-700 active:scale-95 text-white text-[11px] font-black px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all shadow"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
-                  <span>Hapus ({selectedIds.length})</span>
+                  <span>Delete ({selectedIds.length})</span>
                 </button>
                 <button
                   onClick={() => setSelectedIds([])}
                   className="text-xs text-gray-400 hover:text-white px-2 py-1"
                 >
-                  Batal
+                  Cancel
                 </button>
               </div>
             </div>
@@ -423,7 +423,7 @@ export default function AdminPage() {
                       type="button"
                       onClick={handleToggleSelectAll}
                       className="text-gray-400 hover:text-white transition-colors"
-                      title={allFilteredSelected ? 'Batalkan pilihan semua' : 'Pilih semua'}
+                      title={allFilteredSelected ? 'Deselect all' : 'Select all'}
                     >
                       {allFilteredSelected ? (
                         <CheckSquare className="w-4 h-4 text-[#0066d6]" />
@@ -432,21 +432,21 @@ export default function AdminPage() {
                       )}
                     </button>
                   </th>
-                  <th className="py-3 px-3">Mobil</th>
-                  <th className="py-3 px-3">Seri / Tier</th>
-                  <th className="py-3 px-3">Kondisi</th>
-                  <th className="py-3 px-3">Modal Beli (Privat)</th>
-                  <th className="py-3 px-3">Harga Pasaran</th>
-                  <th className="py-3 px-3">Margin Profit</th>
-                  <th className="py-3 px-3">Status Jual</th>
-                  <th className="py-3 px-3 text-right">Aksi & Sesuaikan</th>
+                  <th className="py-3 px-3">Vehicle</th>
+                  <th className="py-3 px-3">Series / Tier</th>
+                  <th className="py-3 px-3">Condition</th>
+                  <th className="py-3 px-3">Cost Price (Private)</th>
+                  <th className="py-3 px-3">Market Value</th>
+                  <th className="py-3 px-3">Profit Margin</th>
+                  <th className="py-3 px-3">Sale Status</th>
+                  <th className="py-3 px-3 text-right">Actions & Adjust</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#242735]/60 bg-[#14151b]">
                 {filteredItems.length === 0 ? (
                   <tr>
                     <td colSpan={9} className="py-8 text-center text-gray-500">
-                      Tidak ada diecast yang sesuai dengan pencarian.
+                      No vehicles found matching your criteria.
                     </td>
                   </tr>
                 ) : (
@@ -555,7 +555,7 @@ export default function AdminPage() {
                             <button
                               onClick={() => setPriceEditingItem(item)}
                               className="p-1.5 rounded-lg bg-emerald-950/40 text-emerald-400 hover:bg-emerald-900/60 transition-colors border border-emerald-800/30"
-                              title="Sesuaikan Harga Cepat"
+                              title="Quick Price Adjust"
                             >
                               <DollarSign className="w-3.5 h-3.5" />
                             </button>
@@ -567,7 +567,7 @@ export default function AdminPage() {
                                 setShowFormModal(true);
                               }}
                               className="p-1.5 rounded-lg bg-[#242735] text-gray-200 hover:bg-[#0066d6] hover:text-white transition-colors"
-                              title="Edit Data Mobil"
+                              title="Edit Vehicle"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
                             </button>
@@ -576,7 +576,7 @@ export default function AdminPage() {
                             <button
                               onClick={() => handleDeleteSingle(item.id, item.name)}
                               className="p-1.5 rounded-lg bg-red-950/30 text-red-400 hover:bg-red-900/50 hover:text-red-200 transition-colors border border-red-900/20"
-                              title="Hapus Mobil"
+                              title="Delete Vehicle"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
