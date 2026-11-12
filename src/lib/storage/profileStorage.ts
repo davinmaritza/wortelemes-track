@@ -56,8 +56,33 @@ export const defaultProfile: CollectorProfile = {
 
 const STORAGE_KEY = 'wortelemes_collector_profile_v1';
 
+let hasKickedOffProfileSync = false;
+
+export async function syncProfileFromCloud(): Promise<void> {
+  if (typeof window === 'undefined') return;
+  try {
+    const res = await fetch('/api/profile', { cache: 'no-store' });
+    if (!res.ok) return;
+    const json = await res.json();
+    if (json.success && json.profile) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(json.profile));
+      window.dispatchEvent(new CustomEvent('collector-profile-updated', { detail: json.profile }));
+    }
+  } catch (err) {
+    console.warn('Could not sync profile from cloud, using cache:', err);
+  }
+}
+
 export function getStoredProfile(): CollectorProfile {
   if (typeof window === 'undefined') return defaultProfile;
+
+  if (!hasKickedOffProfileSync) {
+    hasKickedOffProfileSync = true;
+    setTimeout(() => {
+      syncProfileFromCloud().catch(() => {});
+    }, 200);
+  }
+
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
@@ -82,6 +107,12 @@ export function saveStoredProfile(profile: CollectorProfile): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
     window.dispatchEvent(new CustomEvent('collector-profile-updated', { detail: profile }));
+
+    fetch('/api/profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profile),
+    }).catch((e) => console.error('Failed to sync profile to cloud:', e));
   } catch (err) {
     console.error('Error saving collector profile to localStorage:', err);
   }

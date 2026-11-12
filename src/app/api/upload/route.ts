@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
 import path from 'path';
+import fs from 'fs';
+import { r2Client, uploadToR2 } from '@/lib/r2';
 
-// Security invariants for file uploads
+// Strict security invariants for image uploads
 const ALLOWED_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif']);
 const ALLOWED_MIME_TYPES = new Set([
   'image/png',
@@ -10,7 +11,7 @@ const ALLOWED_MIME_TYPES = new Set([
   'image/webp',
   'image/gif',
 ]);
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,13 +25,14 @@ export async function POST(req: NextRequest) {
     // 1. File Size Verification
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: 'File size exceeds maximum allowed limit of 5MB' },
+        { error: 'File size exceeds maximum allowed limit of 10MB' },
         { status: 413 }
       );
     }
 
     // 2. MIME Type Verification
-    if (!ALLOWED_MIME_TYPES.has(file.type.toLowerCase())) {
+    const mimeType = file.type.toLowerCase();
+    if (!ALLOWED_MIME_TYPES.has(mimeType)) {
       return NextResponse.json(
         { error: 'Invalid file type. Only PNG, JPG, JPEG, WEBP, and GIF images are permitted.' },
         { status: 415 }
@@ -50,7 +52,6 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     // 4. Magic Bytes Inspection (Anti-spoofing)
-    // PNG: 89 50 4E 47 | JPEG: FF D8 FF | GIF: 47 49 46 | WEBP: 52 49 46 46 (RIFF)
     const isPng = buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47;
     const isJpg = buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
     const isGif = buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46;
@@ -71,11 +72,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 5. Unique, unguessable filename (prevent path traversal / overwrites)
+    // 5. Unique, unguessable filename
     const randomSuffix = Math.random().toString(36).substring(2, 10);
     const uniqueFilename = `diecast_${Date.now()}_${randomSuffix}${ext}`;
 
-    // 6. Resilient Storage Strategy (Local disk + Vercel / Serverless fallback)
+    // 6. Primary Destination: Cloudflare R2 Object Storage
+    if (r2Client) {
+      try {
+        const r2Result = await uploadToR2(buffer, uniqueFilename, mimeType);
+        return NextResponse.json({
+          success: true,
+          url: r2Result.url,
+          filename: uniqueFilename,
+          storage: 'cloudflare-r2',
+        });
+      } catch (r2Error: any) {
+        console.error('Cloudflare R2 upload error, falling back:', r2Error?.message);
+      }
+    }
+
+    // 7. Secondary / Local Fallback (Development or offline mode)
     try {
       const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
       if (!fs.existsSync(uploadsDir)) {
@@ -89,19 +105,18 @@ export async function POST(req: NextRequest) {
         success: true,
         url: `/uploads/${uniqueFilename}`,
         filename: uniqueFilename,
+        storage: 'local-filesystem',
       });
     } catch (fsError: any) {
-      // If filesystem is read-only (such as Vercel serverless environment),
-      // encode as safe Base64 Data URL so uploads never fail!
-      console.warn('Filesystem write not available, using base64 data URI fallback:', fsError?.message);
-      const mime = file.type || 'image/png';
+      console.warn('Filesystem write unavailable, using base64 data URI fallback:', fsError?.message);
       const base64Data = buffer.toString('base64');
-      const dataUri = `data:${mime};base64,${base64Data}`;
+      const dataUri = `data:${mimeType};base64,${base64Data}`;
 
       return NextResponse.json({
         success: true,
         url: dataUri,
         filename: uniqueFilename,
+        storage: 'inline-data-uri',
       });
     }
   } catch (error: any) {

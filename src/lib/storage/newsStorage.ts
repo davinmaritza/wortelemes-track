@@ -103,8 +103,38 @@ export const defaultUpcomingDrops: UpcomingDropItem[] = [
   },
 ];
 
+let hasKickedOffNewsSync = false;
+
+export async function syncNewsFromCloud(): Promise<void> {
+  if (typeof window === 'undefined') return;
+  try {
+    const res = await fetch('/api/news', { cache: 'no-store' });
+    if (!res.ok) return;
+    const json = await res.json();
+    if (json.success) {
+      if (Array.isArray(json.articles) && json.articles.length > 0) {
+        localStorage.setItem(ARTICLES_STORAGE_KEY, JSON.stringify(json.articles));
+      }
+      if (Array.isArray(json.drops) && json.drops.length > 0) {
+        localStorage.setItem(DROPS_STORAGE_KEY, JSON.stringify(json.drops));
+      }
+      window.dispatchEvent(new CustomEvent('journal-data-updated'));
+    }
+  } catch (err) {
+    console.warn('Could not sync news from cloud, using cache:', err);
+  }
+}
+
 export function getStoredArticles(): ArticleItem[] {
   if (typeof window === 'undefined') return defaultArticles;
+
+  if (!hasKickedOffNewsSync) {
+    hasKickedOffNewsSync = true;
+    setTimeout(() => {
+      syncNewsFromCloud().catch(() => {});
+    }, 150);
+  }
+
   try {
     const raw = localStorage.getItem(ARTICLES_STORAGE_KEY);
     if (!raw) {
@@ -124,6 +154,15 @@ export function saveStoredArticles(items: ArticleItem[]): void {
   try {
     localStorage.setItem(ARTICLES_STORAGE_KEY, JSON.stringify(items));
     window.dispatchEvent(new CustomEvent('journal-data-updated'));
+
+    // Sync latest to cloud
+    items.forEach((art) => {
+      fetch('/api/news', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'article', data: art }),
+      }).catch((e) => console.error('Failed to sync article to cloud:', e));
+    });
   } catch (err) {
     console.error('Error saving articles to localStorage:', err);
   }
@@ -150,6 +189,15 @@ export function saveStoredDrops(items: UpcomingDropItem[]): void {
   try {
     localStorage.setItem(DROPS_STORAGE_KEY, JSON.stringify(items));
     window.dispatchEvent(new CustomEvent('journal-data-updated'));
+
+    // Sync latest drops to cloud
+    items.forEach((drop) => {
+      fetch('/api/news', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'drop', data: drop }),
+      }).catch((e) => console.error('Failed to sync drop to cloud:', e));
+    });
   } catch (err) {
     console.error('Error saving drops to localStorage:', err);
   }

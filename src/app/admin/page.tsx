@@ -146,6 +146,9 @@ export default function AdminPage() {
         return updated;
       });
       setSelectedIds((prev) => prev.filter((item) => item !== id));
+      fetch(`/api/inventory?id=${encodeURIComponent(id)}`, { method: 'DELETE' }).catch((e) =>
+        console.error('Failed to delete item from cloud:', e)
+      );
     }
   };
 
@@ -197,6 +200,9 @@ export default function AdminPage() {
         saveStoredArticles(updated);
         return updated;
       });
+      fetch(`/api/news?type=article&id=${encodeURIComponent(id)}`, { method: 'DELETE' }).catch((e) =>
+        console.error('Failed to delete article from cloud:', e)
+      );
     }
   };
 
@@ -220,6 +226,9 @@ export default function AdminPage() {
         saveStoredDrops(updated);
         return updated;
       });
+      fetch(`/api/news?type=drop&id=${encodeURIComponent(id)}`, { method: 'DELETE' }).catch((e) =>
+        console.error('Failed to delete drop from cloud:', e)
+      );
     }
   };
 
