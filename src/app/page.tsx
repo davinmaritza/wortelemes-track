@@ -17,6 +17,8 @@ import {
   Flame,
   LayoutGrid,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Compass,
   Newspaper,
   User,
@@ -75,6 +77,20 @@ export default function Home() {
     if (selectedSort === 'name-asc') return a.name.localeCompare(b.name);
     return b.release_year - a.release_year;
   });
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(12);
+
+  // Reset to page 1 whenever filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedTier, filterForSaleOnly, garageSubTab, selectedSort, itemsPerPage]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedItems.length / itemsPerPage));
+  const validCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (validCurrentPage - 1) * itemsPerPage;
+  const paginatedItems = sortedItems.slice(startIndex, startIndex + itemsPerPage);
 
   const handleUpdateQty = (id: string, delta: number) => {
     setCollections((prev) => {
@@ -324,7 +340,7 @@ export default function Home() {
             </div>
 
             {/* Counter & Status Bar */}
-            <div className="flex items-center justify-between py-1 text-xs text-gray-400 font-medium mb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-1 text-xs text-gray-400 font-medium mb-3">
               <div className="flex items-center gap-2">
                 <span className="text-white font-mono font-bold">
                   {sortedItems.length} Vehicles
@@ -333,14 +349,33 @@ export default function Home() {
                 <span>{collections.filter((c) => c.is_for_sale).length} Available For Purchase</span>
               </div>
 
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="text-[11px] text-gray-400 hover:text-white underline"
-                >
-                  Clear search
-                </button>
-              )}
+              <div className="flex items-center gap-3">
+                {/* Per-Page Selector */}
+                {garageSubTab !== 'Series' && sortedItems.length > 0 && (
+                  <div className="flex items-center gap-1.5 bg-[#12131a] px-2.5 py-1 rounded-xl border border-white/[0.06]">
+                    <span className="text-[10px] uppercase font-mono text-gray-400">Per page:</span>
+                    <select
+                      value={itemsPerPage}
+                      onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                      className="bg-transparent text-white font-mono text-xs focus:outline-none cursor-pointer"
+                    >
+                      <option value={8} className="bg-[#12131a] text-white">8</option>
+                      <option value={12} className="bg-[#12131a] text-white">12</option>
+                      <option value={24} className="bg-[#12131a] text-white">24</option>
+                      <option value={48} className="bg-[#12131a] text-white">48</option>
+                    </select>
+                  </div>
+                )}
+
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="text-[11px] text-gray-400 hover:text-white underline"
+                  >
+                    Clear search
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* SUB-TAB DISPLAY */}
@@ -369,22 +404,87 @@ export default function Home() {
                     <p className="text-xs">No vehicles found.</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-3.5">
-                    {sortedItems.map((item) => (
-                      <div
-                        key={item.id}
-                        onClick={() => setSelectedCar(item)}
-                        className="cursor-pointer"
-                      >
-                        <DiecastCard
-                          item={item}
-                          isAdmin={false}
-                          onUpdateQty={handleUpdateQty}
-                          onToggleFavorite={handleToggleFavorite}
-                        />
+                  <>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-3.5">
+                      {paginatedItems.map((item) => (
+                        <div
+                          key={item.id}
+                          onClick={() => setSelectedCar(item)}
+                          className="cursor-pointer"
+                        >
+                          <DiecastCard
+                            item={item}
+                            isAdmin={false}
+                            onUpdateQty={handleUpdateQty}
+                            onToggleFavorite={handleToggleFavorite}
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Pagination Controls */}
+                    {totalPages > 1 && (
+                      <div className="mt-8 pt-4 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span className="text-xs font-mono text-gray-400">
+                          Showing {startIndex + 1}–{Math.min(startIndex + itemsPerPage, sortedItems.length)} of {sortedItems.length} vehicles
+                        </span>
+
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                            disabled={validCurrentPage === 1}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-white/[0.08] text-gray-300 hover:text-white border border-white/[0.08] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                          >
+                            <ChevronLeft className="w-3.5 h-3.5" />
+                            <span>Prev</span>
+                          </button>
+
+                          {/* Page Buttons */}
+                          <div className="flex items-center gap-1">
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                              .filter((page) => {
+                                return (
+                                  page === 1 ||
+                                  page === totalPages ||
+                                  Math.abs(page - validCurrentPage) <= 1
+                                );
+                              })
+                              .map((page, idx, arr) => {
+                                const prevPage = arr[idx - 1];
+                                const showEllipsis = prevPage && page - prevPage > 1;
+
+                                return (
+                                  <React.Fragment key={page}>
+                                    {showEllipsis && (
+                                      <span className="px-1 text-xs text-gray-600 font-mono">...</span>
+                                    )}
+                                    <button
+                                      onClick={() => setCurrentPage(page)}
+                                      className={`w-8 h-8 rounded-xl text-xs font-mono font-bold transition-all ${
+                                        page === validCurrentPage
+                                          ? 'bg-white text-black shadow-sm'
+                                          : 'bg-white/[0.04] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
+                                      }`}
+                                    >
+                                      {page}
+                                    </button>
+                                  </React.Fragment>
+                                );
+                              })}
+                          </div>
+
+                          <button
+                            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                            disabled={validCurrentPage === totalPages}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-white/[0.08] text-gray-300 hover:text-white border border-white/[0.08] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                          >
+                            <span>Next</span>
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  </>
                 )}
               </div>
             )}

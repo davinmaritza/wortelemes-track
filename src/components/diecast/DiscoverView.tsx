@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { CollectionItem } from '@/types/diecast';
-import { Search, ArrowUpRight } from 'lucide-react';
+import { Search, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { DiecastCard } from './DiecastCard';
 
 interface DiscoverViewProps {
@@ -52,6 +52,19 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
   const sthCars = cars.filter((c) => c.tier_badge?.toUpperCase().includes('TREASURE') || c.tier_badge?.toUpperCase().includes('STH'));
   const forSaleCars = cars.filter((c) => c.is_for_sale);
   const spotlightCar = rlcCars[0] || cars[0];
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, activeCategory, itemsPerPage]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredCars.length / itemsPerPage));
+  const validCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (validCurrentPage - 1) * itemsPerPage;
+  const paginatedCars = filteredCars.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="flex flex-col gap-6 pb-20 w-full max-w-7xl mx-auto">
@@ -185,9 +198,25 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
               ? 'Available Units'
               : 'Complete Catalog'}
           </h2>
-          <span className="text-xs text-gray-500 font-mono">
-            {filteredCars.length} Models
-          </span>
+          <div className="flex items-center gap-3">
+            {filteredCars.length > 0 && (
+              <div className="flex items-center gap-1.5 bg-[#111219] px-2.5 py-1 rounded-xl border border-white/[0.06]">
+                <span className="text-[10px] uppercase font-mono text-gray-400">Per page:</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                  className="bg-transparent text-white font-mono text-xs focus:outline-none cursor-pointer"
+                >
+                  <option value={10} className="bg-[#111219] text-white">10</option>
+                  <option value={20} className="bg-[#111219] text-white">20</option>
+                  <option value={30} className="bg-[#111219] text-white">30</option>
+                </select>
+              </div>
+            )}
+            <span className="text-xs text-gray-500 font-mono">
+              {filteredCars.length} Models
+            </span>
+          </div>
         </div>
 
         {filteredCars.length === 0 ? (
@@ -195,22 +224,87 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
             <p className="text-xs font-mono">No matching diecasts found in vault.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {filteredCars.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => onSelectCar(item)}
-                className="cursor-pointer"
-              >
-                <DiecastCard
-                  item={item}
-                  isAdmin={isAdmin}
-                  onUpdateQty={onUpdateQty}
-                  onToggleFavorite={onToggleFavorite}
-                />
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {paginatedCars.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => onSelectCar(item)}
+                  className="cursor-pointer"
+                >
+                  <DiecastCard
+                    item={item}
+                    isAdmin={isAdmin}
+                    onUpdateQty={onUpdateQty}
+                    onToggleFavorite={onToggleFavorite}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-8 pt-4 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
+                <span className="text-xs font-mono text-gray-400">
+                  Showing {startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredCars.length)} of {filteredCars.length} models
+                </span>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={validCurrentPage === 1}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-white/[0.08] text-gray-300 hover:text-white border border-white/[0.08] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                    <span>Prev</span>
+                  </button>
+
+                  {/* Page Buttons */}
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter((page) => {
+                        return (
+                          page === 1 ||
+                          page === totalPages ||
+                          Math.abs(page - validCurrentPage) <= 1
+                        );
+                      })
+                      .map((page, idx, arr) => {
+                        const prevPage = arr[idx - 1];
+                        const showEllipsis = prevPage && page - prevPage > 1;
+
+                        return (
+                          <React.Fragment key={page}>
+                            {showEllipsis && (
+                              <span className="px-1 text-xs text-gray-600 font-mono">...</span>
+                            )}
+                            <button
+                              onClick={() => setCurrentPage(page)}
+                              className={`w-8 h-8 rounded-xl text-xs font-mono font-bold transition-all ${
+                                page === validCurrentPage
+                                  ? 'bg-white text-black shadow-sm'
+                                  : 'bg-white/[0.04] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          </React.Fragment>
+                        );
+                      })}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={validCurrentPage === totalPages}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-white/[0.08] text-gray-300 hover:text-white border border-white/[0.08] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  >
+                    <span>Next</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
     </div>

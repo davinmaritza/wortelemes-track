@@ -32,6 +32,7 @@ import {
   Edit3,
   Search,
   ChevronLeft,
+  ChevronRight,
   DollarSign,
   TrendingUp,
   Package,
@@ -68,6 +69,10 @@ export default function AdminPage() {
 
   // Multi-Selection State for Select All / Bulk Delete
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  // Table Pagination State
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(15);
 
   // Diecast Modals State
   const [showFormModal, setShowFormModal] = useState(false);
@@ -235,6 +240,15 @@ export default function AdminPage() {
     const matchesTier = tierFilter === 'all' || item.tier_badge === tierFilter;
     return matchesSearch && matchesTier;
   });
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, tierFilter, itemsPerPage]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / itemsPerPage));
+  const validCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (validCurrentPage - 1) * itemsPerPage;
+  const paginatedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
 
   // Checkbox Select All Logic
   const allFilteredSelected =
@@ -641,7 +655,7 @@ export default function AdminPage() {
                     </td>
                   </tr>
                 ) : (
-                  filteredItems.map((item) => {
+                  paginatedItems.map((item) => {
                     const profit = (item.sell_price || 0) - (item.buy_price || 0);
                     const marginPercent =
                       item.buy_price && item.buy_price > 0
@@ -780,6 +794,85 @@ export default function AdminPage() {
               </tbody>
             </table>
           </div>
+
+          {/* Table Pagination Bar */}
+          {filteredItems.length > 0 && (
+            <div className="p-4 bg-[#14151b] border-t border-[#242735] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-3">
+                <span className="text-gray-400 font-mono">
+                  Showing {startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredItems.length)} of {filteredItems.length} vehicles
+                </span>
+                <div className="flex items-center gap-1.5 bg-[#12141c] px-2.5 py-1 rounded-lg border border-[#242735]">
+                  <span className="text-[10px] text-gray-500 font-mono uppercase">Per page:</span>
+                  <select
+                    value={itemsPerPage}
+                    onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                    className="bg-transparent text-white font-mono text-xs focus:outline-none cursor-pointer"
+                  >
+                    <option value={10} className="bg-[#14151b] text-white">10</option>
+                    <option value={15} className="bg-[#14151b] text-white">15</option>
+                    <option value={25} className="bg-[#14151b] text-white">25</option>
+                    <option value={50} className="bg-[#14151b] text-white">50</option>
+                  </select>
+                </div>
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={validCurrentPage === 1}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1e212b] hover:bg-[#2d3142] text-gray-300 hover:text-white border border-[#2d3142] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                    <span>Prev</span>
+                  </button>
+
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter((page) => {
+                        return (
+                          page === 1 ||
+                          page === totalPages ||
+                          Math.abs(page - validCurrentPage) <= 1
+                        );
+                      })
+                      .map((page, idx, arr) => {
+                        const prevPage = arr[idx - 1];
+                        const showEllipsis = prevPage && page - prevPage > 1;
+
+                        return (
+                          <React.Fragment key={page}>
+                            {showEllipsis && (
+                              <span className="px-1 text-xs text-gray-600 font-mono">...</span>
+                            )}
+                            <button
+                              onClick={() => setCurrentPage(page)}
+                              className={`w-7 h-7 rounded-lg text-xs font-mono font-bold transition-all ${
+                                page === validCurrentPage
+                                  ? 'bg-white text-black shadow-sm'
+                                  : 'bg-[#1e212b] text-gray-400 hover:text-white border border-[#2d3142]'
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          </React.Fragment>
+                        );
+                      })}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={validCurrentPage === totalPages}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1e212b] hover:bg-[#2d3142] text-gray-300 hover:text-white border border-[#2d3142] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  >
+                    <span>Next</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
           </>
         ) : activeAdminTab === 'journal' ? (
