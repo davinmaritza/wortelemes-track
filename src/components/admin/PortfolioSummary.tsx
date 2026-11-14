@@ -24,58 +24,58 @@ export const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ items }) => 
   const profitMarginPercent = totalModal > 0 ? Math.round((totalPotentialProfit / totalModal) * 100) : 0;
 
   return (
-    <div className="bg-[#12141c] border border-white/[0.08] rounded-2xl p-4 mb-4 flex flex-col gap-3 shadow-sm">
+    <div className="bg-[#12131a] border border-white/[0.08] rounded-xl p-4 mb-4 flex flex-col gap-3 shadow-sm">
       <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-amber-400" />
           <h2 className="text-white text-xs font-semibold uppercase tracking-wider">
-            Portfolio & Financial Ledger
+            Ringkasan Koleksi Garasi
           </h2>
         </div>
-        <span className="text-[10px] bg-amber-400/10 text-amber-300 border border-amber-400/20 px-2 py-0.5 rounded-full font-mono font-medium">
-          Confidential
+        <span className="text-[10px] bg-white/[0.05] text-gray-300 border border-white/10 px-2 py-0.5 rounded-md font-mono">
+          Privat
         </span>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         {/* Total Koleksi */}
-        <div className="bg-[#0b0c10] p-3 rounded-xl border border-white/[0.06]">
+        <div className="bg-[#0e0f14] p-3 rounded-lg border border-white/[0.06]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
-            <Package className="w-3.5 h-3.5 text-white/60" />
-            <span>Total Units</span>
+            <Package className="w-3.5 h-3.5 text-gray-400" />
+            <span>Total Koleksi</span>
           </div>
           <div className="text-white font-bold text-base font-mono">
-            {totalItems} <span className="text-xs font-normal text-gray-400">pcs</span>
+            {totalItems} <span className="text-xs font-normal text-gray-400">unit</span>
           </div>
         </div>
 
         {/* Total Modal */}
-        <div className="bg-[#0b0c10] p-3 rounded-xl border border-white/[0.06]">
+        <div className="bg-[#0e0f14] p-3 rounded-lg border border-white/[0.06]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
             <DollarSign className="w-3.5 h-3.5 text-gray-400" />
-            <span>Total Cost</span>
+            <span>Total Modal</span>
           </div>
           <div className="text-white font-bold text-sm sm:text-base font-mono truncate">
             {formatRupiah(totalModal)}
           </div>
         </div>
 
-        {/* Total Valuasi Pasar */}
-        <div className="bg-[#0b0c10] p-3 rounded-xl border border-white/[0.06]">
+        {/* Total Nilai Jual */}
+        <div className="bg-[#0e0f14] p-3 rounded-lg border border-white/[0.06]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
             <TrendingUp className="w-3.5 h-3.5 text-gray-400" />
-            <span>Market Valuation</span>
+            <span>Estimasi Nilai Jual</span>
           </div>
           <div className="text-white font-bold text-sm sm:text-base font-mono truncate">
             {formatRupiah(totalValuasi)}
           </div>
         </div>
 
-        {/* Potensi Margin Profit */}
-        <div className="bg-[#0b0c10] p-3 rounded-xl border border-white/[0.06]">
+        {/* Potensi Margin */}
+        <div className="bg-[#0e0f14] p-3 rounded-lg border border-white/[0.06]">
           <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mb-1">
             <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Potential Margin</span>
+            <span>Potensi Selisih</span>
           </div>
           <div className="text-emerald-400 font-bold text-sm sm:text-base font-mono truncate">
             +{formatRupiah(totalPotentialProfit)}

@@ -3,54 +3,54 @@
 import { CollectorProfile } from '@/types/diecast';
 
 export const defaultProfile: CollectorProfile = {
-  garageName: 'WORTELEMES GARAGE',
-  collectorBadge: 'Verified Collector',
-  bio: '1:64 scale diecast curator and collector specializing in RLC, Silver Series, vintage castings, and modern releases. Open for acquisitions, trade inquiries (WTT), and collector consultations.',
+  garageName: 'Wortelemes Garage',
+  collectorBadge: 'Kolektor 1:64',
+  bio: 'Koleksi pribadi dan jual santai diecast skala 1:64. Fokus Hot Wheels (RLC, Super Treasure Hunt, Boulevard, Mainline) dan rilisan diecast pilihan. Semua unit original dan kondisi fisik sesuai deskripsi.',
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '',
   isWhatsAppOrderEnabled: false, // Default to disabled as requested
-  location: 'Indonesia (Worldwide Shipping)',
+  location: 'Indonesia',
   avatarUrl: '/logo.png',
   instagramHandle: '@wortelemes',
   pillars: [
     {
       id: 'pillar-1',
       icon: 'award',
-      title: '100% Authentic',
-      description: 'Every casting is verified genuine from authorized official distribution channels.',
+      title: '100% Original',
+      description: 'Semua unit dijamin original Hot Wheels / Mattel resmi. Bukan custom atau repro.',
     },
     {
       id: 'pillar-2',
       icon: 'package',
-      title: 'Safe Box Packing',
-      description: 'Double-wall boxes and corner guards included on every order.',
+      title: 'Packing Standar Kolektor',
+      description: 'Kardus tebal double-wall dan bubble wrap berlapis agar bubble tidak pecah & card aman.',
     },
     {
       id: 'pillar-3',
       icon: 'truck',
-      title: 'Worldwide Shipping',
-      description: 'Domestic courier delivery (JNE, SiCepat, Paxel) and international tracked post.',
+      title: 'Kirim Seluruh Indonesia',
+      description: 'Melayani kirim ke seluruh Indonesia via ekspedisi terpercaya (JNE, SiCepat, J&T, Paxel).',
     },
   ],
   faqs: [
     {
       id: 'faq-1',
-      q: 'Are all diecasts guaranteed 100% authentic?',
-      a: 'Every model comes directly from factory cases and authorized distribution. We do not stock reproductions, resealed cards, or custom clones.',
+      q: 'Apakah semua diecast dijamin original?',
+      a: 'Ya, semua diecast kami dapatkan langsung dari distributor resmi atau sesama kolektor terpercaya. Tidak menjual barang tiruan, reseal, atau repro.',
     },
     {
       id: 'faq-2',
-      q: 'What is your grading standard for card and blister condition?',
-      a: 'Every piece is classified transparently: Carded Mint (straight unbent cardstock), Blister Soft Corner (minor corner soft bend), or Loose Mint (flawless casting body and unchipped factory paint).',
+      q: 'Bagaimana standar penilaian kondisi card dan blister?',
+      a: 'Kondisi dicantumkan jelas: Carded Mint (karton tegak bubble mulus), Soft Corner (ujung karton agak melengkung wajar), atau Loose (unit tanpa kemasan dengan cat mulus).',
     },
     {
       id: 'faq-3',
-      q: 'Can I request close-up physical inspection photos before checkout?',
-      a: 'Yes. Message us on WhatsApp for 4-sided macro photos, base rivet inspection, and blister bubble clarity checks before purchase.',
+      q: 'Bisa minta foto atau video detail sebelum beli?',
+      a: 'Bisa. Silakan kontak admin via WhatsApp atau DM Instagram untuk cek foto tampak depan, belakang, sudut bubble, dan rivet bawah.',
     },
     {
       id: 'faq-4',
-      q: 'How are shipments packed and protected?',
-      a: 'We pack every shipment in double-wall corrugated boxes with wrapped card protectors and reinforced corners. Free of charge.',
+      q: 'Bisa tukar tambah atau barter (WTT)?',
+      a: 'Bisa didiskusikan santai jika punya rilisan RLC, STH, atau casting retro yang sepadan.',
     },
   ],
 };

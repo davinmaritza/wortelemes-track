@@ -254,11 +254,11 @@ export default function Home() {
           <>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-1 mb-3">
               <div>
-                <h1 className="text-xl sm:text-2xl font-black tracking-tight uppercase text-white font-sans">
-                  GARAGE INVENTORY
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight uppercase text-white font-sans">
+                  Katalog Koleksi Garasi
                 </h1>
                 <p className="text-xs text-gray-400 mt-0.5">
-                  Curated physical diecasts, blister condition ratings, and live collection vault.
+                  Daftar diecast skala 1:64 Wortelemes. Cek ketersediaan stok, seri, dan kondisi kemasan.
                 </p>
               </div>
 
@@ -272,7 +272,7 @@ export default function Home() {
                       : 'text-gray-400 hover:text-white'
                   }`}
                 >
-                  Vehicles
+                  Semua Unit
                 </button>
                 <button
                   onClick={() => setGarageSubTab('Series')}
@@ -282,7 +282,7 @@ export default function Home() {
                       : 'text-gray-400 hover:text-white'
                   }`}
                 >
-                  Series Sets
+                  Seri Koleksi
                 </button>
                 <button
                   onClick={() => setGarageSubTab('Lists')}
@@ -292,7 +292,7 @@ export default function Home() {
                       : 'text-gray-400 hover:text-white'
                   }`}
                 >
-                  Favorites
+                  Favorit
                 </button>
               </div>
             </div>
@@ -307,10 +307,10 @@ export default function Home() {
                     onChange={(e) => setSelectedSort(e.target.value as any)}
                     className="appearance-none bg-[#12131a] border border-white/[0.08] hover:border-white/20 rounded-xl pl-3 pr-8 py-2 text-xs text-gray-200 focus:outline-none focus:border-white/30 transition-colors cursor-pointer font-medium"
                   >
-                    <option value="newest">Sort: Newest Batch</option>
-                    <option value="price-asc">Price: Low to High</option>
-                    <option value="price-desc">Price: High to Low</option>
-                    <option value="name-asc">Name: A - Z</option>
+                    <option value="newest">Urutkan: Rilis Terbaru</option>
+                    <option value="price-asc">Harga Terendah</option>
+                    <option value="price-desc">Harga Tertinggi</option>
+                    <option value="name-asc">Nama (A - Z)</option>
                   </select>
                   <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
@@ -322,7 +322,7 @@ export default function Home() {
                     onChange={(e) => setSelectedTier(e.target.value)}
                     className="appearance-none bg-[#12131a] border border-white/[0.08] hover:border-white/20 rounded-xl pl-3 pr-8 py-2 text-xs text-gray-200 focus:outline-none focus:border-white/30 transition-colors cursor-pointer font-medium"
                   >
-                    <option value="all">All Tiers</option>
+                    <option value="all">Semua Kategori</option>
                     <option value="RLC">Red Line Club (RLC)</option>
                     <option value="Silver Series">Silver Series</option>
                     <option value="Mainline">Mainline Regular</option>
@@ -341,7 +341,7 @@ export default function Home() {
                       : 'bg-[#12131a] text-gray-400 hover:text-white border-white/[0.08]'
                   }`}
                 >
-                  {filterForSaleOnly ? '✓ For Sale Only' : 'For Sale'}
+                  {filterForSaleOnly ? '✓ Siap Dijual Saja' : 'Siap Dijual'}
                 </button>
               </div>
 
@@ -352,7 +352,7 @@ export default function Home() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Filter casting name, color, or series..."
+                  placeholder="Cari nama casting, seri, atau warna..."
                   className="w-full bg-[#12131a] border border-white/[0.08] focus:border-white/30 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none transition-colors"
                 />
               </div>
@@ -362,10 +362,10 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-1 text-xs text-gray-400 font-medium mb-3">
               <div className="flex items-center gap-2">
                 <span className="text-white font-mono font-bold">
-                  {sortedItems.length} Vehicles
+                  {sortedItems.length} Unit
                 </span>
                 <span className="text-gray-600">•</span>
-                <span>{collections.filter((c) => c.is_for_sale).length} Available For Purchase</span>
+                <span>{collections.filter((c) => c.is_for_sale).length} Siap Diorder</span>
               </div>
 
               <div className="flex items-center gap-3">

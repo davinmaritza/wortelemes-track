@@ -513,7 +513,7 @@ export default function AdminPage() {
               }`}
             >
               <Package className="w-3.5 h-3.5" />
-              <span>Vehicles & Inventory</span>
+              <span>Koleksi & Stok</span>
               <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded font-mono">
                 {collections.length}
               </span>
@@ -528,7 +528,7 @@ export default function AdminPage() {
               }`}
             >
               <Newspaper className="w-3.5 h-3.5" />
-              <span>News & Drop Radar</span>
+              <span>Artikel & Jadwal Drop</span>
               <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded font-mono">
                 {articles.length + drops.length}
               </span>
@@ -543,7 +543,7 @@ export default function AdminPage() {
               }`}
             >
               <User className="w-3.5 h-3.5" />
-              <span>Collector Profile & FAQ</span>
+              <span>Profil & FAQ Garasi</span>
             </button>
           </div>
 
@@ -557,15 +557,15 @@ export default function AdminPage() {
                   ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60'
                   : 'bg-amber-950/50 border-amber-500/40 text-amber-300 hover:bg-amber-900/50'
               }`}
-              title="Click to toggle Direct WhatsApp Orders on public pages"
+              title="Klik untuk mengaktifkan / pause order WhatsApp di halaman publik"
             >
-              <span className={`w-2 h-2 rounded-full ${isWaOrderActive ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
-              <span>WhatsApp Orders: {isWaOrderActive ? 'Enabled' : 'Paused (Catalog Only)'}</span>
+              <span className={`w-2 h-2 rounded-full ${isWaOrderActive ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+              <span>Order WhatsApp: {isWaOrderActive ? 'Aktif' : 'Nonaktif (Display)'}</span>
             </button>
 
             <div className="text-xs text-gray-400 hidden lg:flex items-center gap-2 font-mono text-[11px]">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span>Vault Synchronized</span>
+              <span>Tersinkronisasi</span>
             </div>
           </div>
         </div>
@@ -581,15 +581,15 @@ export default function AdminPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-black uppercase text-white tracking-tight">
-                  Inventory & Pricing Management
+                <h2 className="text-base sm:text-lg font-bold uppercase text-white tracking-tight">
+                  Kelola Stok & Harga Diecast
                 </h2>
-                <span className="text-[11px] font-mono font-bold bg-[#1e212b] text-gray-300 px-2 py-0.5 rounded-full border border-[#2d3142]">
-                  {collections.length} Units
+                <span className="text-[11px] font-mono font-semibold bg-[#1e212b] text-gray-300 px-2 py-0.5 rounded-md border border-[#2d3142]">
+                  {collections.length} Unit
                 </span>
               </div>
               <p className="text-xs text-gray-400 mt-0.5">
-                Manage vehicles, adjust cost and market prices, toggle sale availability, and perform bulk operations.
+                Atur koleksi diecast, harga modal & jual, status ketersediaan, serta upload foto ke Cloudflare R2.
               </p>
             </div>
 

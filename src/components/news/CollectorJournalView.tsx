@@ -29,40 +29,40 @@ export const CollectorJournalView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pt-2">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white uppercase font-sans">
-            RELEASE RADAR & JOURNAL
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase font-sans">
+            Jadwal Rilis & Catatan Garasi
           </h1>
           <p className="text-xs text-gray-400 mt-0.5">
-            Verified release schedules, case assortments, and market valuation reports.
+            Informasi jadwal drop Hot Wheels, referensi casting, dan tips perawatan diecast koleksi.
           </p>
         </div>
 
         <Link
           href="/admin"
-          className="self-start sm:self-auto inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3.5 py-2 rounded-xl transition-colors font-medium"
+          className="self-start sm:self-auto inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3 py-1.5 rounded-lg transition-colors font-medium"
         >
           <Settings className="w-3.5 h-3.5 text-gray-400" />
-          <span>Admin News Management</span>
+          <span>Kelola Artikel & Jadwal</span>
         </Link>
       </div>
 
       {/* 1. Release Drop Radar */}
-      <div className="bg-[#111219] border border-white/[0.08] rounded-3xl p-5 sm:p-7 shadow-xl flex flex-col gap-4">
+      <div className="bg-[#12131a] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col gap-4">
         <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-blue-400" />
-            <h2 className="text-xs font-mono uppercase tracking-widest text-gray-300 font-bold">
-              Upcoming Release Drops & Restocks
+            <h2 className="text-xs uppercase tracking-wider text-gray-300 font-semibold">
+              Jadwal Drop & Restock Mendatang
             </h2>
           </div>
           <span className="text-[10px] font-mono text-gray-400">
-            {upcomingDrops.length} Scheduled
+            {upcomingDrops.length} Terjadwal
           </span>
         </div>
 
         {upcomingDrops.length === 0 ? (
-          <div className="py-10 text-center text-gray-500 text-xs">
-            No drops scheduled currently. Use the admin workspace to publish new release dates.
+          <div className="py-8 text-center text-gray-500 text-xs">
+            Belum ada jadwal drop yang diinput. Tambahkan jadwal baru lewat menu admin.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -107,21 +107,21 @@ export const CollectorJournalView: React.FC = () => {
         )}
       </div>
 
-      {/* 2. Editorial Stories & Market Analysis */}
+      {/* 2. Editorial Stories & Articles */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-mono uppercase tracking-widest text-gray-300 font-bold flex items-center gap-2">
+          <h2 className="text-xs uppercase tracking-wider text-gray-300 font-semibold flex items-center gap-2">
             <Newspaper className="w-4 h-4 text-gray-400" />
-            Curator Journal Articles
+            Catatan & Artikel Kolektor
           </h2>
           <span className="text-xs text-gray-400 font-mono">
-            {articles.length} Stories
+            {articles.length} Artikel
           </span>
         </div>
 
         {articles.length === 0 ? (
-          <div className="py-12 text-center text-gray-500 bg-[#111219] rounded-2xl border border-white/[0.06] text-xs">
-            No articles published yet. Publish new stories via the admin workspace.
+          <div className="py-10 text-center text-gray-500 bg-[#12131a] rounded-xl border border-white/[0.06] text-xs">
+            Belum ada artikel yang dipublikasikan. Tambahkan artikel baru lewat menu admin.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -129,14 +129,14 @@ export const CollectorJournalView: React.FC = () => {
               <article
                 key={art.id}
                 onClick={() => setSelectedArticle(art)}
-                className="bg-[#111219] border border-white/[0.06] hover:border-white/20 rounded-2xl p-5 flex flex-col justify-between gap-4 transition-all duration-200 cursor-pointer group shadow-sm hover:shadow-xl"
+                className="bg-[#12131a] border border-white/[0.08] hover:border-white/20 rounded-xl p-5 flex flex-col justify-between gap-4 transition-all duration-200 cursor-pointer group shadow-sm"
               >
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-gray-300 font-mono text-[10px] uppercase tracking-wider bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.06]">
+                    <span className="text-gray-300 text-[10px] uppercase tracking-wider bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.06] font-medium">
                       {art.category}
                     </span>
-                    <span className="text-gray-500 font-mono">{art.readTime}</span>
+                    <span className="text-gray-500 font-mono text-[10px]">{art.readTime}</span>
                   </div>
 
                   <h3 className="text-base font-bold text-white group-hover:text-gray-200 transition-colors leading-snug">
