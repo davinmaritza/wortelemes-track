@@ -80,6 +80,7 @@ export interface CollectorProfile {
   collectorBadge: string;
   bio: string;
   whatsappNumber: string;
+  isWhatsAppOrderEnabled?: boolean;
   location: string;
   avatarUrl: string;
   instagramHandle?: string;

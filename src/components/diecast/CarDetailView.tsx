@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CollectionItem } from '@/types/diecast';
-import { ChevronLeft, Share2, MessageCircle, Star, ShieldCheck } from 'lucide-react';
-import { getStoredWhatsAppNumber } from '@/lib/storage/profileStorage';
+import { ChevronLeft, Share2, MessageCircle, Star, ShieldCheck, EyeOff } from 'lucide-react';
+import { getStoredWhatsAppNumber, isWhatsAppOrderActive } from '@/lib/storage/profileStorage';
 
 interface CarDetailViewProps {
   car: CollectionItem;
@@ -20,6 +21,19 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
   onBack,
   onToggleFavorite,
 }) => {
+  const [isOrderActive, setIsOrderActive] = useState(false);
+
+  useEffect(() => {
+    setIsOrderActive(isWhatsAppOrderActive());
+
+    const handleProfileUpdate = () => {
+      setIsOrderActive(isWhatsAppOrderActive());
+    };
+
+    window.addEventListener('collector-profile-updated', handleProfileUpdate);
+    return () => window.removeEventListener('collector-profile-updated', handleProfileUpdate);
+  }, []);
+
   const formatRupiah = (val: number) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
@@ -29,7 +43,11 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
   };
 
   const handleWhatsAppOrder = () => {
-    const phone = getStoredWhatsAppNumber().replace(/[^0-9]/g, '') || '6281234567890';
+    const phone = getStoredWhatsAppNumber().replace(/[^0-9]/g, '');
+    if (!phone) {
+      alert('WhatsApp ordering is not yet configured with a valid contact number.');
+      return;
+    }
     const text = `Hi Wortelemes, I'm interested in your diecast collection *${car.name}* (${car.release_year}, ${car.tier_badge || '1:64'}) listed at *${formatRupiah(car.sell_price)}*. Is this unit still available?`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
   };
@@ -226,22 +244,42 @@ export const CarDetailView: React.FC<CarDetailViewProps> = ({
 
           {/* Action CTA */}
           <div className="fixed md:static bottom-0 left-0 right-0 p-4 md:p-0 bg-[#090a0f]/95 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-t md:border-t-0 border-white/[0.08] z-30">
-            {car.is_for_sale ? (
-              <button
-                onClick={handleWhatsAppOrder}
-                className="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white rounded-xl py-3.5 px-6 font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-all"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Order via Direct WhatsApp</span>
-              </button>
+            {isOrderActive ? (
+              car.is_for_sale ? (
+                <button
+                  onClick={handleWhatsAppOrder}
+                  className="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white rounded-xl py-3.5 px-6 font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-all"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Order via Direct WhatsApp</span>
+                </button>
+              ) : (
+                <button
+                  onClick={handleWhatsAppOrder}
+                  className="w-full bg-white/[0.05] hover:bg-white/[0.1] text-gray-300 rounded-xl py-3.5 px-6 font-semibold text-xs flex items-center justify-center gap-2 border border-white/[0.08] transition-all"
+                >
+                  <MessageCircle className="w-4 h-4 text-gray-400" />
+                  <span>Inquire Trade or Vault Acquisition (WhatsApp)</span>
+                </button>
+              )
             ) : (
-              <button
-                onClick={handleWhatsAppOrder}
-                className="w-full bg-white/[0.05] hover:bg-white/[0.1] text-gray-300 rounded-xl py-3.5 px-6 font-semibold text-xs flex items-center justify-center gap-2 border border-white/[0.08] transition-all"
-              >
-                <MessageCircle className="w-4 h-4 text-gray-400" />
-                <span>Inquire Trade or Vault Acquisition (WhatsApp)</span>
-              </button>
+              <div className="w-full bg-[#111219] border border-white/[0.08] rounded-xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
+                <div className="flex items-center gap-2.5 text-left w-full sm:w-auto">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0" />
+                  <div>
+                    <p className="text-xs font-bold text-white uppercase tracking-tight">Direct WhatsApp Orders Currently Paused</p>
+                    <p className="text-[11px] text-gray-400">Exhibition and collection catalog viewing only. Orders are currently disabled by curator.</p>
+                  </div>
+                </div>
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300 hover:text-white bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors"
+                  >
+                    Enable in Admin
+                  </Link>
+                )}
+              </div>
             )}
           </div>
         </div>

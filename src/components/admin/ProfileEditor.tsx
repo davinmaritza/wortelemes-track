@@ -55,6 +55,7 @@ export const ProfileEditor: React.FC = () => {
   const [collectorBadge, setCollectorBadge] = useState(defaultProfile.collectorBadge);
   const [bio, setBio] = useState(defaultProfile.bio);
   const [whatsappNumber, setWhatsappNumber] = useState(defaultProfile.whatsappNumber);
+  const [isWhatsAppOrderEnabled, setIsWhatsAppOrderEnabled] = useState(false);
   const [location, setLocation] = useState(defaultProfile.location);
   const [avatarUrl, setAvatarUrl] = useState(defaultProfile.avatarUrl);
   const [instagramHandle, setInstagramHandle] = useState(defaultProfile.instagramHandle || '');
@@ -73,6 +74,11 @@ export const ProfileEditor: React.FC = () => {
     setCollectorBadge(data.collectorBadge || defaultProfile.collectorBadge);
     setBio(data.bio || defaultProfile.bio);
     setWhatsappNumber(data.whatsappNumber || defaultProfile.whatsappNumber);
+    setIsWhatsAppOrderEnabled(
+      data.isWhatsAppOrderEnabled !== undefined
+        ? Boolean(data.isWhatsAppOrderEnabled)
+        : false
+    );
     setLocation(data.location || defaultProfile.location);
     setAvatarUrl(data.avatarUrl || defaultProfile.avatarUrl);
     setInstagramHandle(data.instagramHandle || '');
@@ -121,7 +127,8 @@ export const ProfileEditor: React.FC = () => {
       garageName: garageName.trim() || 'WORTELEMES GARAGE',
       collectorBadge: collectorBadge.trim() || 'Verified Collector',
       bio: bio.trim(),
-      whatsappNumber: whatsappNumber.trim() || '6281234567890',
+      whatsappNumber: whatsappNumber.trim(),
+      isWhatsAppOrderEnabled,
       location: location.trim() || 'Indonesia',
       avatarUrl: avatarUrl.trim() || '/logo.png',
       instagramHandle: instagramHandle.trim(),
@@ -142,6 +149,7 @@ export const ProfileEditor: React.FC = () => {
       setCollectorBadge(def.collectorBadge);
       setBio(def.bio);
       setWhatsappNumber(def.whatsappNumber);
+      setIsWhatsAppOrderEnabled(Boolean(def.isWhatsAppOrderEnabled));
       setLocation(def.location);
       setAvatarUrl(def.avatarUrl);
       setInstagramHandle(def.instagramHandle || '');
@@ -352,7 +360,58 @@ export const ProfileEditor: React.FC = () => {
             />
           </div>
 
-          {/* 3. Contact & Location Matrix */}
+          {/* 3. Direct WhatsApp Ordering Toggle */}
+          <div className="p-4 rounded-2xl bg-[#12141c] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div
+                className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-colors ${
+                  isWhatsAppOrderEnabled
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                    : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                }`}
+              >
+                <MessageCircle className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+                    Direct WhatsApp Ordering Option
+                  </h4>
+                  <span
+                    className={`text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full ${
+                      isWhatsAppOrderEnabled
+                        ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/60'
+                        : 'bg-amber-950/80 text-amber-300 border border-amber-800/60'
+                    }`}
+                  >
+                    {isWhatsAppOrderEnabled ? 'Active / Enabled' : 'Disabled / Paused (Catalog Only)'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-gray-400 mt-1 leading-relaxed max-w-xl">
+                  {isWhatsAppOrderEnabled
+                    ? 'Public visitors will see direct "Order via Direct WhatsApp" and "Inquire" buttons on all available cars and can initiate WhatsApp messages.'
+                    : 'WhatsApp direct order and inquiry buttons are paused. The site runs in exhibition catalog showcase mode without opening WhatsApp.'}
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsWhatsAppOrderEnabled(!isWhatsAppOrderEnabled)}
+              aria-label="Toggle WhatsApp ordering"
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                isWhatsAppOrderEnabled ? 'bg-emerald-500' : 'bg-gray-700'
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                  isWhatsAppOrderEnabled ? 'translate-x-5' : 'translate-x-0'
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* 4. Contact & Location Matrix */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block text-[11px] font-bold text-gray-300 uppercase mb-1 flex items-center gap-1">
@@ -363,11 +422,10 @@ export const ProfileEditor: React.FC = () => {
                 type="text"
                 value={whatsappNumber}
                 onChange={(e) => setWhatsappNumber(e.target.value)}
-                placeholder="6281234567890"
-                required
+                placeholder="628123456789 (leave blank if paused)"
                 className="w-full bg-[#12141c] border border-white/[0.08] focus:border-white/40 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono transition-colors"
               />
-              <span className="text-[10px] text-gray-500 mt-0.5 block">Format: 628xxx (no + sign)</span>
+              <span className="text-[10px] text-gray-500 mt-0.5 block">Format: 628xxx (no + or spaces)</span>
             </div>
 
             <div>
@@ -570,9 +628,25 @@ export const ProfileEditor: React.FC = () => {
               <div className="flex items-center justify-between text-[11px]">
                 <span className="text-gray-400 flex items-center gap-1">
                   <MessageCircle className="w-3 h-3 text-emerald-400" />
-                  WhatsApp
+                  WhatsApp Orders
                 </span>
-                <span className="font-mono text-gray-200">{whatsappNumber || 'None'}</span>
+                <span
+                  className={`font-mono text-[10px] px-2 py-0.5 rounded font-semibold ${
+                    isWhatsAppOrderEnabled
+                      ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/40'
+                      : 'bg-amber-950/80 text-amber-300 border border-amber-800/40'
+                  }`}
+                >
+                  {isWhatsAppOrderEnabled ? 'Enabled' : 'Paused'}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-gray-400 flex items-center gap-1">
+                  <span className="text-emerald-400 font-mono text-[10px]">#</span>
+                  WhatsApp Contact
+                </span>
+                <span className="font-mono text-gray-200">{whatsappNumber || 'Unset'}</span>
               </div>
 
               <div className="flex items-center justify-between text-[11px]">

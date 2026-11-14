@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { CollectionItem } from '@/types/diecast';
 import { Star, MessageCircle, ArrowUpRight } from 'lucide-react';
-import { getStoredWhatsAppNumber } from '@/lib/storage/profileStorage';
+import { getStoredWhatsAppNumber, isWhatsAppOrderActive } from '@/lib/storage/profileStorage';
 
 interface DiecastCardProps {
   item: CollectionItem;
@@ -18,6 +18,15 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
   isAdmin,
   onToggleFavorite,
 }) => {
+  const [isOrderActive, setIsOrderActive] = useState(false);
+
+  useEffect(() => {
+    setIsOrderActive(isWhatsAppOrderActive());
+    const handleProfileUpdate = () => setIsOrderActive(isWhatsAppOrderActive());
+    window.addEventListener('collector-profile-updated', handleProfileUpdate);
+    return () => window.removeEventListener('collector-profile-updated', handleProfileUpdate);
+  }, []);
+
   const isRLC = item.tier_badge?.toUpperCase().includes('RLC');
   const isSTH = item.tier_badge?.toUpperCase().includes('TREASURE') || item.tier_badge?.toUpperCase().includes('STH');
 
@@ -31,7 +40,11 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
 
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const phone = getStoredWhatsAppNumber().replace(/[^0-9]/g, '') || '6281234567890';
+    const phone = getStoredWhatsAppNumber().replace(/[^0-9]/g, '');
+    if (!phone) {
+      alert('WhatsApp contact number is not yet configured.');
+      return;
+    }
     const text = `Hello Wortelemes, I am interested in the diecast casting *${item.name}* (${item.release_year}) listed for *${formatRupiah(item.sell_price)}*. Is this item still available?`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
   };
@@ -121,15 +134,22 @@ export const DiecastCard: React.FC<DiecastCardProps> = ({
 
           {/* Action */}
           {item.is_for_sale ? (
-            <button
-              type="button"
-              onClick={handleWhatsAppClick}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/[0.05] hover:bg-emerald-500/15 text-gray-300 hover:text-emerald-300 border border-white/10 hover:border-emerald-500/30 text-[10px] font-semibold transition-all active:scale-95"
-              title="Order via WhatsApp"
-            >
-              <MessageCircle className="w-3 h-3 text-emerald-400" />
-              <span>Inquire</span>
-            </button>
+            isOrderActive ? (
+              <button
+                type="button"
+                onClick={handleWhatsAppClick}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/[0.05] hover:bg-emerald-500/15 text-gray-300 hover:text-emerald-300 border border-white/10 hover:border-emerald-500/30 text-[10px] font-semibold transition-all active:scale-95"
+                title="Order via WhatsApp"
+              >
+                <MessageCircle className="w-3 h-3 text-emerald-400" />
+                <span>Inquire</span>
+              </button>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/[0.03] text-gray-400 border border-white/[0.06] text-[10px] font-mono">
+                <span>Details</span>
+                <ArrowUpRight className="w-2.5 h-2.5 text-gray-500" />
+              </span>
+            )
           ) : (
             <span className="text-[10px] text-gray-500 font-mono">
               Not For Sale

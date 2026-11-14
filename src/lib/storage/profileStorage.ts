@@ -6,7 +6,8 @@ export const defaultProfile: CollectorProfile = {
   garageName: 'WORTELEMES GARAGE',
   collectorBadge: 'Verified Collector',
   bio: '1:64 scale diecast curator and collector specializing in RLC, Silver Series, vintage castings, and modern releases. Open for acquisitions, trade inquiries (WTT), and collector consultations.',
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '6281234567890',
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '',
+  isWhatsAppOrderEnabled: false, // Default to disabled as requested
   location: 'Indonesia (Worldwide Shipping)',
   avatarUrl: '/logo.png',
   instagramHandle: '@wortelemes',
@@ -93,6 +94,10 @@ export function getStoredProfile(): CollectorProfile {
     return {
       ...defaultProfile,
       ...parsed,
+      isWhatsAppOrderEnabled:
+        parsed.isWhatsAppOrderEnabled !== undefined
+          ? Boolean(parsed.isWhatsAppOrderEnabled)
+          : false,
       pillars: Array.isArray(parsed.pillars) && parsed.pillars.length > 0 ? parsed.pillars : defaultProfile.pillars,
       faqs: Array.isArray(parsed.faqs) && parsed.faqs.length > 0 ? parsed.faqs : defaultProfile.faqs,
     };
@@ -132,5 +137,19 @@ export function resetStoredProfile(): CollectorProfile {
 
 export function getStoredWhatsAppNumber(): string {
   const profile = getStoredProfile();
-  return profile.whatsappNumber || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '6281234567890';
+  return profile.whatsappNumber || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '';
+}
+
+export function isWhatsAppOrderActive(): boolean {
+  const profile = getStoredProfile();
+  return Boolean(profile.isWhatsAppOrderEnabled);
+}
+
+export function setWhatsAppOrderActive(enabled: boolean): void {
+  const profile = getStoredProfile();
+  const updated: CollectorProfile = {
+    ...profile,
+    isWhatsAppOrderEnabled: enabled,
+  };
+  saveStoredProfile(updated);
 }

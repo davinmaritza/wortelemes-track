@@ -25,6 +25,10 @@ import {
   resetStoredNews,
 } from '@/lib/storage/newsStorage';
 import {
+  isWhatsAppOrderActive,
+  setWhatsAppOrderActive,
+} from '@/lib/storage/profileStorage';
+import {
   Lock,
   Unlock,
   Plus,
@@ -87,12 +91,16 @@ export default function AdminPage() {
   const [showDropModal, setShowDropModal] = useState(false);
   const [editingDrop, setEditingDrop] = useState<UpcomingDropItem | null>(null);
 
+  // WhatsApp Ordering Feature Toggle State
+  const [isWaOrderActive, setIsWaOrderActive] = useState(false);
+
   // Load from Storage on Mount
   useEffect(() => {
     const data = getStoredCollections();
     setCollections(data);
     setArticles(getStoredArticles());
     setDrops(getStoredDrops());
+    setIsWaOrderActive(isWhatsAppOrderActive());
 
     const handleInventoryUpdate = (e: Event) => {
       const customEvent = e as CustomEvent<CollectionItem[]>;
@@ -106,14 +114,26 @@ export default function AdminPage() {
       setDrops(getStoredDrops());
     };
 
+    const handleProfileUpdate = () => {
+      setIsWaOrderActive(isWhatsAppOrderActive());
+    };
+
     window.addEventListener('diecast-inventory-updated', handleInventoryUpdate);
     window.addEventListener('journal-data-updated', handleJournalUpdate);
+    window.addEventListener('collector-profile-updated', handleProfileUpdate);
 
     return () => {
       window.removeEventListener('diecast-inventory-updated', handleInventoryUpdate);
       window.removeEventListener('journal-data-updated', handleJournalUpdate);
+      window.removeEventListener('collector-profile-updated', handleProfileUpdate);
     };
   }, []);
+
+  const handleToggleWhatsAppOrder = () => {
+    const nextState = !isWaOrderActive;
+    setWhatsAppOrderActive(nextState);
+    setIsWaOrderActive(nextState);
+  };
 
   const handleVerifyPin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -527,9 +547,26 @@ export default function AdminPage() {
             </button>
           </div>
 
-          <div className="text-xs text-gray-400 hidden sm:flex items-center gap-2 font-mono text-[11px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>Vault Synchronized</span>
+          <div className="flex items-center gap-3">
+            {/* Quick WhatsApp Order Switch */}
+            <button
+              onClick={handleToggleWhatsAppOrder}
+              type="button"
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                isWaOrderActive
+                  ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60'
+                  : 'bg-amber-950/50 border-amber-500/40 text-amber-300 hover:bg-amber-900/50'
+              }`}
+              title="Click to toggle Direct WhatsApp Orders on public pages"
+            >
+              <span className={`w-2 h-2 rounded-full ${isWaOrderActive ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+              <span>WhatsApp Orders: {isWaOrderActive ? 'Enabled' : 'Paused (Catalog Only)'}</span>
+            </button>
+
+            <div className="text-xs text-gray-400 hidden lg:flex items-center gap-2 font-mono text-[11px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span>Vault Synchronized</span>
+            </div>
           </div>
         </div>
 

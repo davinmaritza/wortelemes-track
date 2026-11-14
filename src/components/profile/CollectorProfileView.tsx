@@ -53,7 +53,11 @@ export const CollectorProfileView: React.FC = () => {
   }, []);
 
   const handleWhatsAppChat = () => {
-    const phone = profile.whatsappNumber.replace(/[^0-9]/g, '') || '6281234567890';
+    const phone = profile.whatsappNumber.replace(/[^0-9]/g, '');
+    if (!phone) {
+      alert('WhatsApp contact number is not yet configured.');
+      return;
+    }
     const text = `Hello ${profile.garageName}! I would like to inquire about your diecast collection in your garage.`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
   };
@@ -106,13 +110,23 @@ export const CollectorProfileView: React.FC = () => {
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-2.5">
-            <button
-              onClick={handleWhatsAppChat}
-              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span>Direct WhatsApp Inquiries</span>
-            </button>
+            {profile.isWhatsAppOrderEnabled ? (
+              <button
+                onClick={handleWhatsAppChat}
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>Direct WhatsApp Inquiries</span>
+              </button>
+            ) : (
+              <div
+                className="inline-flex items-center gap-2 bg-white/[0.04] text-gray-400 font-medium text-xs px-3.5 py-2 rounded-xl border border-white/[0.06]"
+                title="WhatsApp inquiries are temporarily disabled"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <span>Direct Inquiries Paused (Showcase Only)</span>
+              </div>
+            )}
 
             {profile.instagramHandle && (
               <a
