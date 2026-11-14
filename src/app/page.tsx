@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { showcaseCars, showcaseSeries } from '@/lib/data/mockData';
 import { CollectionItem, Series } from '@/types/diecast';
 import { getStoredCollections, saveStoredCollections } from '@/lib/storage/collectionStorage';
@@ -23,6 +24,7 @@ import {
   Newspaper,
   User,
   SlidersHorizontal,
+  Shield,
 } from 'lucide-react';
 
 export default function Home() {
@@ -195,8 +197,16 @@ export default function Home() {
         </div>
 
         {/* Right Info */}
-        <div className="flex items-center gap-3">
-          <span className="text-[11px] font-mono text-gray-400 bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 rounded-xl">
+        <div className="flex items-center gap-2.5">
+          <Link
+            href="/admin"
+            className="flex items-center gap-1.5 text-xs text-gray-300 hover:text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-xl transition-all font-medium"
+            title="Curator Admin Dashboard"
+          >
+            <Shield className="w-3.5 h-3.5 text-amber-400" />
+            <span>Admin Vault</span>
+          </Link>
+          <span className="text-[11px] font-mono text-gray-400 bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 rounded-xl hidden lg:inline-block">
             1:64 Scale Catalog
           </span>
         </div>
@@ -212,9 +222,18 @@ export default function Home() {
               WORTELEMES
             </span>
           </div>
-          <span className="text-[10px] font-mono text-gray-400 uppercase bg-white/[0.04] border border-white/[0.08] px-2.5 py-1 rounded-lg">
-            1:64 GARAGE
-          </span>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/admin"
+              className="text-[10px] font-mono font-semibold text-gray-300 hover:text-white bg-white/[0.06] hover:bg-white/10 border border-white/[0.08] px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors"
+            >
+              <Shield className="w-3 h-3 text-amber-400" />
+              <span>Admin</span>
+            </Link>
+            <span className="text-[10px] font-mono text-gray-400 uppercase bg-white/[0.04] border border-white/[0.08] px-2 py-1 rounded-lg">
+              1:64
+            </span>
+          </div>
         </div>
 
         {/* SCREEN VIEWS */}

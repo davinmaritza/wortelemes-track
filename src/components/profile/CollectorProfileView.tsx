@@ -144,6 +144,15 @@ export const CollectorProfileView: React.FC = () => {
             <span className="text-xs text-gray-400 font-mono bg-white/[0.02] border border-white/[0.06] px-3 py-2 rounded-xl">
               {profile.location}
             </span>
+
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-1.5 text-xs text-amber-300/90 hover:text-white bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 px-3 py-2 rounded-xl transition-all font-medium"
+              title="Open Curator Admin Settings"
+            >
+              <Settings className="w-3.5 h-3.5 text-amber-400" />
+              <span>Admin Vault</span>
+            </Link>
           </div>
         </div>
       </div>
